@@ -221,6 +221,8 @@ export type LearningGoal =
 export interface Project {
   id: EntityId
   slug: Slug
+  categoryId: EntityId
+  categorySlug?: string
   name: string
   description: string
   narrative: string
@@ -559,6 +561,8 @@ export interface PublicProfile {
 export interface PublicProject {
   id: EntityId
   slug: Slug
+  categoryId: EntityId
+  categorySlug?: string
   title: string
   coverImage: string
   techStack: string[]
@@ -733,6 +737,8 @@ export interface Category {
   id: EntityId
   name: string
   slug: Slug
+  categoryId: EntityId
+  categorySlug?: string
   description: string
   icon: string // Lucide icon name (e.g., 'code', 'calculator')
   color: string // Hex color code
@@ -782,4 +788,122 @@ export type SubscriptionStatus = 'active' | 'canceled' | 'expired' | 'trial'
 export interface UserSubscriptionWithTier {
   subscription: UserSubscription
   tier: SubscriptionTier
+}
+
+// -----------------------------------------------------------------------------
+// CATEGORY EXECUTION FLOWS
+// -----------------------------------------------------------------------------
+
+export interface CategoryExecutionFlow {
+  categorySlug: string
+  executionConfig: ExecutionConfig
+  validationConfig: ValidationConfig
+  tutorConfig: TutorConfig
+}
+
+export interface ExecutionConfig {
+  supportedLanguages: string[]
+  timeout: number
+  memoryLimit: string
+  enableNetworking?: boolean
+  maxOutputLines?: number
+}
+
+export interface ValidationConfig {
+  requiresTests: boolean
+  minTestCoverage?: number
+  checkSyntax?: boolean
+  checkLinting?: boolean
+  allowedImports?: string[]
+  bannedPatterns?: string[]
+}
+
+export interface TutorConfig {
+  avatar: string
+  style: string
+  maxSteps: number
+  personality?: string
+  codeExamplesEnabled?: boolean
+}
+
+// -----------------------------------------------------------------------------
+// CATEGORY VALIDATION RESULTS
+// -----------------------------------------------------------------------------
+
+export interface CategoryValidationResult {
+  id: EntityId
+  userProjectId: EntityId
+  categorySlug: string
+  passed: boolean
+  score: number
+  criteriaResults: Record<string, boolean>
+  insights: string[]
+  createdAt: Timestamp
+}
+
+// -----------------------------------------------------------------------------
+// AI TUTOR TYPES
+// -----------------------------------------------------------------------------
+
+export interface TutorSession {
+  sessionId: EntityId
+  userProjectId: EntityId
+  categorySlug: string
+  explanations: InlineExplanation[]
+  currentIndex: number
+  totalCount: number
+  summary: TutoringSummary
+  canRedo: boolean
+}
+
+export interface InlineExplanation {
+  id: EntityId
+  filePath: string
+  lineStart: number
+  lineEnd: number
+  issueType: IssueType
+  title: string
+  explanation: string
+  codeSnippet?: string
+  suggestedFix?: string
+  avatarPosition: AvatarPosition
+  severity: IssueSeverity
+  order: number
+}
+
+export type IssueType =
+  | "error"
+  | "warning"
+  | "optimization"
+  | "bestPractice"
+  | "style"
+  | "security"
+  | "performance"
+
+export type IssueSeverity = "critical" | "major" | "minor" | "info"
+
+export type AvatarPosition = "left" | "right" | "top" | "bottom"
+
+export interface TutoringSummary {
+  totalIssues: number
+  criticalCount: number
+  majorCount: number
+  minorCount: number
+  keyLearnings: string[]
+  recommendedResources: Resource[]
+}
+
+export interface Resource {
+  title: string
+  url: string
+  resourceType: string
+}
+
+export interface StartTutorRequest {
+  userProjectId: EntityId
+  validationResult: any // ValidationResult from backend
+}
+
+export interface TutorSessionResponse {
+  session: TutorSession
 }

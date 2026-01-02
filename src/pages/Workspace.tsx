@@ -11,11 +11,10 @@ import FilePanel, { type WorkspaceFile } from "@/components/workspace/FilePanel"
 import CodeEditor from "@/components/workspace/CodeEditor"
 import RightPanel from "@/components/workspace/RightPanel"
 import SubmitModal from "@/components/workspace/SubmitModal"
-import ValidationResultModal from "@/components/workspace/ValidationResultModal"
 import ValidationProgressModal from "@/components/workspace/ValidationProgressModal"
 import CodeTutorModal from "@/components/workspace/CodeTutorModal"
-// Category-based workspace routing
-import { CategoryRouter } from "@/categories/shared/components"
+// Category-based routing
+import { CategoryRouter, ValidationRouter } from "@/categories/shared/components"
 import type { Category } from "@/lib/api/types"
 
 interface EditorTab {
@@ -582,8 +581,9 @@ def test_another():
   const filesChanged = openTabs.filter((t) => t.isDirty).length || 3
 
   // Category-based workspace routing
-  // All categories now use CategoryRouter which routes to appropriate workspace
-  if (category && id) {
+  // Programming category uses the default IDE workspace with Monaco editor
+  // Other categories use CategoryRouter for specialized workspaces
+  if (category && id && category.slug !== 'programming') {
     return <CategoryRouter projectId={id} project={project} category={category} />
   }
 
@@ -687,11 +687,12 @@ def test_another():
             projectName={project.name}
           />
 
-          <ValidationResultModal
+          <ValidationRouter
             isOpen={showResultModal}
-            onClose={handleResultModalClose}
             result={validationResult}
+            category={category}
             projectName={project.name}
+            onClose={handleResultModalClose}
             onOpenTutor={() => {
               setShowResultModal(false)
               setIsSubmitting(false)

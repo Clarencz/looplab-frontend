@@ -5,4 +5,4 @@ export { default as Terminal } from './Terminal'
 export { default as Header } from './Header'
 export * from './LearningPathUI'
 export { CategoryRouter } from './CategoryRouter'
-
+export { ValidationRouter } from './ValidationRouter'

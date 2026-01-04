@@ -1,42 +1,34 @@
 "use client"
 
 import { useState } from "react"
+import { useFormContext, useFieldArray } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { CheckCircle2, Circle, Briefcase, Plus, ChevronDown, Trash2 } from "lucide-react"
-
-interface Experience {
-  id: string
-  title: string
-  company: string
-  timeline: string
-  description: string
-}
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import type { ProfileFormValues } from "@/lib/validation/profileValidation"
 
 interface ExperienceCardProps {
-  experiences: Experience[]
-  onChange: (experiences: Experience[]) => void
   isEditing: boolean
 }
 
-export function ExperienceCard({ experiences, onChange, isEditing }: ExperienceCardProps) {
+export function ExperienceCard({ isEditing }: ExperienceCardProps) {
+  const { control, watch } = useFormContext<ProfileFormValues>()
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "experiences",
+  })
+
+  const experiences = watch("experiences") || []
   const [isOpen, setIsOpen] = useState(experiences.length > 0)
-  const isComplete = experiences.length > 0 && experiences.every((e) => e.title && e.company)
+  const isComplete = experiences.length > 0 && experiences.every((e) => e.company && e.role)
 
   const addExperience = () => {
-    onChange([...experiences, { id: Date.now().toString(), title: "", company: "", timeline: "", description: "" }])
+    append({ id: Date.now().toString(), company: "", role: "", period: "", description: "" })
     setIsOpen(true)
-  }
-
-  const updateExperience = (id: string, field: keyof Experience, value: string) => {
-    onChange(experiences.map((e) => (e.id === id ? { ...e, [field]: value } : e)))
-  }
-
-  const removeExperience = (id: string) => {
-    onChange(experiences.filter((e) => e.id !== id))
   }
 
   return (
@@ -59,50 +51,74 @@ export function ExperienceCard({ experiences, onChange, isEditing }: ExperienceC
         </CardHeader>
         <CollapsibleContent>
           <CardContent className="space-y-4">
-            {experiences.map((exp, index) => (
-              <div key={exp.id} className="p-4 rounded-lg bg-secondary/30 space-y-3">
+            {fields.map((field, index) => (
+              <div key={field.id} className="p-4 rounded-lg bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">Experience {index + 1}</span>
                   {isEditing && (
-                    <Button size="icon" variant="ghost" onClick={() => removeExperience(exp.id)} className="h-6 w-6">
+                    <Button size="icon" variant="ghost" onClick={() => remove(index)} className="h-6 w-6">
                       <Trash2 className="h-3 w-3 text-destructive" />
                     </Button>
                   )}
                 </div>
                 {isEditing ? (
                   <>
-                    <Input
-                      value={exp.title}
-                      onChange={(e) => updateExperience(exp.id, "title", e.target.value)}
-                      placeholder="Job Title"
-                      className="bg-secondary/50"
+                    <FormField
+                      control={control}
+                      name={`experiences.${index}.role`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input {...field} placeholder="Job Title" className="bg-secondary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                    <Input
-                      value={exp.company}
-                      onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
-                      placeholder="Company"
-                      className="bg-secondary/50"
+                    <FormField
+                      control={control}
+                      name={`experiences.${index}.company`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input {...field} placeholder="Company" className="bg-secondary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                    <Input
-                      value={exp.timeline}
-                      onChange={(e) => updateExperience(exp.id, "timeline", e.target.value)}
-                      placeholder="Timeline (e.g., Jan 2022 - Present)"
-                      className="bg-secondary/50"
+                    <FormField
+                      control={control}
+                      name={`experiences.${index}.period`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input {...field} placeholder="Timeline (e.g., Jan 2022 - Present)" className="bg-secondary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                    <Textarea
-                      value={exp.description}
-                      onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
-                      placeholder="Brief description of your role..."
-                      className="bg-secondary/50 resize-none"
+                    <FormField
+                      control={control}
+                      name={`experiences.${index}.description`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Textarea {...field} placeholder="Brief description of your role..." className="bg-secondary/50 resize-none" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </>
                 ) : (
                   <div className="space-y-1">
-                    <p className="font-medium">{exp.title || "No title"}</p>
+                    <p className="font-medium">{experiences[index]?.role || "No title"}</p>
                     <p className="text-sm text-muted-foreground">
-                      {exp.company} {exp.timeline && `• ${exp.timeline}`}
+                      {experiences[index]?.company} {experiences[index]?.period && `• ${experiences[index].period}`}
                     </p>
-                    {exp.description && <p className="text-sm mt-2">{exp.description}</p>}
+                    {experiences[index]?.description && <p className="text-sm mt-2">{experiences[index].description}</p>}
                   </div>
                 )}
               </div>

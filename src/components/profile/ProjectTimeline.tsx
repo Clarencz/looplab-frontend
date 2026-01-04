@@ -27,7 +27,7 @@ export function ProjectTimeline({ projects }: ProjectTimelineProps) {
         <p className="text-xs text-muted-foreground">Automatically synced from your verified projects</p>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[500px] pr-4">
+        <ScrollArea className="max-h-[500px] pr-4">
           <div className="space-y-4">
             {projects.map((project) => (
               <div

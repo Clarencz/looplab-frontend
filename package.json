@@ -12,10 +12,11 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@looplab/shared-types": "workspace:*",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@hello-pangea/dnd": "^18.0.1",
+    "@hookform/resolvers": "^5.2.2",
+    "@looplab/shared-types": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
@@ -45,12 +46,15 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tanstack/react-query": "^5.56.2",
+    "@types/dompurify": "^3.2.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "dompurify": "^3.3.1",
     "embla-carousel-react": "^8.1.8",
     "framer-motion": "^12.23.25",
+    "html2pdf.js": "^0.12.1",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.441.0",
     "monaco-editor": "^0.55.1",
@@ -67,7 +71,8 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.1"
+    "vaul": "^0.9.1",
+    "zod": "^4.3.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

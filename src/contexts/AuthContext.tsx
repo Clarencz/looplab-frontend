@@ -5,6 +5,8 @@ interface User {
   id: string;
   email: string;
   username: string;
+  phone?: string;
+  subdomain?: string;
   roles?: Array<{ id: string; name: string; display_name: string }>;
   profile: {
     full_name: string;
@@ -41,6 +43,7 @@ interface AuthContextType {
   signInWithGitHub: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -124,6 +127,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.location.href = '/api/v1/auth/google';
   };
 
+  const refreshUser = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) return;
+
+      const response = await fetch('/api/v1/auth/session', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const userData = data.data?.user || data.user;
+
+        if (userData) {
+          setUser(userData);
+          if (session) {
+            setSession({
+              ...session,
+              user: userData,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+    }
+  };
+
   const signOut = async () => {
     try {
       // Call backend logout endpoint
@@ -161,6 +195,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signInWithGitHub,
         signInWithGoogle,
         signOut,
+        refreshUser,
       }}
     >
       {children}

@@ -65,7 +65,7 @@ export function ProfileHeader({ user, completionPercentage, onEditProfile, onGen
             className={`gap-2 ${!isProfileComplete ? "opacity-50 cursor-not-allowed" : "glow-button"}`}
           >
             <FileText className="h-4 w-4" />
-            Generate CV
+            Preview CV
           </Button>
         </div>
       </div>

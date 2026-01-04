@@ -1,35 +1,29 @@
 "use client"
+
+import { useFormContext, useFieldArray } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Circle, GraduationCap, Plus, Trash2 } from "lucide-react"
-
-interface Education {
-  id: string
-  school: string
-  course: string
-  year: string
-}
+import { FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form"
+import type { ProfileFormValues } from "@/lib/validation/profileValidation"
 
 interface EducationCardProps {
-  education: Education[]
-  onChange: (education: Education[]) => void
   isEditing: boolean
 }
 
-export function EducationCard({ education, onChange, isEditing }: EducationCardProps) {
+export function EducationCard({ isEditing }: EducationCardProps) {
+  const { control, watch } = useFormContext<ProfileFormValues>()
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "education",
+  })
+
+  const education = watch("education") || []
   const isComplete = education.length > 0 && education.every((e) => e.school && e.course)
 
   const addEducation = () => {
-    onChange([...education, { id: Date.now().toString(), school: "", course: "", year: "" }])
-  }
-
-  const updateEducation = (id: string, field: keyof Education, value: string) => {
-    onChange(education.map((e) => (e.id === id ? { ...e, [field]: value } : e)))
-  }
-
-  const removeEducation = (id: string) => {
-    onChange(education.filter((e) => e.id !== id))
+    append({ id: Date.now().toString(), school: "", course: "", year: "" })
   }
 
   return (
@@ -46,42 +40,60 @@ export function EducationCard({ education, onChange, isEditing }: EducationCardP
         )}
       </CardHeader>
       <CardContent className="space-y-4">
-        {education.map((edu, index) => (
-          <div key={edu.id} className="p-4 rounded-lg bg-secondary/30 space-y-3">
+        {fields.map((field, index) => (
+          <div key={field.id} className="p-4 rounded-lg bg-secondary/30 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">Education {index + 1}</span>
               {isEditing && (
-                <Button size="icon" variant="ghost" onClick={() => removeEducation(edu.id)} className="h-6 w-6">
+                <Button size="icon" variant="ghost" onClick={() => remove(index)} className="h-6 w-6">
                   <Trash2 className="h-3 w-3 text-destructive" />
                 </Button>
               )}
             </div>
             {isEditing ? (
               <>
-                <Input
-                  value={edu.school}
-                  onChange={(e) => updateEducation(edu.id, "school", e.target.value)}
-                  placeholder="School/University Name"
-                  className="bg-secondary/50"
+                <FormField
+                  control={control}
+                  name={`education.${index}.school`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder="School/University Name" className="bg-secondary/50" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <Input
-                  value={edu.course}
-                  onChange={(e) => updateEducation(edu.id, "course", e.target.value)}
-                  placeholder="Course/Degree Title"
-                  className="bg-secondary/50"
+                <FormField
+                  control={control}
+                  name={`education.${index}.course`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder="Course/Degree Title" className="bg-secondary/50" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <Input
-                  value={edu.year}
-                  onChange={(e) => updateEducation(edu.id, "year", e.target.value)}
-                  placeholder="Year (e.g., 2020 - 2024)"
-                  className="bg-secondary/50"
+                <FormField
+                  control={control}
+                  name={`education.${index}.year`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} placeholder="Year (e.g., 2020 - 2024)" className="bg-secondary/50" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </>
             ) : (
               <div className="space-y-1">
-                <p className="font-medium">{edu.school || "No school"}</p>
+                <p className="font-medium">{education[index]?.school || "No school"}</p>
                 <p className="text-sm text-muted-foreground">
-                  {edu.course} {edu.year && `• ${edu.year}`}
+                  {education[index]?.course} {education[index]?.year && `• ${education[index].year}`}
                 </p>
               </div>
             )}

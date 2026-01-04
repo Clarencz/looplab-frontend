@@ -1,33 +1,35 @@
 "use client"
 
 import { useState } from "react"
+import { useFormContext } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Circle, Code2, Plus, X } from "lucide-react"
+import type { ProfileFormValues } from "@/lib/validation/profileValidation"
 
 interface SkillsCardProps {
-  skills: string[]
   loopLabSkills: string[]
-  onChange: (skills: string[]) => void
   isEditing: boolean
 }
 
-export function SkillsCard({ skills, loopLabSkills, onChange, isEditing }: SkillsCardProps) {
+export function SkillsCard({ loopLabSkills, isEditing }: SkillsCardProps) {
+  const { watch, setValue } = useFormContext<ProfileFormValues>()
   const [newSkill, setNewSkill] = useState("")
+  const skills = watch("skills") || []
   const allSkills = [...new Set([...skills, ...loopLabSkills])]
   const isComplete = allSkills.length >= 3
 
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      onChange([...skills, newSkill.trim()])
+      setValue("skills", [...skills, newSkill.trim()])
       setNewSkill("")
     }
   }
 
   const removeSkill = (skill: string) => {
-    onChange(skills.filter((s) => s !== skill))
+    setValue("skills", skills.filter((s) => s !== skill))
   }
 
   return (

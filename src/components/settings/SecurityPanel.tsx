@@ -1,67 +1,181 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Switch } from "@/components/ui/switch"
+import { Button } from "@/components/ui/button"
+import { Shield, Monitor, Smartphone, Laptop, Loader2 } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/contexts/AuthContext"
+import { TwoFactorSetupModal } from "./TwoFactorSetupModal"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Lock, Shield, Monitor, Smartphone, Laptop, Info } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 
 interface Session {
   id: string
-  device: string
-  type: "desktop" | "mobile" | "tablet"
-  location: string
+  deviceInfo: string | null
+  deviceType: string | null
+  location: string | null
   lastActive: string
-  isCurrent: boolean
+  isCurrent?: boolean
 }
 
-const mockSessions: Session[] = [
-  {
-    id: "1",
-    device: "Chrome on MacOS",
-    type: "desktop",
-    location: "San Francisco, CA",
-    lastActive: "Now",
-    isCurrent: true,
-  },
-  {
-    id: "2",
-    device: "Safari on iPhone",
-    type: "mobile",
-    location: "San Francisco, CA",
-    lastActive: "2 hours ago",
-    isCurrent: false,
-  },
-  {
-    id: "3",
-    device: "Firefox on Windows",
-    type: "desktop",
-    location: "New York, NY",
-    lastActive: "3 days ago",
-    isCurrent: false,
-  },
-]
-
 export function SecurityPanel() {
-  const [passwords, setPasswords] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  })
-  const [twoStepEnabled, setTwoStepEnabled] = useState(false)
-  const [sessions, setSessions] = useState(mockSessions)
+  const { user, refreshUser } = useAuth()
+  const { toast } = useToast()
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [loading, setLoading] = useState(true)
+  const [terminating, setTerminating] = useState<string | null>(null)
+  const [showSetupModal, setShowSetupModal] = useState(false)
+  const [showDisableDialog, setShowDisableDialog] = useState(false)
+  const [disableCode, setDisableCode] = useState("")
+  const [disabling, setDisabling] = useState(false)
 
-  const passwordsMatch = passwords.newPassword === passwords.confirmPassword && passwords.newPassword.length > 0
-  const canSave = passwords.oldPassword.length > 0 && passwordsMatch
+  // Load user 2FA status
+  useEffect(() => {
+    if (user) {
+      // TODO: Add two_factor_enabled to user model
+      setTwoFactorEnabled(false) // user.two_factor_enabled || false
+    }
+  }, [user])
 
-  const handleTerminateSession = (sessionId: string) => {
-    setSessions((prev) => prev.filter((s) => s.id !== sessionId))
+  // Fetch sessions on mount
+  useEffect(() => {
+    fetchSessions()
+  }, [])
+
+  const fetchSessions = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings/sessions', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        // Ensure sessions is always an array
+        setSessions(Array.isArray(data) ? data : [])
+      } else {
+        setSessions([])
+      }
+    } catch (error) {
+      console.error('Failed to fetch sessions:', error)
+      setSessions([])
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const getDeviceIcon = (type: Session["type"]) => {
+  const handleTerminateSession = async (sessionId: string) => {
+    setTerminating(sessionId)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch(`/api/v1/settings/sessions/${sessionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to terminate session')
+      }
+
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId))
+      toast({
+        title: "Session terminated",
+        description: "The session has been successfully terminated",
+      })
+    } catch (error) {
+      console.error('Failed to terminate session:', error)
+      toast({
+        title: "Termination failed",
+        description: "Failed to terminate the session",
+        variant: "destructive",
+      })
+    } finally {
+      setTerminating(null)
+    }
+  }
+
+  const handleToggle2FA = (checked: boolean) => {
+    if (checked) {
+      setShowSetupModal(true)
+    } else {
+      setShowDisableDialog(true)
+    }
+  }
+
+  const handleDisable2FA = async () => {
+    if (disableCode.length !== 6) {
+      toast({
+        title: "Invalid code",
+        description: "Please enter a 6-digit code",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setDisabling(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings/2fa/disable', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ code: disableCode }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to disable 2FA')
+      }
+
+      setTwoFactorEnabled(false)
+      setShowDisableDialog(false)
+      setDisableCode("")
+      await refreshUser()
+
+      toast({
+        title: "2FA disabled",
+        description: "Two-factor authentication has been disabled",
+      })
+    } catch (error) {
+      console.error('Failed to disable 2FA:', error)
+      toast({
+        title: "Disable failed",
+        description: "Invalid code or failed to disable 2FA",
+        variant: "destructive",
+      })
+    } finally {
+      setDisabling(false)
+    }
+  }
+
+  const handle2FASetupSuccess = async () => {
+    setTwoFactorEnabled(true)
+    await refreshUser()
+  }
+
+  const getDeviceIcon = (type: string | null) => {
     switch (type) {
       case "mobile":
         return <Smartphone className="h-4 w-4" />
@@ -72,57 +186,22 @@ export function SecurityPanel() {
     }
   }
 
+  const formatLastActive = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMins / 60)
+    const diffDays = Math.floor(diffHours / 24)
+
+    if (diffMins < 5) return "Now"
+    if (diffMins < 60) return `${diffMins} minutes ago`
+    if (diffHours < 24) return `${diffHours} hours ago`
+    return `${diffDays} days ago`
+  }
+
   return (
     <div className="space-y-6">
-      {/* Change Password Card */}
-      <Card className="shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Lock className="h-5 w-5" /> Change Password
-          </CardTitle>
-          <CardDescription>Update your password to keep your account secure</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="oldPassword">Current Password</Label>
-            <Input
-              id="oldPassword"
-              type="password"
-              value={passwords.oldPassword}
-              onChange={(e) => setPasswords((prev) => ({ ...prev, oldPassword: e.target.value }))}
-              placeholder="Enter current password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
-            <Input
-              id="newPassword"
-              type="password"
-              value={passwords.newPassword}
-              onChange={(e) => setPasswords((prev) => ({ ...prev, newPassword: e.target.value }))}
-              placeholder="Enter new password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              value={passwords.confirmPassword}
-              onChange={(e) => setPasswords((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-              placeholder="Confirm new password"
-              className={passwords.confirmPassword && !passwordsMatch ? "border-destructive" : ""}
-            />
-            {passwords.confirmPassword && !passwordsMatch && (
-              <p className="text-xs text-destructive">Passwords do not match</p>
-            )}
-          </div>
-          <Button disabled={!canSave} className="mt-2">
-            Update Password
-          </Button>
-        </CardContent>
-      </Card>
-
       {/* Two-Step Security Card */}
       <Card className="shadow-sm">
         <CardHeader>
@@ -143,17 +222,20 @@ export function SecurityPanel() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Info className="h-4 w-4 text-muted-foreground" />
+                    <Shield className="h-4 w-4 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="text-xs max-w-[200px]">
-                      Two-step verification adds security by requiring both your password and a code sent to your phone.
+                      Two-step verification adds security by requiring both your OAuth login and a code from your authenticator app.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <Switch checked={twoStepEnabled} onCheckedChange={setTwoStepEnabled} />
+            <Switch
+              checked={twoFactorEnabled}
+              onCheckedChange={handleToggle2FA}
+            />
           </div>
         </CardContent>
       </Card>
@@ -167,43 +249,99 @@ export function SecurityPanel() {
           <CardDescription>Manage devices where you're currently signed in</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {sessions.map((session) => (
-              <div
-                key={session.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/30"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-                    {getDeviceIcon(session.type)}
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : sessions.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">No active sessions found</p>
+          ) : (
+            <div className="space-y-3">
+              {sessions.map((session, index) => (
+                <div
+                  key={session.id}
+                  className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/30"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      {getDeviceIcon(session.deviceType)}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm flex items-center gap-2">
+                        {session.deviceInfo || "Unknown Device"}
+                        {index === 0 && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary">Current</span>
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {session.location || "Unknown location"} · {formatLastActive(session.lastActive)}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm flex items-center gap-2">
-                      {session.device}
-                      {session.isCurrent && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary">Current</span>
+                  {index !== 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => handleTerminateSession(session.id)}
+                      disabled={terminating === session.id}
+                    >
+                      {terminating === session.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Terminate"
                       )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {session.location} · {session.lastActive}
-                    </p>
-                  </div>
+                    </Button>
+                  )}
                 </div>
-                {!session.isCurrent && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => handleTerminateSession(session.id)}
-                  >
-                    Terminate
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
+
+      {/* 2FA Setup Modal */}
+      <TwoFactorSetupModal
+        open={showSetupModal}
+        onOpenChange={setShowSetupModal}
+        onSuccess={handle2FASetupSuccess}
+      />
+
+      {/* 2FA Disable Dialog */}
+      <AlertDialog open={showDisableDialog} onOpenChange={setShowDisableDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disable Two-Factor Authentication?</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4">
+              <p>
+                This will remove the extra layer of security from your account.
+              </p>
+              <div className="space-y-2">
+                <Label htmlFor="disable-code">Enter your 6-digit code to confirm</Label>
+                <Input
+                  id="disable-code"
+                  placeholder="000000"
+                  value={disableCode}
+                  onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  maxLength={6}
+                  className="text-center text-xl tracking-widest"
+                />
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDisableCode("")}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDisable2FA}
+              disabled={disableCode.length !== 6 || disabling}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {disabling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Disable 2FA
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

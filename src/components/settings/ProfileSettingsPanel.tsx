@@ -1,28 +1,138 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Github, Linkedin, Globe, ArrowRight } from "lucide-react"
+import { Github, Linkedin, Globe, ArrowRight, Loader2 } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { useToast } from "@/hooks/use-toast"
 
 export function ProfileSettingsPanel() {
+  const { user, refreshUser } = useAuth()
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+
   const [profileData, setProfileData] = useState({
-    fullName: "Alex Johnson",
-    username: "alexcoder",
-    email: "alex@example.com",
-    country: "United States",
-    timezone: "America/Los_Angeles",
-    github: "github.com/alexjohnson",
-    linkedin: "linkedin.com/in/alexjohnson",
-    portfolio: "alexjohnson.dev",
+    fullName: "",
+    username: "",
+    email: "",
+    country: "",
+    timezone: "",
+    github: "",
+    linkedin: "",
+    portfolio: "",
   })
+
+  // Load user data on mount
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        fullName: user.profile?.full_name || "",
+        username: user.username || "",
+        email: user.email || "",
+        country: user.profile?.country || "",
+        timezone: user.profile?.timezone || "",
+        github: user.profile?.github_url || "",
+        linkedin: user.profile?.linkedin_url || "",
+        portfolio: user.profile?.portfolio_url || "",
+      })
+    }
+  }, [user])
 
   const handleChange = (field: string, value: string) => {
     setProfileData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleSaveBasics = async () => {
+    setSaving(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          full_name: profileData.fullName,
+          username: profileData.username,
+          country: profileData.country,
+          timezone: profileData.timezone,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile')
+      }
+
+      await refreshUser()
+      toast({
+        title: "Profile updated",
+        description: "Your profile information has been saved",
+      })
+    } catch (error) {
+      console.error('Failed to save profile:', error)
+      toast({
+        title: "Update failed",
+        description: "Failed to save profile changes",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleSaveLinks = async () => {
+    setSaving(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          github_url: profileData.github,
+          linkedin_url: profileData.linkedin,
+          portfolio_url: profileData.portfolio,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update links')
+      }
+
+      await refreshUser()
+      toast({
+        title: "Links updated",
+        description: "Your professional links have been saved",
+      })
+    } catch (error) {
+      console.error('Failed to save links:', error)
+      toast({
+        title: "Update failed",
+        description: "Failed to save professional links",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (
@@ -37,16 +147,18 @@ export function ProfileSettingsPanel() {
           {/* Avatar Section */}
           <div className="flex items-center gap-6">
             <Avatar className="h-20 w-20">
-              <AvatarImage src="/developer-avatar-portrait.jpg" alt="Profile" />
-              <AvatarFallback className="text-xl">AJ</AvatarFallback>
+              <AvatarImage src={user.profile?.avatar_url || undefined} alt="Profile" />
+              <AvatarFallback className="text-xl">
+                {user.profile?.full_name?.charAt(0) || user.username?.charAt(0) || "U"}
+              </AvatarFallback>
             </Avatar>
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm">
-                Change
-              </Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground">
-                Remove
-              </Button>
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">
+                Manage your avatar on the{" "}
+                <a href="/profile" className="text-primary hover:underline">
+                  Profile page
+                </a>
+              </p>
             </div>
           </div>
 
@@ -76,9 +188,13 @@ export function ProfileSettingsPanel() {
                 id="email"
                 type="email"
                 value={profileData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
+                disabled
+                className="bg-muted"
                 placeholder="your@email.com"
               />
+              <p className="text-xs text-muted-foreground">
+                Email is managed through your OAuth provider
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="country">Country</Label>
@@ -95,6 +211,9 @@ export function ProfileSettingsPanel() {
                   <SelectItem value="Australia">Australia</SelectItem>
                   <SelectItem value="Japan">Japan</SelectItem>
                   <SelectItem value="India">India</SelectItem>
+                  <SelectItem value="Kenya">Kenya</SelectItem>
+                  <SelectItem value="Nigeria">Nigeria</SelectItem>
+                  <SelectItem value="South Africa">South Africa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -113,12 +232,17 @@ export function ProfileSettingsPanel() {
                   <SelectItem value="Europe/Paris">CET (Paris)</SelectItem>
                   <SelectItem value="Asia/Tokyo">JST (Tokyo)</SelectItem>
                   <SelectItem value="Asia/Kolkata">IST (India)</SelectItem>
+                  <SelectItem value="Africa/Nairobi">EAT (Nairobi)</SelectItem>
+                  <SelectItem value="Africa/Lagos">WAT (Lagos)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <Button className="mt-2">Save Changes</Button>
+          <Button onClick={handleSaveBasics} disabled={saving}>
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Save Changes
+          </Button>
         </CardContent>
       </Card>
 
@@ -163,7 +287,10 @@ export function ProfileSettingsPanel() {
             />
           </div>
 
-          <Button className="mt-2">Save Links</Button>
+          <Button onClick={handleSaveLinks} disabled={saving}>
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Save Links
+          </Button>
         </CardContent>
       </Card>
 

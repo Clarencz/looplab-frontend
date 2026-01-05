@@ -2,10 +2,12 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { Check, Sun, Moon, Monitor } from "lucide-react"
+import { Check, Sun, Moon, Monitor, Loader2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { useTheme } from "@/contexts/ThemeContext"
 
 interface Theme {
   id: string
@@ -95,28 +97,174 @@ const editorThemes: EditorTheme[] = [
 ]
 
 export function AppearancePanel() {
+  const { toast } = useToast()
+  const { theme: currentTheme, toggleTheme } = useTheme()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [selectedTheme, setSelectedTheme] = useState("dark")
   const [selectedEditorTheme, setSelectedEditorTheme] = useState("monokai")
+
+  // Load settings on mount
+  useEffect(() => {
+    fetchSettings()
+  }, [])
+
+  const fetchSettings = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setSelectedTheme(data.theme || "dark")
+        setSelectedEditorTheme(data.editorTheme || "monokai")
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const saveTheme = async (theme: string) => {
+    setSaving(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ theme }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update theme')
+      }
+
+      // Apply theme to UI
+      applyThemeToUI(theme)
+
+      toast({
+        title: "Theme updated",
+        description: "Your theme preference has been saved",
+      })
+    } catch (error) {
+      console.error('Failed to save theme:', error)
+      toast({
+        title: "Error",
+        description: "Failed to update theme",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const applyThemeToUI = (theme: string) => {
+    // Map custom themes to light/dark for ThemeContext
+    const root = document.documentElement
+    root.classList.remove("light", "dark", "midnight", "solarized")
+
+    if (theme === "light" || theme === "system") {
+      root.classList.add("light")
+    } else {
+      // All other themes (dark, midnight, solarized) use dark mode
+      root.classList.add("dark")
+      if (theme === "midnight" || theme === "solarized") {
+        root.classList.add(theme)
+      }
+    }
+
+    localStorage.setItem("theme", theme)
+  }
+
+  const saveEditorTheme = async (editorTheme: string) => {
+    setSaving(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ editor_theme: editorTheme }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update editor theme')
+      }
+
+      toast({
+        title: "Editor theme updated",
+        description: "Your editor theme preference has been saved",
+      })
+    } catch (error) {
+      console.error('Failed to save editor theme:', error)
+      toast({
+        title: "Update failed",
+        description: "Failed to save editor theme preference",
+        variant: "destructive",
+      })
+      fetchSettings()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleThemeChange = (themeId: string) => {
+    setSelectedTheme(themeId)
+    saveTheme(themeId)
+  }
+
+  const handleEditorThemeChange = (themeId: string) => {
+    setSelectedEditorTheme(themeId)
+    saveEditorTheme(themeId)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
       {/* App Theme */}
       <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg">Theme</CardTitle>
-          <CardDescription>Choose how LoopLab looks to you</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Theme</CardTitle>
+              <CardDescription>Choose how LoopLab looks to you</CardDescription>
+            </div>
+            {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {appThemes.map((theme) => (
               <button
                 key={theme.id}
-                onClick={() => setSelectedTheme(theme.id)}
+                onClick={() => handleThemeChange(theme.id)}
+                disabled={saving}
                 className={cn(
                   "relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
                   selectedTheme === theme.id
                     ? "border-primary ring-2 ring-primary/20"
                     : "border-border hover:border-muted-foreground/30",
+                  saving && "opacity-50 cursor-not-allowed"
                 )}
               >
                 {/* Theme Preview */}
@@ -155,20 +303,27 @@ export function AppearancePanel() {
       {/* Editor Theme */}
       <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg">Editor Theme</CardTitle>
-          <CardDescription>Customize the code editor appearance</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Editor Theme</CardTitle>
+              <CardDescription>Customize the code editor appearance</CardDescription>
+            </div>
+            {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {editorThemes.map((theme) => (
               <button
                 key={theme.id}
-                onClick={() => setSelectedEditorTheme(theme.id)}
+                onClick={() => handleEditorThemeChange(theme.id)}
+                disabled={saving}
                 className={cn(
                   "relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
                   selectedEditorTheme === theme.id
                     ? "border-primary ring-2 ring-primary/20"
                     : "border-border hover:border-muted-foreground/30",
+                  saving && "opacity-50 cursor-not-allowed"
                 )}
               >
                 {/* Editor Preview */}

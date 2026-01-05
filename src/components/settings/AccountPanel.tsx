@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { AlertTriangle, Download, Trash2 } from "lucide-react"
+import { AlertTriangle, Download, Trash2, Loader2 } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,12 +18,104 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useAuth } from "@/contexts/AuthContext"
+import { useToast } from "@/hooks/use-toast"
+import { useNavigate } from "react-router-dom"
 
 export function AccountPanel() {
+  const { user } = useAuth()
+  const { toast } = useToast()
+  const navigate = useNavigate()
   const [deleteConfirmation, setDeleteConfirmation] = useState("")
-  const username = "alexcoder"
+  const [exporting, setExporting] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
-  const canDelete = deleteConfirmation === username
+  const canDelete = deleteConfirmation === user?.username
+
+  const handleExportData = async () => {
+    setExporting(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings/export', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to request data export')
+      }
+
+      toast({
+        title: "Export requested",
+        description: "Your data export has been requested. You'll receive an email with a download link shortly.",
+      })
+    } catch (error) {
+      console.error('Failed to export data:', error)
+      toast({
+        title: "Export failed",
+        description: "Failed to request data export. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true)
+    try {
+      const accessToken = localStorage.getItem('access_token')
+      const response = await fetch('/api/v1/settings/account', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete account')
+      }
+
+      toast({
+        title: "Account deleted",
+        description: "Your account has been permanently deleted.",
+      })
+
+      // Clear local storage and redirect to home
+      localStorage.clear()
+      navigate('/')
+    } catch (error) {
+      console.error('Failed to delete account:', error)
+      toast({
+        title: "Deletion failed",
+        description: "Failed to delete account. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return "Unknown"
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -40,11 +132,15 @@ export function AccountPanel() {
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Member Since</span>
-            <span className="text-sm font-medium">November 15, 2024</span>
+            <span className="text-sm font-medium">{formatDate(user.created_at)}</span>
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Account ID</span>
-            <span className="text-sm font-mono text-muted-foreground">usr_a1b2c3d4e5</span>
+            <span className="text-sm font-mono text-muted-foreground">{user.id.slice(0, 13)}...</span>
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-sm text-muted-foreground">Email</span>
+            <span className="text-sm font-medium">{user.email}</span>
           </div>
         </CardContent>
       </Card>
@@ -60,9 +156,18 @@ export function AccountPanel() {
             Export includes your profile information, project history, achievements, and CV data. The export will be
             prepared and sent to your email.
           </p>
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Request Data Export
+          <Button variant="outline" onClick={handleExportData} disabled={exporting}>
+            {exporting ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Preparing Export...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                Request Data Export
+              </>
+            )}
           </Button>
         </CardContent>
       </Card>
@@ -103,7 +208,7 @@ export function AccountPanel() {
                     </p>
                     <div className="space-y-2">
                       <Label htmlFor="confirm-delete" className="text-foreground">
-                        Type <span className="font-mono font-bold">{username}</span> to confirm
+                        Type <span className="font-mono font-bold">{user.username}</span> to confirm
                       </Label>
                       <Input
                         id="confirm-delete"
@@ -118,10 +223,18 @@ export function AccountPanel() {
                 <AlertDialogFooter>
                   <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    disabled={!canDelete}
+                    disabled={!canDelete || deleting}
+                    onClick={handleDeleteAccount}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Delete Account
+                    {deleting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Deleting...
+                      </>
+                    ) : (
+                      "Delete Account"
+                    )}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

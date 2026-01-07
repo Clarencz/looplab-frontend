@@ -28,7 +28,7 @@ export default function AdminLayout() {
     const { user, logout } = useAuth();
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="admin-light min-h-screen bg-gray-50 text-gray-900" style={{ colorScheme: 'light' }}>
             {/* Sidebar */}
             <div className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200">
                 {/* Logo */}

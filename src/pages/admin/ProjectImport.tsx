@@ -267,7 +267,7 @@ export default function ProjectImport() {
 
                         <div className="flex gap-4">
                             <button
-                                onClick={() => navigate(`/admin/projects/${importedProjectId}`)}
+                                onClick={() => navigate(`/admin/projects/${importedProjectId}/edit`)}
                                 className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                             >
                                 View Project

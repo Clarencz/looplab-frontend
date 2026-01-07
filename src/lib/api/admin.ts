@@ -160,7 +160,8 @@ export const adminApi = {
 
     // Learning Paths
     listLearningPaths: async (includeUnpublished = false): Promise<LearningPath[]> => {
-        return apiClient.get<LearningPath[]>('/admin/learning-paths', { include_unpublished: includeUnpublished });
+        const response = await apiClient.get<{ data: LearningPath[] }>('/admin/learning-paths', { include_unpublished: includeUnpublished });
+        return Array.isArray(response) ? response : (response.data || []);
     },
 
     createLearningPath: async (data: {

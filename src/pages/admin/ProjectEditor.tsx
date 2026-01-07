@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Save, Eye, FileCode, Info } from 'lucide-react';
+import { ArrowLeft, Save, Eye, FileCode, Info, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import ProjectMetadataEditor from '@/components/admin/ProjectMetadataEditor';
+import AIPipelineChat from '@/components/admin/AIPipelineChat';
 import { apiClient } from '@/lib/api';
 
 interface FileNode {
@@ -18,7 +19,7 @@ interface FileNode {
 export default function ProjectEditor() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<'files' | 'metadata'>('files');
+    const [activeTab, setActiveTab] = useState<'files' | 'pipeline' | 'metadata'>('files');
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
     const [fileContent, setFileContent] = useState<string>('');
     const [isSaving, setIsSaving] = useState(false);
@@ -145,6 +146,16 @@ export default function ProjectEditor() {
                             Files
                         </button>
                         <button
+                            onClick={() => setActiveTab('pipeline')}
+                            className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'pipeline'
+                                ? 'border-purple-500 text-purple-600'
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                }`}
+                        >
+                            <Sparkles className="h-4 w-4 inline mr-2" />
+                            AI Pipeline
+                        </button>
+                        <button
                             onClick={() => setActiveTab('metadata')}
                             className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'metadata'
                                 ? 'border-blue-500 text-blue-600'
@@ -160,7 +171,7 @@ export default function ProjectEditor() {
 
             {/* Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {activeTab === 'files' ? (
+                {activeTab === 'files' && (
                     <div className="grid grid-cols-12 gap-6">
                         {/* File Tree */}
                         <div className="col-span-3 bg-white rounded-lg shadow p-4">
@@ -224,7 +235,17 @@ export default function ProjectEditor() {
                             )}
                         </div>
                     </div>
-                ) : (
+                )}
+
+                {activeTab === 'pipeline' && (
+                    <AIPipelineChat
+                        projectId={id!}
+                        projectName={project.name}
+                        files={files}
+                    />
+                )}
+
+                {activeTab === 'metadata' && (
                     <ProjectMetadataEditor
                         projectId={id!}
                         project={project}

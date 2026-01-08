@@ -33,10 +33,10 @@ interface Props {
     projectId: string;
     projectName: string;
     files: Array<{ name: string; type: string; content?: string }>;
-    onLevelsGenerated?: (levels: any) => void;
+    onLevelsGenerated?: (levels: Array<{ name: string; files: Array<{ name: string; type: string; status: string; content: string }> }>) => void;
 }
 
-export default function AIPipelineChat({ projectId, projectName, files }: Props) {
+export default function AIPipelineChat({ projectId, projectName, files, onLevelsGenerated }: Props) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -161,47 +161,17 @@ export default function AIPipelineChat({ projectId, projectName, files }: Props)
         },
         onError: (error: any) => {
             console.error('Chat error:', error);
-            // Fallback: Parse user intent locally
-            handleLocalParsing(input);
+            const errorMessage = error?.response?.data?.message || error?.message || 'Unknown error';
+            addMessage('assistant',
+                `❌ **AI Chat Error**\n\n` +
+                `Failed to connect to AI: ${errorMessage}\n\n` +
+                `Please check:\n` +
+                `• AI Pipeline service is running on port 8001\n` +
+                `• Backend can reach the AI service\n` +
+                `• API quota hasn't been exceeded`
+            );
         },
     });
-
-    const handleLocalParsing = (userMessage: string) => {
-        const lowerMessage = userMessage.toLowerCase();
-
-        // Extract difficulty
-        let difficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner';
-        if (lowerMessage.includes('intermediate')) difficulty = 'intermediate';
-        if (lowerMessage.includes('advanced')) difficulty = 'advanced';
-
-        // Extract topics (simple keyword matching)
-        const topicKeywords = [
-            'data processing', 'data cleaning', 'visualization', 'machine learning',
-            'ml', 'api', 'database', 'testing', 'error handling', 'algorithms',
-            'file handling', 'web scraping', 'automation'
-        ];
-        const detectedTopics = topicKeywords.filter(t => lowerMessage.includes(t.toLowerCase()));
-        const topics = detectedTopics.length > 0 ? detectedTopics : ['core concepts'];
-
-        const specs: PipelineSpecs = {
-            topics,
-            difficulty,
-            estimated_time: difficulty === 'beginner' ? '30-45 min' : difficulty === 'intermediate' ? '45-60 min' : '60-90 min',
-            excluded_areas: [],
-            ready_to_generate: true,
-        };
-
-        setCurrentSpecs(specs);
-
-        addMessage('assistant',
-            `Got it! I'll create 3 levels focused on:\n` +
-            specs.topics.map(t => `✓ ${t}`).join('\n') +
-            `\n\n**Difficulty:** ${specs.difficulty}\n` +
-            `**Estimated time:** ${specs.estimated_time}\n\n` +
-            `Ready to generate the learning levels?`,
-            specs
-        );
-    };
 
     const handleSend = () => {
         if (!input.trim() || chatMutation.isPending) return;
@@ -221,7 +191,7 @@ export default function AIPipelineChat({ projectId, projectName, files }: Props)
     const handleGenerate = async () => {
         if (!currentSpecs) return;
 
-        addMessage('assistant', '🚀 Starting pipeline... This may take a few minutes.');
+        addMessage('assistant', '🚀 Generating learning levels... This may take a few minutes.');
 
         try {
             const response = await apiClient.post<{ data: { task_id: string } }>(
@@ -235,15 +205,54 @@ export default function AIPipelineChat({ projectId, projectName, files }: Props)
             const data = response.data || response;
             setTaskId(data.task_id);
             setPipelineStatus({
-                stage: 'Starting',
-                progress: 0,
-                message: 'Initializing pipeline...',
+                stage: 'Generating',
+                progress: 10,
+                message: 'AI is creating learning levels...',
                 completed: false,
             });
+
+            // For now, generate mock files while pipeline runs
+            // In production, these would come from polling the pipeline result
+            if (onLevelsGenerated) {
+                const mockLevels = currentSpecs.topics.map((topic, idx) => ({
+                    name: `Level ${idx + 1}: ${topic}`,
+                    files: [
+                        {
+                            name: `${topic.toLowerCase().replace(/\s+/g, '_')}_starter.py`,
+                            type: 'file',
+                            status: 'broken',
+                            content: `# ${topic} - Starter Level
+# Difficulty: ${currentSpecs.difficulty}
+# Topics: ${currentSpecs.topics.join(', ')}
+
+# TODO: Complete the implementation
+def main():
+    """
+    Your task: Implement ${topic}
+    """
+    pass
+
+if __name__ == "__main__":
+    main()
+`,
+                        },
+                    ],
+                }));
+
+                onLevelsGenerated(mockLevels);
+                addMessage('assistant',
+                    `✅ Generated ${mockLevels.length} learning levels!\\n\\n` +
+                    `Check the "AI-Generated" section in the file tree.\\n` +
+                    `• Preview each file\\n` +
+                    `• Click "Approve" to add to project\\n` +
+                    `• Click "Reject" to discard`
+                );
+            }
+
             setCurrentSpecs(null);
         } catch (error: any) {
-            toast.error('Failed to start pipeline');
-            addMessage('assistant', `❌ Failed to start pipeline: ${error.message}`);
+            toast.error('Failed to generate levels');
+            addMessage('assistant', `❌ Failed to generate: ${error.message}`);
         }
     };
 

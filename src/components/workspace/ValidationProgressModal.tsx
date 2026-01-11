@@ -38,6 +38,19 @@ const ValidationProgressModal = ({
     const [error, setError] = useState<string | null>(null)
     const [isComplete, setIsComplete] = useState(false)
 
+    // Reset state when modal opens to ensure clean slate for each submission
+    useEffect(() => {
+        if (isOpen) {
+            setStages([
+                { id: "user_tests", label: "Your Tests", status: "pending" },
+                { id: "backend_tests", label: "Validation Tests", status: "pending" },
+                { id: "ai_review", label: "AI Code Review", status: "pending" },
+            ])
+            setError(null)
+            setIsComplete(false)
+        }
+    }, [isOpen])
+
     useEffect(() => {
         if (!isOpen || !userProjectId) return
 
@@ -204,10 +217,10 @@ const ValidationProgressModal = ({
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${stage.status === "running"
-                                        ? "bg-blue-500/10 border border-blue-500/30"
-                                        : stage.status === "complete"
-                                            ? "bg-green-500/5 border border-green-500/20"
-                                            : "bg-muted/30 border border-border"
+                                    ? "bg-blue-500/10 border border-blue-500/30"
+                                    : stage.status === "complete"
+                                        ? "bg-green-500/5 border border-green-500/20"
+                                        : "bg-muted/30 border border-border"
                                     }`}
                             >
                                 <div className="flex-shrink-0">

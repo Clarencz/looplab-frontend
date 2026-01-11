@@ -271,10 +271,7 @@ const Workspace = () => {
   }
 
   const handleContentChange = (path: string, content: string) => {
-    // Reset submission flag when user makes changes
-    if (hasSubmittedOnce) {
-      setHasSubmittedOnce(false)
-    }
+    // Note: Submit button requires another Run, not just edits
 
     // Update tab content
     setOpenTabs((prev) => prev.map((t) => (t.path === path ? { ...t, content, isDirty: true } : t)))
@@ -557,6 +554,7 @@ def test_another():
     setValidationResult(result)
     setShowResultModal(true)
     setIsSubmitting(false)
+    setHasRun(false) // Require another run before next submission
 
     if (result.overallStatus === "passed") {
       toast.success("Project validated successfully!", {

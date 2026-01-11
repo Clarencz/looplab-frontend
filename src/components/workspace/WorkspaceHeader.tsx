@@ -13,10 +13,11 @@ interface WorkspaceHeaderProps {
   onSubmit: () => void
   isRunning?: boolean
   hasRun?: boolean
+  isSubmitting?: boolean
   isSubmitDisabled?: boolean
 }
 
-const WorkspaceHeader = ({ projectName, status, onRun, onStop, onSubmit, isRunning, hasRun = false, isSubmitDisabled = false }: WorkspaceHeaderProps) => {
+const WorkspaceHeader = ({ projectName, status, onRun, onStop, onSubmit, isRunning, hasRun = false, isSubmitting = false, isSubmitDisabled = false }: WorkspaceHeaderProps) => {
   const navigate = useNavigate()
 
   const statusConfig = {
@@ -67,9 +68,18 @@ const WorkspaceHeader = ({ projectName, status, onRun, onStop, onSubmit, isRunni
           <Tooltip>
             <TooltipTrigger asChild>
               <span>
-                <Button size="sm" className="h-8 px-3 glow-button" onClick={onSubmit} disabled={!hasRun || isSubmitDisabled}>
-                  <Send className="w-3.5 h-3.5 mr-1.5" />
-                  Submit Project
+                <Button size="sm" className="h-8 px-3 glow-button" onClick={onSubmit} disabled={!hasRun || isSubmitDisabled || isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-3.5 h-3.5 mr-1.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5 mr-1.5" />
+                      Submit Project
+                    </>
+                  )}
                 </Button>
               </span>
             </TooltipTrigger>

@@ -618,7 +618,8 @@ def test_another():
             onSubmit={handleSubmit}
             isRunning={isRunning}
             hasRun={hasRun}
-            isSubmitDisabled={hasSubmittedOnce && openTabs.filter(t => t.isDirty).length === 0}
+            isSubmitting={isSubmitting}
+            isSubmitDisabled={isSubmitting || (hasSubmittedOnce && openTabs.filter(t => t.isDirty).length === 0)}
           />
 
           <div className="flex-1 flex min-h-0 overflow-hidden h-full">

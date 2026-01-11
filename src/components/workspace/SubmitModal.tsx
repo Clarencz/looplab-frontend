@@ -69,6 +69,13 @@ const SubmitModal = ({
 }: SubmitModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Reset submitting state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setIsSubmitting(false)
+    }
+  }, [isOpen])
+
   // Detect test files in workspace
   const language = useMemo(() => detectLanguage(workspaceFiles), [workspaceFiles])
   const testPattern = useMemo(() => {
@@ -180,10 +187,10 @@ const SubmitModal = ({
                           animate={{ width: `${readinessScore}%` }}
                           transition={{ duration: 0.5, delay: 0.3 }}
                           className={`h-full rounded-full ${readinessScore >= 80
-                              ? "bg-green-500"
-                              : readinessScore >= 50
-                                ? "bg-yellow-500"
-                                : "bg-orange-500"
+                            ? "bg-green-500"
+                            : readinessScore >= 50
+                              ? "bg-yellow-500"
+                              : "bg-orange-500"
                             }`}
                         />
                       </div>

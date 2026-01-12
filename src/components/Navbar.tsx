@@ -52,6 +52,9 @@ const Navbar = () => {
                 <a href="/learning-paths" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Learning Paths
                 </a>
+                <a href="/pricing" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Pricing
+                </a>
                 <a href="/stats" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Stats
                 </a>
@@ -164,6 +167,9 @@ const Navbar = () => {
                   </a>
                   <a href="/learning-paths" className="block text-sm text-muted-foreground">
                     Learning Paths
+                  </a>
+                  <a href="/pricing" className="block text-sm text-muted-foreground">
+                    Pricing
                   </a>
                   <a href="/stats" className="block text-sm text-muted-foreground">
                     Stats

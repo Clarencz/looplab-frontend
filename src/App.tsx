@@ -39,6 +39,7 @@ import AdminCategories from "./pages/admin/Categories"
 import AdminAnalytics from "./pages/admin/Analytics"
 import AdminLearningPaths from "./pages/admin/LearningPaths"
 import AdminProjects from "./pages/admin/Projects"
+import AdminPricing from "./pages/admin/Pricing"
 import ProjectEditor from "./pages/admin/ProjectEditor"
 import AdminRoles from "./pages/admin/Roles"
 import AdminAuditLogs from "./pages/admin/AuditLogs"
@@ -89,6 +90,7 @@ const App = () => (
                     <Route path="projects/import" element={<ProjectImport />} />
                     <Route path="projects/:projectId/pipeline" element={<PipelineMonitor />} />
                     <Route path="analytics" element={<AdminAnalytics />} />
+                    <Route path="pricing" element={<AdminPricing />} />
                     <Route path="roles" element={<AdminRoles />} />
                     <Route path="audit" element={<AdminAuditLogs />} />
                   </Route>

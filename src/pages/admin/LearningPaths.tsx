@@ -512,3 +512,30 @@ export default function AdminLearningPaths() {
                                                 <Globe className="h-4 w-4" />
                                             </Button>
                                         )}
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleEdit(path)}
+                                            title="Edit path"
+                                        >
+                                            <Edit className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-red-600 hover:text-red-700"
+                                            onClick={() => handleDelete(path.id)}
+                                            title="Delete path"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}

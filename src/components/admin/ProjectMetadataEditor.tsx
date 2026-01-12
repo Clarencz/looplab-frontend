@@ -412,7 +412,7 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
                                 >
                                     <option value="free">Free</option>
                                     <option value="pro">Pro</option>
-                                    <option value="enterprise">Enterprise</option>
+                                    <option value="premium">Premium</option>
                                 </select>
                             </div>
 

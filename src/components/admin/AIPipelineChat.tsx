@@ -51,12 +51,8 @@ export default function AIPipelineChat({ projectId, projectName, files, onLevels
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // Initial analysis when component mounts
-    useEffect(() => {
-        if (messages.length === 0) {
-            analyzeProject();
-        }
-    }, []);
+    // Initial analysis effect removed
+
 
     // Poll pipeline status when running
     useEffect(() => {
@@ -279,6 +275,24 @@ if __name__ == "__main__":
                     <div className="flex items-center gap-2 text-gray-500">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span>Analyzing project files...</span>
+                    </div>
+                )}
+
+                {!isAnalyzing && messages.length === 0 && (
+                    <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
+                        <div className="p-4 bg-blue-50 rounded-full">
+                            <Sparkles className="h-8 w-8 text-blue-600" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-medium text-gray-900">Start AI Analysis</h3>
+                            <p className="text-sm text-gray-500 max-w-xs mt-1">
+                                Let AI analyze your project files to suggest learning paths and topics.
+                            </p>
+                        </div>
+                        <Button onClick={analyzeProject} className="gap-2">
+                            <Play className="h-4 w-4" />
+                            Start Analysis
+                        </Button>
                     </div>
                 )}
 

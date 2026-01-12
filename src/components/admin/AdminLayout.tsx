@@ -8,6 +8,7 @@ import {
     Shield,
     FileText,
     FileCode,
+    CreditCard,
     LogOut
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,6 +19,7 @@ const navigation = [
     { name: 'Categories', href: '/admin/categories', icon: FolderTree },
     { name: 'Learning Paths', href: '/admin/paths', icon: BookOpen },
     { name: 'Projects', href: '/admin/projects', icon: FileCode },
+    { name: 'Pricing', href: '/admin/pricing', icon: CreditCard },
     { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
     { name: 'Roles', href: '/admin/roles', icon: Shield },
     { name: 'Audit Logs', href: '/admin/audit', icon: FileText },

@@ -171,9 +171,9 @@ export default function AdminLearningPaths() {
     const handleEdit = (path: LearningPath) => {
         setEditingPath(path);
         setEditFormState({
-            categoryId: path.category_id || '',
-            difficultyLevel: path.difficulty_level as any,
-            tierRequired: path.tier_required as any,
+            categoryId: path.categoryId || '',
+            difficultyLevel: path.difficultyLevel as any,
+            tierRequired: path.tierRequired as any,
         });
         setIsEditOpen(true);
     };
@@ -383,7 +383,7 @@ export default function AdminLearningPaths() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="edit_estimated_hours">Est. Hours</Label>
-                                    <Input id="edit_estimated_hours" name="estimated_hours" type="number" min="0" defaultValue={editingPath.estimated_hours} required />
+                                    <Input id="edit_estimated_hours" name="estimated_hours" type="number" min="0" defaultValue={editingPath.estimatedHours} required />
                                 </div>
                             </div>
 
@@ -424,7 +424,7 @@ export default function AdminLearningPaths() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <input type="checkbox" id="edit_is_premium" name="is_premium" defaultChecked={editingPath.is_premium} className="rounded border-gray-300" />
+                                <input type="checkbox" id="edit_is_premium" name="is_premium" defaultChecked={editingPath.isPremium} className="rounded border-gray-300" />
                                 <Label htmlFor="edit_is_premium">Is Premium Content?</Label>
                             </div>
 
@@ -478,18 +478,18 @@ export default function AdminLearningPaths() {
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-600">{path.category}</td>
                                     <td className="px-6 py-4 text-sm text-gray-600">
-                                        {path.difficulty} • {path.estimated_hours}h
+                                        {path.difficultyLevel} • {path.estimatedHours}h
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${path.is_active
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${path.isActive
                                             ? 'bg-green-100 text-green-700'
                                             : 'bg-yellow-100 text-yellow-700'
                                             }`}>
-                                            {path.is_active ? 'Published' : 'Draft'}
+                                            {path.isActive ? 'Published' : 'Draft'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right space-x-1">
-                                        {path.is_active ? (
+                                        {path.isActive ? (
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
@@ -512,24 +512,3 @@ export default function AdminLearningPaths() {
                                                 <Globe className="h-4 w-4" />
                                             </Button>
                                         )}
-                                        <Button variant="ghost" size="sm" onClick={() => handleEdit(path)}>
-                                            <Edit className="h-4 w-4" />
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="text-red-600 hover:text-red-700"
-                                            onClick={() => handleDelete(path.id)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
-}

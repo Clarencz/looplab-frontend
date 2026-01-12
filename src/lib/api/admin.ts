@@ -41,14 +41,14 @@ export interface LearningPath {
     slug: string;
     description?: string;
     category: string;
-    category_id?: string;
-    difficulty: string;
-    tier: string;
-    estimated_hours?: number;
-    is_published: boolean;
-    is_active: boolean;
-    created_at: string;
-    updated_at: string;
+    categoryId?: string;
+    difficultyLevel: string;
+    tierRequired: string;
+    estimatedHours?: number;
+    isPremium: boolean;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface OverviewStats {

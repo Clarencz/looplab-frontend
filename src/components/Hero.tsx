@@ -47,7 +47,7 @@ const Hero = () => {
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2"
           >
             <Zap className="h-4 w-4 text-primary" />
-            <span className="text-sm font-mono text-primary">No tutorials. No handholding.</span>
+            <span className="text-sm font-mono text-primary">AI can code. Learn to be a problem solver.</span>
           </motion.div>
 
           {/* Main Heading */}

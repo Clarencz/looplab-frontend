@@ -55,90 +55,92 @@ export default function AdminUsers() {
                 </div>
             </div>
 
-            {/* Users Table */}
+            {/* Users Table - Scrollable on mobile */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                User
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Roles
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Subscription
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Joined
-                            </th>
-                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {isLoading ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
                             <tr>
-                                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                                    Loading...
-                                </td>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    User
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Roles
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Subscription
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Joined
+                                </th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
                             </tr>
-                        ) : users?.users?.length === 0 ? (
-                            <tr>
-                                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
-                                    No users found
-                                </td>
-                            </tr>
-                        ) : (
-                            users?.users?.map((user: UserWithDetails) => (
-                                <tr key={user.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div>
-                                            <div className="text-sm font-medium text-gray-900">
-                                                {user.username}
-                                            </div>
-                                            <div className="text-sm text-gray-500">{user.email}</div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex gap-1">
-                                            {user.roles?.map((role) => (
-                                                <span
-                                                    key={role}
-                                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                                                >
-                                                    {role}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {user.subscription_tier || 'Free'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {new Date(user.created_at).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button
-                                            onClick={() => handleBan(user.id)}
-                                            className="text-red-600 hover:text-red-900 mr-4"
-                                            title="Ban user"
-                                        >
-                                            <Ban className="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            className="text-gray-600 hover:text-gray-900"
-                                            title="More actions"
-                                        >
-                                            <MoreVertical className="w-4 h-4" />
-                                        </button>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                                        Loading...
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : users?.users?.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                                        No users found
+                                    </td>
+                                </tr>
+                            ) : (
+                                users?.users?.map((user: UserWithDetails) => (
+                                    <tr key={user.id} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div>
+                                                <div className="text-sm font-medium text-gray-900">
+                                                    {user.username}
+                                                </div>
+                                                <div className="text-sm text-gray-500">{user.email}</div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex gap-1">
+                                                {user.roles?.map((role) => (
+                                                    <span
+                                                        key={role}
+                                                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                                    >
+                                                        {role}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {user.subscription_tier || 'Free'}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {new Date(user.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button
+                                                onClick={() => handleBan(user.id)}
+                                                className="text-red-600 hover:text-red-900 mr-4"
+                                                title="Ban user"
+                                            >
+                                                <Ban className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                className="text-gray-600 hover:text-gray-900"
+                                                title="More actions"
+                                            >
+                                                <MoreVertical className="w-4 h-4" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Pagination */}

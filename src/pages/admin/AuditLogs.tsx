@@ -81,9 +81,9 @@ export default function AdminAuditLogs() {
                 </Button>
             </div>
 
-            {/* Filters */}
-            <div className="flex gap-4">
-                <div className="relative flex-1 max-w-md">
+            {/* Filters - Stack on mobile */}
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                         placeholder="Search logs..."
@@ -95,7 +95,7 @@ export default function AdminAuditLogs() {
                 <select
                     value={actionFilter}
                     onChange={(e) => setActionFilter(e.target.value)}
-                    className="px-3 py-2 border rounded-lg text-sm"
+                    className="px-3 py-2 border rounded-lg text-sm w-full sm:w-auto"
                 >
                     <option value="">All Actions</option>
                     {uniqueActions.map(action => (
@@ -104,56 +104,58 @@ export default function AdminAuditLogs() {
                 </select>
             </div>
 
-            {/* Logs Table */}
+            {/* Logs Table - Scrollable on mobile */}
             <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resource</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">IP Address</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {filteredLogs.length === 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
                             <tr>
-                                <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                                    <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                                    <p>No audit logs found</p>
-                                </td>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resource</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">IP Address</th>
                             </tr>
-                        ) : (
-                            filteredLogs.map((log) => (
-                                <tr key={log.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 text-sm text-gray-500">
-                                        {formatDate(log.createdAt)}
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {filteredLogs.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                                        <p>No audit logs found</p>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded text-xs font-medium ${log.action.includes('create') ? 'bg-green-100 text-green-700' :
+                                </tr>
+                            ) : (
+                                filteredLogs.map((log) => (
+                                    <tr key={log.id} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 text-sm text-gray-500">
+                                            {formatDate(log.createdAt)}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-2 py-1 rounded text-xs font-medium ${log.action.includes('create') ? 'bg-green-100 text-green-700' :
                                                 log.action.includes('delete') ? 'bg-red-100 text-red-700' :
                                                     log.action.includes('update') ? 'bg-blue-100 text-blue-700' :
                                                         'bg-gray-100 text-gray-700'
-                                            }`}>
-                                            {log.action}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm">
-                                        <span className="text-gray-900">{log.resourceType}</span>
-                                        <span className="text-gray-400 ml-1">#{log.resourceId?.slice(0, 8)}</span>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">
-                                        {log.userEmail || 'System'}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500 font-mono">
-                                        {log.ipAddress || '-'}
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                                                }`}>
+                                                {log.action}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm">
+                                            <span className="text-gray-900">{log.resourceType}</span>
+                                            <span className="text-gray-400 ml-1">#{log.resourceId?.slice(0, 8)}</span>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-600">
+                                            {log.userEmail || 'System'}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-500 font-mono">
+                                            {log.ipAddress || '-'}
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

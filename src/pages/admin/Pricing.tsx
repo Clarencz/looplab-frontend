@@ -163,14 +163,14 @@ export default function AdminPricing() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold">Pricing Management</h1>
-                    <p className="text-muted-foreground">
+                    <h1 className="text-2xl sm:text-3xl font-bold">Pricing Management</h1>
+                    <p className="text-muted-foreground text-sm sm:text-base">
                         Manage subscription tiers and pricing plans
                     </p>
                 </div>
-                <Button onClick={() => openEditDialog()}>
+                <Button onClick={() => openEditDialog()} className="w-full sm:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Add Tier
                 </Button>
@@ -190,64 +190,66 @@ export default function AdminPricing() {
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
                     ) : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-12"></TableHead>
-                                    <TableHead>Tier</TableHead>
-                                    <TableHead>Monthly</TableHead>
-                                    <TableHead>Yearly</TableHead>
-                                    <TableHead>Features</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {tiers.map((tier) => {
-                                    const features = tier.features as Record<string, any>
-                                    return (
-                                        <TableRow key={tier.id}>
-                                            <TableCell>
-                                                <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Badge className={getTierBadgeColor(tier.name)}>
-                                                        {tier.displayName}
-                                                    </Badge>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="font-mono">
-                                                ${tier.priceMonthly}
-                                            </TableCell>
-                                            <TableCell className="font-mono">
-                                                ${tier.priceYearly}
-                                            </TableCell>
-                                            <TableCell>
-                                                <span className="text-sm text-muted-foreground">
-                                                    {features.list?.length || 0} features
-                                                </span>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Eye className="h-4 w-4 text-green-500" />
-                                                    <span className="text-sm text-green-600">Active</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => openEditDialog(tier)}
-                                                >
-                                                    <Edit2 className="h-4 w-4" />
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-12"></TableHead>
+                                        <TableHead>Tier</TableHead>
+                                        <TableHead>Monthly</TableHead>
+                                        <TableHead>Yearly</TableHead>
+                                        <TableHead>Features</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {tiers.map((tier) => {
+                                        const features = tier.features as Record<string, any>
+                                        return (
+                                            <TableRow key={tier.id}>
+                                                <TableCell>
+                                                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge className={getTierBadgeColor(tier.name)}>
+                                                            {tier.displayName}
+                                                        </Badge>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="font-mono">
+                                                    ${tier.priceMonthly}
+                                                </TableCell>
+                                                <TableCell className="font-mono">
+                                                    ${tier.priceYearly}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <span className="text-sm text-muted-foreground">
+                                                        {features.list?.length || 0} features
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Eye className="h-4 w-4 text-green-500" />
+                                                        <span className="text-sm text-green-600">Active</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => openEditDialog(tier)}
+                                                    >
+                                                        <Edit2 className="h-4 w-4" />
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </div>
                     )}
                 </CardContent>
             </Card>
@@ -278,7 +280,7 @@ export default function AdminPricing() {
 
             {/* Edit Dialog */}
             <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {editingTier ? `Edit ${editingTier.displayName}` : 'Create New Tier'}
@@ -290,7 +292,7 @@ export default function AdminPricing() {
 
                     <div className="space-y-6 py-4">
                         {/* Basic Info */}
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Internal Name</Label>
                                 <Input
@@ -323,7 +325,7 @@ export default function AdminPricing() {
                         </div>
 
                         {/* Pricing */}
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="priceMonthly">Monthly Price ($)</Label>
                                 <Input

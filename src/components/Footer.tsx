@@ -33,6 +33,7 @@ const Footer = () => {
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Projects</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technologies</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
+              <li><a href="/enterprise/request-demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">For Organizations</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</a></li>
             </ul>
           </div>
@@ -54,6 +55,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Careers</a></li>
+              <li><a href="/enterprise/request-demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact Sales</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</a></li>
             </ul>

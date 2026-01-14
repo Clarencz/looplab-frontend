@@ -142,17 +142,16 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
         { id: 'spec', label: 'Specification' },
         { id: 'curriculum', label: 'Curriculum' },
     ];
-
     return (
         <div className="bg-white rounded-lg shadow">
-            {/* Tab Navigation */}
-            <div className="border-b border-gray-200">
-                <nav className="flex space-x-8 px-6">
+            {/* Tab Navigation - Scrollable on mobile */}
+            <div className="border-b border-gray-200 overflow-x-auto">
+                <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 min-w-max">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
+                            className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${activeTab === tab.id
                                 ? 'border-blue-500 text-blue-600'
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
@@ -164,7 +163,7 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
             </div>
 
             {/* Tab Content */}
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
                 {activeTab === 'basic' && (
                     <div className="space-y-6">
                         <div>
@@ -288,7 +287,7 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Difficulty *
@@ -400,7 +399,7 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
 
                 {activeTab === 'curriculum' && (
                     <div className="space-y-6">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Tier

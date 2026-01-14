@@ -58,12 +58,12 @@ export default function AdminRoles() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Roles & Permissions</h1>
-                    <p className="text-gray-500">Manage user roles and access permissions</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Roles & Permissions</h1>
+                    <p className="text-gray-500 text-sm">Manage user roles and access permissions</p>
                 </div>
-                <Button className="gap-2">
+                <Button className="gap-2 w-full sm:w-auto">
                     <Plus className="h-4 w-4" />
                     New Role
                 </Button>
@@ -81,7 +81,7 @@ export default function AdminRoles() {
             </div>
 
             {/* Roles Grid */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredRoles.length === 0 ? (
                     <div className="col-span-full bg-white rounded-lg border p-12 text-center text-gray-500">
                         <Shield className="h-12 w-12 mx-auto mb-4 text-gray-300" />

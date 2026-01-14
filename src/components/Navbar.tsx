@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Github, Menu, X, LogOut, User } from "lucide-react"
+import { Menu, X, LogOut, User } from "lucide-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from "@/contexts/AuthContext"
@@ -74,6 +74,9 @@ const Navbar = () => {
                 <a href="/#features" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Features
                 </a>
+                <a href="/enterprise/request-demo" className="text-sm text-primary font-medium transition-colors hover:text-primary/80">
+                  For Organizations
+                </a>
               </>
             )}
           </div>
@@ -120,12 +123,6 @@ const Navbar = () => {
             ) : (
               // Non-authenticated actions
               <>
-                <Button variant="ghost" size="sm" asChild>
-                  <a href="https://github.com/yourusername/looplab" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4" />
-                    GitHub
-                  </a>
-                </Button>
                 <Button variant="outline" size="sm" asChild>
                   <a href="/auth">Sign In</a>
                 </Button>

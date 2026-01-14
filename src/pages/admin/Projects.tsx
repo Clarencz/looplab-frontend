@@ -191,23 +191,23 @@ export default function AdminProjects() {
 
     return (
         <div>
-            <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
+            <div className="mb-6 sm:mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Project Management</h1>
-                        <p className="text-gray-600 mt-1">View and manage coding projects for users</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Project Management</h1>
+                        <p className="text-gray-600 mt-1 text-sm sm:text-base">View and manage coding projects for users</p>
                     </div>
                     <button
                         onClick={() => navigate('/admin/projects/import')}
-                        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                        className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium w-full sm:w-auto"
                     >
                         <Github className="w-5 h-5" />
-                        Import from GitHub
+                        <span className="whitespace-nowrap">Import from GitHub</span>
                     </button>
                 </div>
 
                 {/* Coming Soon Notice */}
-                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                     <div>
                         <p className="text-sm font-medium text-blue-900">Create & Edit Features Coming Soon</p>
@@ -268,19 +268,19 @@ export default function AdminProjects() {
                         {projects?.map((project: any) => (
                             <div
                                 key={project.id}
-                                className="px-6 py-4 hover:bg-gray-50 transition-colors"
+                                className="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <h3 className="text-lg font-semibold text-gray-900">
+                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
                                                 {project.name}
                                             </h3>
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(project.difficulty)}`}>
+                                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(project.difficulty)}`}>
                                                 {project.difficulty}
                                             </span>
                                             {/* Status Badge */}
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${project.status === 'active'
+                                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${project.status === 'active'
                                                 ? 'bg-green-100 text-green-800'
                                                 : project.status === 'archived'
                                                     ? 'bg-gray-100 text-gray-500'
@@ -323,7 +323,8 @@ export default function AdminProjects() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 ml-4">
+                                    {/* Action Buttons - Wrap on mobile */}
+                                    <div className="flex items-center flex-wrap gap-2 mt-3 sm:mt-0 sm:ml-4 justify-end">
                                         {/* Status Toggle Button */}
                                         <button
                                             onClick={() => statusMutation.mutate({

@@ -247,4 +247,37 @@
       linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
   }
+
+  /* Admin Mobile-First Utilities */
+  .admin-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .scrollable-table {
+    @apply -mx-4 sm:-mx-6 lg:-mx-8;
+  }
+
+  .scrollable-table-inner {
+    @apply min-w-full px-4 sm:px-6 lg:px-8 overflow-x-auto;
+  }
+
+  /* Mobile sidebar overlay */
+  .sidebar-overlay {
+    @apply fixed inset-0 bg-black/50 z-40 transition-opacity duration-300;
+  }
+
+  .sidebar-overlay.hidden {
+    @apply opacity-0 pointer-events-none;
+  }
+
+  /* Safe area padding for mobile devices with notches */
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .safe-area-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .safe-area-top {
+      padding-top: env(safe-area-inset-top);
+    }
+  }
 }

@@ -49,45 +49,45 @@ $ code .  # Your editor, your rules`,
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="relative py-32 overflow-hidden">
+    <section id="how-it-works" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-dark" />
-      
-      <div className="container relative z-10 mx-auto px-6">
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 sm:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mb-6"
           >
-            <span className="font-mono text-sm text-primary">// workflow</span>
+            <span className="font-mono text-xs sm:text-sm text-primary">// workflow</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4"
+            className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4"
           >
             How <span className="text-gradient">LoopLab</span> Works
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
           >
             Four steps. No fluff. Real learning through real work.
           </motion.p>
         </div>
 
         {/* Steps */}
-        <div className="grid gap-8 lg:gap-12">
+        <div className="grid gap-6 sm:gap-8 lg:gap-12">
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
@@ -95,9 +95,8 @@ const HowItWorks = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15 }}
-              className={`grid lg:grid-cols-2 gap-8 items-center ${
-                index % 2 === 1 ? "lg:direction-rtl" : ""
-              }`}
+              className={`grid lg:grid-cols-2 gap-8 items-center ${index % 2 === 1 ? "lg:direction-rtl" : ""
+                }`}
             >
               {/* Content */}
               <div className={`space-y-4 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
@@ -109,7 +108,7 @@ const HowItWorks = () => {
                 </div>
                 <h3 className="text-2xl font-bold">{step.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-                
+
                 {index < steps.length - 1 && (
                   <div className="hidden lg:flex items-center gap-2 pt-4 text-primary/50">
                     <ArrowRight className="h-4 w-4" />

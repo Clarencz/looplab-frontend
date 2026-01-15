@@ -2,11 +2,11 @@ import { Github, Twitter } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background py-12">
-      <div className="container mx-auto px-6">
-        <div className="grid gap-8 md:grid-cols-4">
+    <footer className="border-t border-border bg-background py-8 sm:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 grid-cols-2 md:grid-cols-4">
           {/* Brand */}
-          <div className="md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <span className="font-mono text-sm font-bold text-primary-foreground">L</span>
@@ -62,7 +62,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 pb-4">
           <p className="text-sm text-muted-foreground">
             © 2025 LoopLab. All rights reserved.
           </p>

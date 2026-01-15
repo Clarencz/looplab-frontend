@@ -4,13 +4,13 @@ import { ArrowRight, Terminal } from "lucide-react";
 
 const CTA = () => {
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-secondary/50" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -22,14 +22,14 @@ const CTA = () => {
             <Terminal className="h-10 w-10 text-primary" />
           </div>
 
-          <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl mb-6">
+          <h2 className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6">
             Stop watching tutorials.
             <br />
             <span className="text-gradient">Start shipping code.</span>
           </h2>
 
-          <p className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto">
-            Get your first broken project now. Fix it, submit it, and start building 
+          <p className="text-base sm:text-lg text-muted-foreground mb-8 sm:mb-10 max-w-xl mx-auto px-2">
+            Get your first broken project now. Fix it, submit it, and start building
             real skills that actually matter.
           </p>
 

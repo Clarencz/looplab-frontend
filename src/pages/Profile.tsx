@@ -21,7 +21,7 @@ import { getUserPaths, userProjectsApi, type UserPathsResponse } from "@/lib/api
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trophy, BookOpen, Loader2, Eye, Save } from "lucide-react"
+import { Trophy, BookOpen, Loader2, Save } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useToast } from "@/hooks/use-toast"
 import { profileFormSchema, type ProfileFormValues } from "@/lib/validation/profileValidation"
@@ -515,25 +515,6 @@ export default function Profile() {
                 <ProjectTimeline projects={userProjects} />
               )}
 
-              {/* CV Preview Button */}
-              <Card>
-                <CardContent className="py-4">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => setShowCVPreview(true)}
-                    disabled={completionPercentage < 50}
-                  >
-                    <Eye className="h-4 w-4" />
-                    Preview CV
-                  </Button>
-                  {completionPercentage < 50 && (
-                    <p className="text-xs text-muted-foreground text-center mt-2">
-                      Fill at least 50% of your profile to preview
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
             </div>
           </div>
         </FormProvider>

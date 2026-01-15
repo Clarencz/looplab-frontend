@@ -124,11 +124,11 @@ export function CVPreviewOverlay({ isOpen, onClose, profileData }: CVPreviewOver
                             className="w-full max-w-[800px] bg-white text-gray-900 rounded-lg shadow-2xl overflow-hidden"
                         >
                             {/* CV Header */}
-                            <div className="bg-gradient-to-r from-gray-50 to-white p-8 border-b border-gray-200">
-                                <h1 className="text-3xl font-bold text-gray-900">
+                            <div className="bg-gradient-to-r from-gray-50 to-white p-4 sm:p-6 lg:p-8 border-b border-gray-200">
+                                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
                                     {profileData.personalInfo.fullName || "Your Name"}
                                 </h1>
-                                <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600">
+                                <div className="flex flex-wrap gap-2 sm:gap-4 mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600">
                                     {profileData.personalInfo.email && (
                                         <span className="flex items-center gap-1.5">
                                             <Mail className="h-4 w-4" /> {profileData.personalInfo.email}
@@ -145,7 +145,7 @@ export function CVPreviewOverlay({ isOpen, onClose, profileData }: CVPreviewOver
                                         </span>
                                     )}
                                 </div>
-                                <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-600">
+                                <div className="flex flex-wrap gap-2 sm:gap-4 mt-2 text-xs sm:text-sm text-gray-600">
                                     {profileData.personalInfo.linkedin && (
                                         <span className="flex items-center gap-1.5">
                                             <Linkedin className="h-4 w-4" /> {profileData.personalInfo.linkedin}
@@ -165,8 +165,8 @@ export function CVPreviewOverlay({ isOpen, onClose, profileData }: CVPreviewOver
                             </div>
 
                             {/* CV Body */}
-                            <div className="p-8">
-                                <div className="grid grid-cols-3 gap-8">
+                            <div className="p-4 sm:p-6 lg:p-8">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                                     {/* Left Column - Skills & Education */}
                                     <div className="space-y-8">
                                         {allSkills.length > 0 && (
@@ -207,7 +207,7 @@ export function CVPreviewOverlay({ isOpen, onClose, profileData }: CVPreviewOver
                                     </div>
 
                                     {/* Right Column - Summary, Experience, Projects */}
-                                    <div className="col-span-2 space-y-8">
+                                    <div className="md:col-span-2 space-y-6 sm:space-y-8">
                                         {profileData.summary && (
                                             <section>
                                                 <h2 className="text-sm font-bold uppercase tracking-wide text-gray-900 mb-4 border-b border-gray-200 pb-2">

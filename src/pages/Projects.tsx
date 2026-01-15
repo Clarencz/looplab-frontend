@@ -131,7 +131,7 @@ const Projects = () => {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button
                 variant={selectedDifficulty === null ? "default" : "outline"}
                 size="sm"
@@ -159,7 +159,7 @@ const Projects = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
           >
             {filteredProjects.map((project, index) => (
               <ProjectTile key={project.id} project={project} index={index} />

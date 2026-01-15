@@ -190,9 +190,11 @@ export default function Dashboard() {
           )}
 
           {/* Main Layout: Profile Column + Content */}
-          <div className="flex gap-8">
-            {/* Left Profile Column */}
-            <ProfileColumn user={userData} />
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            {/* Left Profile Column - Full width on mobile */}
+            <div className="w-full lg:w-auto">
+              <ProfileColumn user={userData} />
+            </div>
 
             {/* Main Content Area */}
             <div className="flex-1 min-w-0">
@@ -201,22 +203,22 @@ export default function Dashboard() {
               {/* Learning Paths Section */}
               {!loadingPaths && activePaths.length > 0 && (
                 <div className="mb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold">Continue Learning</h2>
-                    <Button variant="ghost" size="sm" onClick={() => navigate('/learning-paths')}>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold tracking-tight">Continue Learning</h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" onClick={() => navigate('/learning-paths')}>
                       View All
                     </Button>
                   </div>
-                  <div className="grid gap-4">
+                  <div className="grid gap-6">
                     {activePaths.map((path) => (
                       <Card key={path.id} className="hover:border-primary/50 transition-colors cursor-pointer" onClick={() => navigate(`/learning-paths/${path.id}`)}>
                         <CardHeader>
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                             <div>
-                              <CardTitle className="text-lg">{path.title}</CardTitle>
-                              <CardDescription>{path.description}</CardDescription>
+                              <CardTitle className="text-lg mb-1">{path.title}</CardTitle>
+                              <CardDescription className="line-clamp-2">{path.description}</CardDescription>
                             </div>
-                            <Badge variant="secondary">
+                            <Badge variant="secondary" className="self-start whitespace-nowrap">
                               {path.progress?.completedProjects || 0}/{path.totalProjects} Projects
                             </Badge>
                           </div>
@@ -238,9 +240,9 @@ export default function Dashboard() {
 
               {/* Recent Projects Section */}
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold">Recent Projects</h2>
-                  <Button variant="ghost" size="sm" onClick={() => navigate('/projects')}>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold tracking-tight">Recent Projects</h2>
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" onClick={() => navigate('/projects')}>
                     View All
                   </Button>
                 </div>
@@ -250,14 +252,22 @@ export default function Dashboard() {
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
                 ) : projects.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                     {projects.map((project) => (
                       <Card key={project.id} className="hover:border-primary/50 transition-colors cursor-pointer" onClick={() => navigate(`/projects/${project.id}`)}>
-                        {project.coverImage && (
-                          <div className="aspect-video w-full overflow-hidden rounded-t-lg">
-                            <img src={project.coverImage} alt={project.title} className="w-full h-full object-cover" />
+                        {project.coverImage ? (
+                          <div className="aspect-video w-full overflow-hidden rounded-t-lg bg-muted">
+                            <img
+                              src={project.coverImage}
+                              alt={project.title}
+                              className="w-full h-full object-cover transition-transform hover:scale-105"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                                (e.target as HTMLImageElement).parentElement!.style.display = 'none';
+                              }}
+                            />
                           </div>
-                        )}
+                        ) : null}
                         <CardHeader>
                           <CardTitle className="text-lg">{project.title}</CardTitle>
                           <CardDescription className="line-clamp-2">{project.summary}</CardDescription>

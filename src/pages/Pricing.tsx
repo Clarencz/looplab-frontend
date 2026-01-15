@@ -213,7 +213,7 @@ export default function Pricing() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2 }}
-                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                                className="grid grid-cols-2 lg:grid-cols-4 gap-6"
                             >
                                 {allTiers.map((tier, index) => {
                                     const Icon = getTierIcon(tier.name)
@@ -231,8 +231,8 @@ export default function Pricing() {
                                             className={isPremium ? 'lg:-mt-4 lg:mb-4' : ''}
                                         >
                                             <Card className={`h-full relative overflow-hidden backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isPremium
-                                                    ? 'border-2 border-primary shadow-lg shadow-primary/20'
-                                                    : 'border-border/50 hover:border-border'
+                                                ? 'border-2 border-primary shadow-lg shadow-primary/20'
+                                                : 'border-border/50 hover:border-border'
                                                 }`}>
                                                 {/* Gradient background */}
                                                 <div className={`absolute inset-0 bg-gradient-to-br ${getTierGradient(tier.name, true)} opacity-50`} />

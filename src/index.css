@@ -275,9 +275,113 @@
     .safe-area-bottom {
       padding-bottom: env(safe-area-inset-bottom);
     }
-    
+
     .safe-area-top {
       padding-top: env(safe-area-inset-top);
+    }
+  }
+
+  /* Aurora Glow Effects for 3D Editor */
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+  }
+
+  .aurora-glow-red {
+    background: radial-gradient(ellipse at center,
+        rgba(239, 68, 68, 0.2) 0%,
+        rgba(249, 115, 22, 0.1) 40%,
+        transparent 70%);
+  }
+
+  .aurora-glow-green {
+    background: radial-gradient(ellipse at center,
+        rgba(34, 197, 94, 0.2) 0%,
+        rgba(16, 185, 129, 0.1) 40%,
+        transparent 70%);
+  }
+
+  .aurora-glow-blue {
+    background: radial-gradient(ellipse at center,
+        rgba(59, 130, 246, 0.2) 0%,
+        rgba(6, 182, 212, 0.1) 40%,
+        transparent 70%);
+  }
+
+  .aurora-glow-purple {
+    background: radial-gradient(ellipse at center,
+        rgba(168, 85, 247, 0.2) 0%,
+        rgba(236, 72, 153, 0.1) 40%,
+        transparent 70%);
+  }
+
+  /* Glassmorphism effects */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-gray-900/50 backdrop-blur-xl border border-white/10 rounded-xl;
+  }
+
+  /* 3D perspective utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Enhanced text gradients */
+  .text-gradient-vibrant {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #22c55e 0%, #06b6d4 50%, #8b5cf6 100%);
+  }
+
+  .text-gradient-aurora {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #f472b6, #a78bfa, #60a5fa, #34d399, #facc15, #fb923c, #f472b6);
+    background-size: 200% auto;
+    animation: aurora-text 8s linear infinite;
+  }
+
+  @keyframes aurora-text {
+    0% {
+      background-position: 0% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  /* Shimmer animation for badges */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+
+    100% {
+      left: 100%;
     }
   }
 }

@@ -61,7 +61,7 @@ const Auth = () => {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
 
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6">
         {/* Back button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -94,9 +94,9 @@ const Auth = () => {
           </div>
 
           {/* Auth card */}
-          <div className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-8">
+          <div className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-6 sm:p-8">
             <div className="text-center mb-8">
-              <h1 className="font-mono text-2xl font-bold text-foreground mb-2">
+              <h1 className="font-mono text-xl sm:text-2xl font-bold text-foreground mb-2">
                 Welcome back
               </h1>
               <p className="text-muted-foreground">

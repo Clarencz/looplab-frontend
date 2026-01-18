@@ -51,6 +51,7 @@ import RequestDemo from "./pages/enterprise/RequestDemo"
 import AssessmentWorkspace from "./pages/candidate/AssessmentWorkspace"
 import { EnterpriseErrorBoundary } from "./components/enterprise/EnterpriseErrorBoundary"
 import AssessmentComplete from "./pages/candidate/AssessmentComplete"
+import DataSciencePipeline from "./pages/DataSciencePipeline"
 
 const queryClient = new QueryClient()
 
@@ -82,6 +83,7 @@ const App = () => (
                   <Route path="/stats" element={<ProtectedRoute><ErrorBoundary><Stats /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><ErrorBoundary><Profile /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><ErrorBoundary><Settings /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/ds-pipeline" element={<ProtectedRoute><ErrorBoundary><DataSciencePipeline /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/u/:username" element={<ErrorBoundary><PublicProfile /></ErrorBoundary>} />
                   <Route path="/u/:username/project/:slug" element={<ErrorBoundary><PublicProjectDetail /></ErrorBoundary>} />
                   {/* Admin Routes */}

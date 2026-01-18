@@ -160,7 +160,7 @@ export default function Dashboard() {
   }
 
   const userData = {
-    avatar: user.profile.avatar_url || "/developer-avatar-portrait.jpg",
+    avatar: user.profile.avatarUrl || "/developer-avatar-portrait.jpg",
     username: user.username,
     tagline: user.profile.bio || "Developer | Building with LoopLab",
     weeklyStreak: userStats?.weeklyStreak || 0,
@@ -285,14 +285,18 @@ export default function Dashboard() {
                             })}
                           </div>
                           {project.isCompleted ? (
-                            <Badge className="w-full justify-center">Completed</Badge>
-                          ) : project.progress !== undefined ? (
+                            <Badge className="w-full justify-center bg-green-500">✓ Completed</Badge>
+                          ) : project.progress !== undefined && project.progress > 0 ? (
                             <div className="space-y-2">
                               <div className="flex items-center justify-between text-sm">
                                 <span className="text-muted-foreground">Progress</span>
                                 <span className="font-medium">{project.progress}%</span>
                               </div>
                               <Progress value={project.progress} />
+                              <Button variant="default" size="sm" className="w-full mt-2">
+                                <Play className="mr-2 h-4 w-4" />
+                                Continue Project
+                              </Button>
                             </div>
                           ) : (
                             <Button variant="outline" size="sm" className="w-full">

@@ -132,21 +132,24 @@ export default function Profile() {
         headers: { 'Authorization': `Bearer ${accessToken}` },
         credentials: 'include',
       })
-      const experiences = expResponse.ok ? await expResponse.json() : []
+      const expJson = expResponse.ok ? await expResponse.json() : []
+      const experiences = Array.isArray(expJson) ? expJson : (expJson.data || [])
 
       // Load education
       const eduResponse = await fetch('/api/v1/profile/education', {
         headers: { 'Authorization': `Bearer ${accessToken}` },
         credentials: 'include',
       })
-      const education = eduResponse.ok ? await eduResponse.json() : []
+      const eduJson = eduResponse.ok ? await eduResponse.json() : []
+      const education = Array.isArray(eduJson) ? eduJson : (eduJson.data || [])
 
       // Load skills
       const skillsResponse = await fetch('/api/v1/profile/skills', {
         headers: { 'Authorization': `Bearer ${accessToken}` },
         credentials: 'include',
       })
-      const skillsData = skillsResponse.ok ? await skillsResponse.json() : []
+      const skillsJson = skillsResponse.ok ? await skillsResponse.json() : []
+      const skillsData = Array.isArray(skillsJson) ? skillsJson : (skillsJson.data || [])
       const manualSkills = skillsData.filter((s: any) => s.source === 'manual').map((s: any) => s.skillName)
 
       // Initialize form with loaded data
@@ -382,7 +385,7 @@ export default function Profile() {
         <ProfileHeader
           user={{
             name: user.username || "User",
-            avatar: user.profile?.avatar_url || "/developer-avatar-portrait.jpg",
+            avatar: user.profile?.avatarUrl || "/developer-avatar-portrait.jpg",
             tagline: user.profile?.bio || "Developer | Building with LoopLab",
           }}
           completionPercentage={completionPercentage}
@@ -442,7 +445,7 @@ export default function Profile() {
             <div className="space-y-6">
               {/* Avatar Upload */}
               <AvatarUpload
-                currentAvatar={user.profile?.avatar_url}
+                currentAvatar={user.profile?.avatarUrl}
                 userName={user.profile?.full_name || user.username}
                 onUploadSuccess={() => {
                   // Refresh user data to get new avatar URL

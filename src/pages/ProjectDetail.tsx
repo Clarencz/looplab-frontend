@@ -23,11 +23,13 @@ import FileTreePreview, { type FileNode } from "@/components/projects/FileTreePr
 import StartFlowOverlay from "@/components/projects/StartFlowOverlay"
 import GitHubConnectModal from "@/components/projects/GitHubConnectModal"
 import ValidationProgress from "@/components/projects/ValidationProgress"
+import { useSmartNavigation } from "@/hooks/useSmartNavigation"
 
 const ProjectDetail = () => {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const { getBackUrl, getBackLabel, buildNavUrl } = useSmartNavigation()
 
   const [showStartFlow, setShowStartFlow] = useState(false)
   const [showGitHubModal, setShowGitHubModal] = useState(false)
@@ -120,8 +122,8 @@ const ProjectDetail = () => {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
         <p className="text-muted-foreground">{error || "Project not found"}</p>
-        <Button variant="outline" onClick={() => navigate('/projects')}>
-          Back to Projects
+        <Button variant="outline" onClick={() => navigate(getBackUrl('/projects'))}>
+          {getBackLabel('Back to Projects')}
         </Button>
       </div>
     )
@@ -129,7 +131,8 @@ const ProjectDetail = () => {
 
   const handleStartInApp = () => {
     setShowStartFlow(false)
-    navigate(`/workspace/${project.id}`)
+    // Pass context forward to workspace
+    navigate(buildNavUrl(`/workspace/${project.id}`))
   }
 
   const handleGitHubConnect = (repoUrl: string) => {
@@ -158,9 +161,9 @@ const ProjectDetail = () => {
 
       <div className="container mx-auto px-4 md:px-6 pt-24 pb-16">
         {/* Back button */}
-        <Button variant="ghost" size="sm" className="mb-6" onClick={() => navigate("/projects")}>
+        <Button variant="ghost" size="sm" className="mb-6" onClick={() => navigate(getBackUrl('/projects'))}>
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Projects
+          {getBackLabel('Back to Projects')}
         </Button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -393,12 +396,12 @@ const ProjectDetail = () => {
                   <>
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-primary mt-0.5" />
-                      <p className="text-muted-foreground">Workspace created on Dec 2, 2025</p>
+                      <p className="text-muted-foreground">Workspace created</p>
                     </div>
                     {linkedRepo && (
                       <div className="flex items-start gap-2">
                         <GitBranch className="w-4 h-4 text-primary mt-0.5" />
-                        <p className="text-muted-foreground">Repository linked on Dec 2, 2025</p>
+                        <p className="text-muted-foreground">Repository linked</p>
                       </div>
                     )}
                   </>
@@ -406,7 +409,7 @@ const ProjectDetail = () => {
               </div>
             </motion.div>
 
-            {/* Resources panel */}
+            {/* Resources panel - Dynamic based on tech stack */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -418,15 +421,23 @@ const ProjectDetail = () => {
                 <span className="text-sm font-medium">Resources</span>
               </div>
               <div className="p-4 space-y-3 text-sm">
-                <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                  The project expects Node 18; see the Node.js runtime documentation.
-                </a>
-                <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                  MongoDB connection guide for local development.
-                </a>
-                <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                  JWT authentication best practices overview.
-                </a>
+                {project.tech && project.tech.length > 0 ? (
+                  project.tech.slice(0, 3).map((tech: string, idx: number) => (
+                    <a
+                      key={idx}
+                      href={`https://devdocs.io/${tech.toLowerCase()}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {tech} documentation →
+                    </a>
+                  ))
+                ) : (
+                  <p className="text-muted-foreground">
+                    Documentation links will appear based on the project's tech stack.
+                  </p>
+                )}
               </div>
             </motion.div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useSmartNavigation } from "@/hooks/useSmartNavigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable"
 import { toast } from "sonner"
@@ -53,6 +54,7 @@ const getFileContent = (files: WorkspaceFile[], path: string): string | null => 
 const Workspace = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { getBackUrl } = useSmartNavigation()
 
   // Project and user-project state
   const [project, setProject] = useState<{ id: string; name: string; hasPreview: boolean; categoryId?: string } | null>(null)
@@ -84,7 +86,7 @@ const Workspace = () => {
   useEffect(() => {
     const loadWorkspace = async () => {
       if (!id) {
-        navigate('/projects')
+        navigate(getBackUrl('/projects'))
         return
       }
 
@@ -118,15 +120,59 @@ const Workspace = () => {
         }
 
         // Convert project fileStructure to WorkspaceFile format
+        // Handles flat paths like 'src/loader.py' and builds proper nested tree
         const convertFileStructure = (files: any[]): WorkspaceFile[] => {
-          return files.map((file: any) => ({
-            name: file.name,
-            type: file.type === 'folder' ? 'folder' : 'file',
-            status: file.status || 'present',
-            content: file.content || '',
-            children: file.children ? convertFileStructure(file.children) : undefined,
-          }))
-        }
+          const root: WorkspaceFile[] = [];
+          const folderMap = new Map<string, WorkspaceFile>();
+
+          // Sort files so folders are processed consistently
+          const sortedFiles = [...files].sort((a, b) => a.name.localeCompare(b.name));
+
+          sortedFiles.forEach((file: any) => {
+            const parts = file.name.split('/');
+
+            if (parts.length === 1) {
+              // Root level file
+              root.push({
+                name: file.name,
+                type: 'file',
+                status: file.status || 'present',
+                content: file.content || '',
+              });
+            } else {
+              // Nested file - create folder structure
+              let currentPath = '';
+              let parent: WorkspaceFile[] = root;
+
+              for (let i = 0; i < parts.length - 1; i++) {
+                const folderName = parts[i];
+                currentPath = currentPath ? `${currentPath}/${folderName}` : folderName;
+
+                if (!folderMap.has(currentPath)) {
+                  const folder: WorkspaceFile = {
+                    name: folderName,
+                    type: 'folder',
+                    status: 'present',
+                    children: [],
+                  };
+                  parent.push(folder);
+                  folderMap.set(currentPath, folder);
+                }
+                parent = folderMap.get(currentPath)!.children!;
+              }
+
+              // Add the file to its parent folder
+              parent.push({
+                name: parts[parts.length - 1],
+                type: 'file',
+                status: file.status || 'present',
+                content: file.content || '',
+              });
+            }
+          });
+
+          return root;
+        };
 
         // Use project's file structure if available
         if (projectData.fileStructure && projectData.fileStructure.length > 0) {
@@ -173,7 +219,7 @@ const Workspace = () => {
       } catch (error) {
         console.error("Failed to load workspace:", error)
         toast.error("Failed to load project")
-        navigate('/projects')
+        navigate(getBackUrl('/projects'))
       } finally {
         setIsLoading(false)
       }
@@ -230,7 +276,7 @@ const Workspace = () => {
   useEffect(() => {
     // Only redirect if we're done loading and project failed to load
     if (!isLoading && !project) {
-      navigate("/projects")
+      navigate(getBackUrl('/projects'))
     }
   }, [project, navigate, isLoading])
 

@@ -89,7 +89,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.profile.avatar_url} alt={user.username} />
+                      <AvatarImage src={user.profile.avatarUrl} alt={user.username} />
                       <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                   </Button>

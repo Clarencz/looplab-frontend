@@ -4,22 +4,19 @@ import { useState } from "react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar"
-import { ProfileSettingsPanel } from "@/components/settings/ProfileSettingsPanel"
 import { SecurityPanel } from "@/components/settings/SecurityPanel"
 import { NotificationsPanel } from "@/components/settings/NotificationsPanel"
 import { AppearancePanel } from "@/components/settings/AppearancePanel"
 import { AccountPanel } from "@/components/settings/AccountPanel"
 import { OnboardingPanel } from "@/components/settings/OnboardingPanel"
 
-export type SettingsTab = "profile" | "security" | "notifications" | "appearance" | "account" | "onboarding"
+export type SettingsTab = "security" | "notifications" | "appearance" | "account" | "onboarding"
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState<SettingsTab>("profile")
+  const [activeTab, setActiveTab] = useState<SettingsTab>("security")
 
   const renderPanel = () => {
     switch (activeTab) {
-      case "profile":
-        return <ProfileSettingsPanel />
       case "security":
         return <SecurityPanel />
       case "notifications":
@@ -31,7 +28,7 @@ export default function Settings() {
       case "onboarding":
         return <OnboardingPanel />
       default:
-        return <ProfileSettingsPanel />
+        return <SecurityPanel />
     }
   }
 

@@ -5,6 +5,10 @@ import { X, Copy, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { MonacoCodeEditor } from "./MonacoCodeEditor"
+import { DataFileViewer } from "./DataFileViewer"
+
+// Data file extensions that should use DataFileViewer instead of Monaco
+const DATA_EXTENSIONS = ['csv', 'tsv']
 
 interface EditorTab {
   path: string
@@ -122,14 +126,21 @@ const CodeEditor = ({ tabs, activeTab, onTabChange, onTabClose, onContentChange 
         </Button>
       </div>
 
-      {/* Monaco Editor */}
+      {/* Editor content - Monaco for code, DataFileViewer for data files */}
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
         {activeTabData && (
-          <MonacoCodeEditor
-            value={activeTabData.content}
-            onChange={handleEditorChange}
-            language={getFileExtension(activeTabData.path)}
-          />
+          DATA_EXTENSIONS.includes(getFileExtension(activeTabData.path).toLowerCase()) ? (
+            <DataFileViewer
+              content={activeTabData.content}
+              extension={getFileExtension(activeTabData.path)}
+            />
+          ) : (
+            <MonacoCodeEditor
+              value={activeTabData.content}
+              onChange={handleEditorChange}
+              language={getFileExtension(activeTabData.path)}
+            />
+          )
         )}
       </div>
     </div>

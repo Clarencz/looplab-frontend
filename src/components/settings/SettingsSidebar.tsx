@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { User, Lock, Bell, Palette, Settings, Sparkles } from "lucide-react"
+import { Lock, Bell, Palette, Settings, Sparkles } from "lucide-react"
 import type { SettingsTab } from "@/pages/Settings"
 
 interface SettingsSidebarProps {
@@ -10,7 +10,6 @@ interface SettingsSidebarProps {
 }
 
 const tabs = [
-  { id: "profile" as const, label: "Profile Settings", icon: User },
   { id: "security" as const, label: "Password & Security", icon: Lock },
   { id: "notifications" as const, label: "Notifications", icon: Bell },
   { id: "appearance" as const, label: "Appearance", icon: Palette },

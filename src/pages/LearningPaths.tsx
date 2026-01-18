@@ -165,7 +165,7 @@ export default function LearningPaths() {
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            <div className="container mx-auto px-4 md:px-6 pt-24 pb-16">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <h1 className="text-3xl font-bold mb-2">Learning Paths</h1>
@@ -294,7 +294,7 @@ export default function LearningPaths() {
                             <TrendingUp className="h-6 w-6" />
                             Continue Learning
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                             {activePaths.map((path, index) => (
                                 <PathCard
                                     key={path.id}
@@ -318,7 +318,7 @@ export default function LearningPaths() {
                             <BookOpen className="h-6 w-6" />
                             {activePaths.length > 0 ? 'Explore More Paths' : 'Start Your Journey'}
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                             {availablePaths.map((path, index) => (
                                 <PathCard
                                     key={path.id}
@@ -342,7 +342,7 @@ export default function LearningPaths() {
                             <CheckCircle2 className="h-6 w-6 text-green-500" />
                             Completed Paths
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                             {completedPaths.map((path, index) => (
                                 <PathCard
                                     key={path.id}

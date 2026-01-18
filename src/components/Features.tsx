@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { 
-  GitBranch, 
-  Layers, 
-  Shield, 
-  Zap, 
-  FileCode2, 
+import {
+  GitBranch,
+  Layers,
+  Shield,
+  Zap,
+  FileCode2,
   Trophy,
   MonitorSmartphone,
   Cpu
@@ -55,45 +55,45 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="features" className="relative py-32 overflow-hidden">
+    <section id="features" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-secondary/30" />
-      
-      <div className="container relative z-10 mx-auto px-6">
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mb-6"
           >
-            <span className="font-mono text-sm text-primary">// features</span>
+            <span className="font-mono text-xs sm:text-sm text-primary">// features</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4"
+            className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4"
           >
             Built for <span className="text-gradient">real developers</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
           >
             No fluff. No hand-holding. Just the features you need to build real skills.
           </motion.p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -105,12 +105,12 @@ const Features = () => {
             >
               {/* Glow effect on hover */}
               <div className="absolute inset-0 rounded-xl bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              
+
               <div className="relative">
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/30">
                   <feature.icon className="h-6 w-6 text-primary" />
                 </div>
-                
+
                 <h3 className="mb-2 font-mono text-lg font-semibold">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>

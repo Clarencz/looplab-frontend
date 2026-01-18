@@ -19,14 +19,14 @@ const recentProjects = [
 
 const StreakPreview = () => {
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-dark" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glow opacity-30" />
 
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ const StreakPreview = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4"
+            className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4"
           >
             Track your <span className="text-gradient">progress</span>
           </motion.h2>
@@ -52,7 +52,7 @@ const StreakPreview = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
           >
             Build meaningful streaks with completed, validated projects — not empty checkmarks.
           </motion.p>
@@ -116,13 +116,12 @@ const StreakPreview = () => {
                   {weekData.map((day) => (
                     <div key={day.day} className="flex-1 text-center">
                       <div
-                        className={`h-10 w-full rounded-lg mb-2 flex items-center justify-center transition-all ${
-                          day.completed
+                        className={`h-10 w-full rounded-lg mb-2 flex items-center justify-center transition-all ${day.completed
                             ? "bg-primary/20 border border-primary/40"
                             : day.current
-                            ? "bg-secondary border border-dashed border-muted-foreground/30"
-                            : "bg-secondary/30 border border-border"
-                        }`}
+                              ? "bg-secondary border border-dashed border-muted-foreground/30"
+                              : "bg-secondary/30 border border-border"
+                          }`}
                       >
                         {day.completed && <CheckCircle2 className="h-5 w-5 text-primary" />}
                       </div>
@@ -142,19 +141,17 @@ const StreakPreview = () => {
                       className="flex items-center justify-between rounded-lg bg-secondary/30 border border-border p-3"
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`h-2 w-2 rounded-full ${
-                          project.status === "completed" ? "bg-primary" : "bg-yellow-500"
-                        }`} />
+                        <div className={`h-2 w-2 rounded-full ${project.status === "completed" ? "bg-primary" : "bg-yellow-500"
+                          }`} />
                         <div>
                           <div className="font-mono text-sm font-medium">{project.name}</div>
                           <div className="text-xs text-muted-foreground">{project.tech} • {project.difficulty}</div>
                         </div>
                       </div>
-                      <span className={`text-xs font-mono px-2 py-1 rounded ${
-                        project.status === "completed" 
-                          ? "bg-primary/10 text-primary" 
+                      <span className={`text-xs font-mono px-2 py-1 rounded ${project.status === "completed"
+                          ? "bg-primary/10 text-primary"
                           : "bg-yellow-500/10 text-yellow-500"
-                      }`}>
+                        }`}>
                         {project.status === "completed" ? "Completed" : "In Progress"}
                       </span>
                     </div>

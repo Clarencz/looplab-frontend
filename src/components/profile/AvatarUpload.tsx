@@ -13,6 +13,74 @@ interface AvatarUploadProps {
     onUploadSuccess: (avatarUrl: string) => void
 }
 
+/**
+ * Optimize image before upload:
+ * - Resize to max 400x400 maintaining aspect ratio
+ * - Convert to WebP with 85% quality
+ * - Significantly reduces file size
+ */
+const optimizeImage = (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+            reject(new Error('Failed to get canvas context'))
+            return
+        }
+
+        const img = new Image()
+
+        img.onload = () => {
+            // Resize to max 400x400 maintaining aspect ratio
+            const maxSize = 400
+            let { width, height } = img
+
+            if (width > height) {
+                if (width > maxSize) {
+                    height = (height / width) * maxSize
+                    width = maxSize
+                }
+            } else {
+                if (height > maxSize) {
+                    width = (width / height) * maxSize
+                    height = maxSize
+                }
+            }
+
+            canvas.width = width
+            canvas.height = height
+
+            // Enable image smoothing for better quality
+            ctx.imageSmoothingEnabled = true
+            ctx.imageSmoothingQuality = 'high'
+            ctx.drawImage(img, 0, 0, width, height)
+
+            // Convert to WebP with 85% quality (good balance of quality/size)
+            canvas.toBlob(
+                (blob) => {
+                    if (blob) {
+                        resolve(blob)
+                    } else {
+                        reject(new Error('Failed to convert image'))
+                    }
+                },
+                'image/webp',
+                0.85
+            )
+
+            // Cleanup
+            URL.revokeObjectURL(img.src)
+        }
+
+        img.onerror = () => {
+            reject(new Error('Failed to load image'))
+            URL.revokeObjectURL(img.src)
+        }
+
+        img.src = URL.createObjectURL(file)
+    })
+}
+
 export function AvatarUpload({ currentAvatar, userName, onUploadSuccess }: AvatarUploadProps) {
     const [uploading, setUploading] = useState(false)
     const [preview, setPreview] = useState<string | null>(null)
@@ -58,8 +126,12 @@ export function AvatarUpload({ currentAvatar, userName, onUploadSuccess }: Avata
         setUploading(true)
 
         try {
+            // Optimize image before upload (resize + compress)
+            const optimizedBlob = await optimizeImage(file)
+            const optimizedFile = new File([optimizedBlob], 'avatar.webp', { type: 'image/webp' })
+
             const formData = new FormData()
-            formData.append('avatar', file)
+            formData.append('avatar', optimizedFile)
 
             const accessToken = localStorage.getItem('access_token')
             const response = await fetch('/api/v1/profile/avatar', {
@@ -73,16 +145,18 @@ export function AvatarUpload({ currentAvatar, userName, onUploadSuccess }: Avata
 
             if (!response.ok) {
                 const error = await response.json()
-                throw new Error(error.message || 'Upload failed')
+                throw new Error(error.error?.message || error.message || 'Upload failed')
             }
 
-            const data = await response.json()
-            onUploadSuccess(data.avatarUrl)
+            const responseData = await response.json()
+            // Backend wraps response in { success: true, data: { avatarUrl: ... } }
+            const avatarUrl = responseData.data?.avatarUrl || responseData.avatarUrl
+            onUploadSuccess(avatarUrl)
             setPreview(null)
 
             toast({
                 title: "Avatar updated",
-                description: "Your profile photo has been updated successfully",
+                description: "Your profile photo has been optimized and updated",
             })
         } catch (error) {
             console.error('Upload error:', error)
@@ -191,7 +265,7 @@ export function AvatarUpload({ currentAvatar, userName, onUploadSuccess }: Avata
                     </div>
 
                     <p className="text-xs text-muted-foreground text-center">
-                        JPG, PNG or WebP. Max 5MB. Will be resized to 400x400.
+                        JPG, PNG or WebP. Max 5MB.
                     </p>
                 </div>
             </CardContent>

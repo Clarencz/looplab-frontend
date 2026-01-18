@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Clock, CheckCircle2, Lock, Play, Trophy } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, CheckCircle2, Lock, Play, Trophy, LogOut, ArrowRight } from 'lucide-react';
 import { getPathDetail, startPath, type PathDetailResponse, type PathProjectDetail } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,7 +59,8 @@ export default function PathDetail() {
 
     const handleProjectClick = (project: PathProjectDetail) => {
         if (project.isLocked) return;
-        navigate(`/projects/${project.projectSlug}`);
+        // Pass navigation context so back button returns here
+        navigate(`/projects/${project.projectSlug}?from=path&pathId=${pathId}`);
     };
 
     if (loading) {
@@ -93,10 +94,20 @@ export default function PathDetail() {
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Back Button */}
-            <Button variant="ghost" onClick={() => navigate('/learning-paths')} className="mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Learning Paths
-            </Button>
+            <div className="flex items-center justify-between mb-6">
+                <Button variant="ghost" onClick={() => navigate('/learning-paths')}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Learning Paths
+                </Button>
+
+                {/* Exit/Leave Path option for in-progress paths */}
+                {hasStarted && !isCompleted && (
+                    <Button variant="outline" size="sm" onClick={() => navigate('/learning-paths')}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Exit Path
+                    </Button>
+                )}
+            </div>
 
             {/* Path Header */}
             <div className="mb-8">
@@ -152,30 +163,52 @@ export default function PathDetail() {
                     </Card>
                 )}
 
-                {/* Start Path Button */}
-                {!hasStarted && (
-                    <Card className="bg-primary/5 border-primary/20">
+                {/* Start/Continue Path Button */}
+                {!isCompleted && (
+                    <Card className={hasStarted ? "border-primary/30 bg-primary/5" : "bg-primary/5 border-primary/20"}>
                         <CardContent className="pt-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <h3 className="font-semibold mb-1">Ready to start your journey?</h3>
+                                    <h3 className="font-semibold mb-1">
+                                        {hasStarted ? 'Continue your journey' : 'Ready to start your journey?'}
+                                    </h3>
                                     <p className="text-sm text-muted-foreground">
-                                        Begin this learning path and unlock your first project
+                                        {hasStarted
+                                            ? `You're ${progress}% through — keep going!`
+                                            : 'Begin this learning path and unlock your first project'
+                                        }
                                     </p>
                                 </div>
-                                <Button onClick={handleStartPath} disabled={starting} size="lg">
-                                    {starting ? (
-                                        <>
-                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                            Starting...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Play className="mr-2 h-4 w-4" />
-                                            Start Path
-                                        </>
-                                    )}
-                                </Button>
+                                {hasStarted ? (
+                                    <Button
+                                        onClick={() => {
+                                            const nextProject = pathDetail.projects.find(p => !p.isCompleted && !p.isLocked);
+                                            if (nextProject) {
+                                                // Pass navigation context so back button returns here
+                                                navigate(`/projects/${nextProject.projectSlug}?from=path&pathId=${pathId}`);
+                                            }
+                                        }}
+                                        size="lg"
+                                        className="gap-2"
+                                    >
+                                        <ArrowRight className="h-4 w-4" />
+                                        Continue Learning
+                                    </Button>
+                                ) : (
+                                    <Button onClick={handleStartPath} disabled={starting} size="lg">
+                                        {starting ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                Starting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Play className="mr-2 h-4 w-4" />
+                                                Start Path
+                                            </>
+                                        )}
+                                    </Button>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
@@ -302,7 +335,7 @@ function ProjectNode({ project, index, onClick }: ProjectNodeProps) {
                     {isAvailable && !isCompleted && (
                         <Button className="mt-3" size="sm">
                             <Play className="mr-2 h-3 w-3" />
-                            Start Project
+                            {project.isLocked === false && index === 0 ? 'Start Project' : 'Continue Project'}
                         </Button>
                     )}
                 </CardContent>

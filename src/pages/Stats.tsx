@@ -142,7 +142,7 @@ const Stats = () => {
       </div>
 
       <div className="relative pt-24 pb-8">
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <h1 className="text-2xl font-bold mb-1">Stats</h1>
             <p className="text-muted-foreground text-sm font-mono">
@@ -152,7 +152,7 @@ const Stats = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 pb-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 relative z-10">
         {error && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />

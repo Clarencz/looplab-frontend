@@ -147,7 +147,7 @@ export function ProfileSettingsPanel() {
           {/* Avatar Section */}
           <div className="flex items-center gap-6">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user.profile?.avatar_url || undefined} alt="Profile" />
+              <AvatarImage src={user.profile?.avatarUrl || undefined} alt="Profile" />
               <AvatarFallback className="text-xl">
                 {user.profile?.full_name?.charAt(0) || user.username?.charAt(0) || "U"}
               </AvatarFallback>

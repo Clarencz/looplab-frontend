@@ -1,26 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Terminal, Zap } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import Interactive3DEditor from "./landing/Interactive3DEditor";
 
 const Hero = () => {
-  const [displayText, setDisplayText] = useState("");
   const { user } = useAuth();
-  const fullText = "Learn by fixing real, broken projects.";
-
-  useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setDisplayText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 50);
-    return () => clearInterval(timer);
-  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -37,7 +22,7 @@ const Hero = () => {
         }}
       />
 
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <motion.div
@@ -46,8 +31,8 @@ const Hero = () => {
             transition={{ duration: 0.5 }}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2"
           >
-            <Zap className="h-4 w-4 text-primary" />
-            <span className="text-sm font-mono text-primary">AI can code. Learn to be a problem solver.</span>
+            <Zap className="h-4 w-4 text-primary flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-mono text-primary">AI can code. Learn to be a problem solver.</span>
           </motion.div>
 
           {/* Main Heading */}
@@ -55,46 +40,33 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-6 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mb-4 sm:mb-6 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
           >
             <span className="text-foreground">Build skills by</span>
             <br />
             <span className="text-gradient">shipping real code</span>
           </motion.h1>
 
-          {/* Terminal-style Subtitle */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-8 mx-auto max-w-2xl"
-          >
-            <div className="code-block p-4 text-left">
-              <div className="flex items-center gap-2 mb-3 pb-3 border-b border-border">
-                <div className="h-3 w-3 rounded-full bg-destructive/60" />
-                <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-                <div className="h-3 w-3 rounded-full bg-primary/60" />
-              </div>
-              <div className="flex items-start gap-2">
-                <Terminal className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <p className="font-mono text-lg text-muted-foreground">
-                  <span className="text-primary">$</span> {displayText}
-                  <span className="terminal-cursor text-primary">_</span>
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Description */}
+          {/* Description moved above the editor */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-10 text-lg text-muted-foreground max-w-2xl mx-auto"
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mb-6 sm:mb-10 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
           >
             LoopLab delivers broken projects. You fix them in your own IDE.
             Submit for validation and earn project completion streaks.
           </motion.p>
+
+          {/* Interactive 3D Editor Demo */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mb-6 sm:mb-10 px-0 sm:px-4"
+          >
+            <Interactive3DEditor />
+          </motion.div>
 
           {/* CTAs - Different for authenticated vs non-authenticated users */}
           <motion.div
@@ -137,7 +109,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+            className="mt-8 sm:mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto"
           >
             {[
               { value: "10K+", label: "Projects Fixed" },
@@ -145,8 +117,8 @@ const Hero = () => {
               { value: "∞", label: "Your Own IDE" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="font-mono text-2xl font-bold text-primary">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="font-mono text-xl sm:text-2xl font-bold text-primary">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </motion.div>

@@ -1,32 +1,42 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-// User type matching backend response
+// User type matching backend response (uses camelCase from serde)
 interface User {
   id: string;
   email: string;
   username: string;
   phone?: string;
   subdomain?: string;
-  roles?: Array<{ id: string; name: string; display_name: string }>;
+  roles?: Array<{ id: string; name: string; displayName: string }>;
   profile: {
-    full_name: string;
-    avatar_url?: string;
+    fullName: string;
+    avatarUrl?: string;
     bio?: string;
-    location?: string;
-    website?: string;
+    tagline?: string;
+    country?: string;
+    languages?: string[];
     links: {
       github?: string;
       linkedin?: string;
       twitter?: string;
+      portfolio?: string;
     };
   };
-  settings: {
+  settings?: {
     theme: string;
-    notifications_enabled: boolean;
-    email_notifications: boolean;
+    notificationsEnabled?: boolean;
+    emailNotifications?: boolean;
+    privacy?: {
+      profile_public?: boolean;
+      show_projects?: boolean;
+      show_skills?: boolean;
+      show_timeline?: boolean;
+      show_email?: boolean;
+      allow_cv_download?: boolean;
+    };
   };
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Session {

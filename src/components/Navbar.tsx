@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
@@ -89,7 +89,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.profile.avatar_url} alt={user.username} />
+                      <AvatarImage src={user.profile.avatarUrl} alt={user.username} />
                       <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                   </Button>
@@ -149,7 +149,7 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             className="border-t border-border bg-background md:hidden"
           >
-            <div className="container mx-auto px-6 py-4 space-y-4">
+            <div className="container mx-auto px-4 sm:px-6 py-4 space-y-4">
               {user ? (
                 // Authenticated mobile menu
                 <>

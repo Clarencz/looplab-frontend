@@ -40,21 +40,21 @@ export default function Categories() {
         <div className="min-h-screen flex flex-col bg-background">
             <Navbar />
 
-            <main className="flex-1 container mx-auto px-4 py-8 max-w-7xl">
+            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 max-w-7xl">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="mb-12 text-center"
+                    className="mb-8 sm:mb-12 text-center"
                 >
                     <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
                         <BookOpen className="h-8 w-8 text-primary" />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                         Browse Categories
                     </h1>
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
                         Explore learning paths across different domains. Choose a category to discover curated projects and build real-world skills.
                     </p>
                 </motion.div>
@@ -81,7 +81,7 @@ export default function Categories() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        className="grid grid-cols-2 lg:grid-cols-3 gap-6"
                     >
                         {categories.map((category, index) => (
                             <motion.div

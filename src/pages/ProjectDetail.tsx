@@ -80,6 +80,7 @@ const ProjectDetail = () => {
           image: projectData.coverImage,
           estimatedTime: projectData.estimatedTime,
           targetSkill: projectData.targetSkill,
+          category: projectData.category, // Add category for routing logic
           filesPresent: projectData.fileStructure?.filter((f: any) => f.status !== 'missing').length || 0,
           filesTotal: projectData.fileStructure?.length || 0,
           status: "not-started",
@@ -131,8 +132,20 @@ const ProjectDetail = () => {
 
   const handleStartInApp = () => {
     setShowStartFlow(false)
-    // Pass context forward to workspace
-    navigate(buildNavUrl(`/workspace/${project.id}`))
+
+    // Check if this is a data-science category project
+    // Route to the revolutionary DS pipeline instead of regular workspace
+    const isDataScience = project.category === 'data-science' ||
+      project.category === 'data science' ||
+      project.category === 'analytics'
+
+    if (isDataScience) {
+      // Data science projects use the revolutionary analytical thinking platform
+      navigate(buildNavUrl('/ds-pipeline'))
+    } else {
+      // All other projects use the regular workspace
+      navigate(buildNavUrl(`/workspace/${project.id}`))
+    }
   }
 
   const handleGitHubConnect = (repoUrl: string) => {

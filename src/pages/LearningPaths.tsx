@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, TrendingUp, CheckCircle2, Play, Search, Loader2, AlertCircle, Lock } from 'lucide-react';
 import { listLearningPaths, startPath, getUserSubscription, type LearningPathWithProgress, type DifficultyLevel, type TierLevel } from '@/lib/api';
+import { listCategories, type Category } from '@/lib/api/categories';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,6 +38,7 @@ export default function LearningPaths() {
     const { user } = useAuth();
     const { toast } = useToast();
     const [paths, setPaths] = useState<LearningPathWithProgress[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -48,6 +50,7 @@ export default function LearningPaths() {
 
     useEffect(() => {
         loadPaths();
+        loadCategories();
         loadUserSubscription();
 
         // Handle URL params
@@ -68,6 +71,15 @@ export default function LearningPaths() {
             setError('Unable to load learning paths. Please check your connection or try again.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const loadCategories = async () => {
+        try {
+            const data = await listCategories();
+            setCategories(data);
+        } catch (error) {
+            console.error('Failed to load categories:', error);
         }
     };
 
@@ -123,13 +135,11 @@ export default function LearningPaths() {
         }
     };
 
-    const categories = ['all', ...Array.from(new Set(paths.map(p => p.category)))];
-
     const filteredPaths = paths.filter(path => {
         const matchesSearch =
             path.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             path.description.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = selectedCategory === 'all' || path.category === selectedCategory || path.categoryId === selectedCategory;
+        const matchesCategory = selectedCategory === 'all' || path.categoryId === selectedCategory;
         const matchesDifficulty = !selectedDifficulty || path.difficultyLevel === selectedDifficulty;
         const matchesTier = selectedTier === 'all' || path.tierRequired === selectedTier;
         return matchesSearch && matchesCategory && matchesDifficulty && matchesTier;
@@ -216,15 +226,21 @@ export default function LearningPaths() {
                     <div className="flex flex-col gap-4">
                         {/* Category Filter */}
                         <div className="flex gap-2 flex-wrap">
+                            <Button
+                                variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => setSelectedCategory('all')}
+                            >
+                                All Categories
+                            </Button>
                             {categories.map(category => (
                                 <Button
-                                    key={category}
-                                    variant={selectedCategory === category ? 'default' : 'outline'}
+                                    key={category.id}
+                                    variant={selectedCategory === category.id ? 'default' : 'outline'}
                                     size="sm"
-                                    onClick={() => setSelectedCategory(category)}
-                                    className="capitalize"
+                                    onClick={() => setSelectedCategory(category.id)}
                                 >
-                                    {category}
+                                    {category.name}
                                 </Button>
                             ))}
                         </div>

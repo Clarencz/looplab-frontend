@@ -44,7 +44,7 @@ const Hero = () => {
           >
             <span className="text-foreground">Build skills by</span>
             <br />
-            <span className="text-gradient">shipping real code</span>
+            <span className="text-gradient">solving real projects</span>
           </motion.h1>
 
           {/* Description moved above the editor */}

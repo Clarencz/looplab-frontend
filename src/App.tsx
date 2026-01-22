@@ -52,6 +52,10 @@ import AssessmentWorkspace from "./pages/candidate/AssessmentWorkspace"
 import { EnterpriseErrorBoundary } from "./components/enterprise/EnterpriseErrorBoundary"
 import AssessmentComplete from "./pages/candidate/AssessmentComplete"
 import DataSciencePipeline from "./pages/DataSciencePipeline"
+import FinanceWorkspace from "./pages/FinanceWorkspace"
+import RevolutionaryMathWorkspace from "./components/math/RevolutionaryMathWorkspace"
+import AlgorithmProblems from "./pages/AlgorithmProblems"
+import AlgorithmProblemDetail from "./pages/AlgorithmProblemDetail"
 
 const queryClient = new QueryClient()
 
@@ -84,6 +88,11 @@ const App = () => (
                   <Route path="/profile" element={<ProtectedRoute><ErrorBoundary><Profile /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><ErrorBoundary><Settings /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/ds-pipeline" element={<ProtectedRoute><ErrorBoundary><DataSciencePipeline /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/finance-workspace" element={<ProtectedRoute><ErrorBoundary><FinanceWorkspace /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/math-workspace" element={<ProtectedRoute><ErrorBoundary><RevolutionaryMathWorkspace projectName="Quadratic Expansion Challenge" lessonType="quadratic-expansion" /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/math-workspace/parabola" element={<ProtectedRoute><ErrorBoundary><RevolutionaryMathWorkspace projectName="Parabola Exploration" lessonType="parabola-exploration" /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/algorithms" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblems /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/algorithms/:slug" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblemDetail /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/u/:username" element={<ErrorBoundary><PublicProfile /></ErrorBoundary>} />
                   <Route path="/u/:username/project/:slug" element={<ErrorBoundary><PublicProjectDetail /></ErrorBoundary>} />
                   {/* Admin Routes */}

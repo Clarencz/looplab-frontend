@@ -1,102 +1,99 @@
-// Math & Logic Workspace
-// Connected to backend APIs with graph and equation support
+// Math & Logic Workspace - Revolutionary Learning
+// Refactored into modular components for better maintainability
 
-import { useState, useCallback } from 'react'
-import { Loader2 } from 'lucide-react'
-import type { CategoryWorkspaceProps } from '@/categories/shared/interfaces'
-import { InteractiveAiTutor } from '@/categories/shared/components/InteractiveAiTutor'
-import { validateProject, createTutoringSession, getTutoringStyle } from '@/lib/api'
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Target, Lightbulb, TrendingUp, Zap, Eye } from 'lucide-react';
+import type { CategoryWorkspaceProps } from '@/categories/shared/interfaces';
+
+// Local components
+import { MathWorkspaceHeader } from './MathWorkspaceHeader';
+
+// Tab components
+import { AdversarialTab } from './tabs/AdversarialTab';
+import { BreakthroughTab } from './tabs/BreakthroughTab';
+import { ParadoxTab } from './tabs/ParadoxTab';
+import { RealWorldTab } from './tabs/RealWorldTab';
+import { InteractiveTab } from './tabs/InteractiveTab';
 
 export default function MathWorkspace({ projectId, project, category }: CategoryWorkspaceProps) {
-    const [isValidating, setIsValidating] = useState(false)
-    const [validationResult, setValidationResult] = useState<any>(null)
-    const [tutoringSession, setTutoringSession] = useState<any>(null)
-    const [tutoringStyle, setTutoringStyle] = useState<any>(null)
+    const [activeTab, setActiveTab] = useState('adversarial');
+    const [score, setScore] = useState(0);
 
-    // Validate - routes to MathValidator
-    const handleValidate = useCallback(async () => {
-        setIsValidating(true)
-        try {
-            const result = await validateProject({
-                userProjectId: projectId,
-                categorySlug: category?.slug || 'math',
-                files: [],
-                entryPoint: 'main.py',
-                language: 'python',
-            })
-            setValidationResult(result)
-        } catch (error) {
-            console.error('Validation error:', error)
-        } finally {
-            setIsValidating(false)
-        }
-    }, [projectId, category])
+    const handleErrorHuntComplete = (finalScore: number) => {
+        setScore(finalScore);
+        setActiveTab('breakthrough');
+    };
 
-    // Start AI tutoring - routes to MathAiTutor
-    const handleStartTutoring = useCallback(async () => {
-        if (!validationResult) return
-        try {
-            const [session, style] = await Promise.all([
-                createTutoringSession({
-                    userProjectId: projectId,
-                    categorySlug: category?.slug || 'math',
-                    files: [],
-                }),
-                getTutoringStyle(category?.slug || 'math'),
-            ])
-            setTutoringSession(session)
-            setTutoringStyle(style)
-        } catch (error) {
-            console.error('Tutoring error:', error)
-        }
-    }, [projectId, category, validationResult])
+    const handleBuilderComplete = () => {
+        setActiveTab('interactive');
+    };
 
     return (
-        <div className="flex flex-col h-screen bg-background">
-            <header className="flex items-center justify-between px-6 py-4 border-b border-border">
-                <div>
-                    <h1 className="text-xl font-bold">{project.name}</h1>
-                    <p className="text-sm text-muted-foreground">{category?.name || 'Math & Logic'}</p>
-                </div>
-                <div className="flex gap-2">
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg">Run</button>
-                    <button
-                        onClick={handleValidate}
-                        disabled={isValidating}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
-                    >
-                        {isValidating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Validate'}
-                    </button>
-                    {validationResult && (
-                        <button onClick={handleStartTutoring} className="px-4 py-2 bg-purple-600 text-white rounded-lg">
-                            📐 AI Assistance
-                        </button>
-                    )}
-                </div>
-            </header>
+        <div className="h-screen flex flex-col bg-background">
+            {/* Header */}
+            <MathWorkspaceHeader
+                project={project}
+                category={category}
+                score={score}
+            />
 
-            <div className="flex-1 flex">
-                <div className="flex-1 p-6">
-                    <div className="h-full bg-card rounded-lg border border-border p-4">
-                        <p className="text-muted-foreground">Math workspace with LaTeX equations and graph plotting</p>
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs">LaTeX Equations</span>
-                            <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs">Graph Plotting</span>
-                            <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs">Symbolic Math</span>
-                        </div>
+            {/* Main Content */}
+            <div className="flex-1 min-h-0">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+                    <div className="border-b px-4">
+                        <TabsList className="grid w-full grid-cols-5 max-w-4xl">
+                            <TabsTrigger value="adversarial" className="flex items-center gap-2">
+                                <Target className="w-4 h-4" />
+                                <span className="hidden sm:inline">Adversarial</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="breakthrough" className="flex items-center gap-2">
+                                <Lightbulb className="w-4 h-4" />
+                                <span className="hidden sm:inline">Breakthrough</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="paradox" className="flex items-center gap-2">
+                                <Zap className="w-4 h-4" />
+                                <span className="hidden sm:inline">Paradox</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="real-world" className="flex items-center gap-2">
+                                <TrendingUp className="w-4 h-4" />
+                                <span className="hidden sm:inline">Real-World</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="interactive" className="flex items-center gap-2">
+                                <Eye className="w-4 h-4" />
+                                <span className="hidden sm:inline">Interactive</span>
+                            </TabsTrigger>
+                        </TabsList>
                     </div>
-                </div>
-            </div>
 
-            {tutoringSession && tutoringStyle && (
-                <InteractiveAiTutor
-                    session={tutoringSession}
-                    style={tutoringStyle}
-                    onClose={() => setTutoringSession(null)}
-                    onRedo={() => { setTutoringSession(null); setValidationResult(null) }}
-                    onComplete={() => setTutoringSession(null)}
-                />
-            )}
+                    <div className="flex-1 overflow-auto">
+                        {/* 1. ADVERSARIAL: Find What's Wrong */}
+                        <TabsContent value="adversarial" className="h-full m-0">
+                            <AdversarialTab onComplete={handleErrorHuntComplete} />
+                        </TabsContent>
+
+                        {/* 2. BREAKTHROUGH: Build It Yourself */}
+                        <TabsContent value="breakthrough" className="h-full m-0">
+                            <BreakthroughTab onComplete={handleBuilderComplete} />
+                        </TabsContent>
+
+                        {/* 3. PARADOX: Challenge Intuition */}
+                        <TabsContent value="paradox" className="h-full m-0 p-4">
+                            <ParadoxTab />
+                        </TabsContent>
+
+                        {/* 4. REAL-WORLD: Why It Matters */}
+                        <TabsContent value="real-world" className="h-full m-0 p-4">
+                            <RealWorldTab />
+                        </TabsContent>
+
+                        {/* 5. INTERACTIVE: Superior Visualization */}
+                        <TabsContent value="interactive" className="h-full m-0 p-4">
+                            <InteractiveTab />
+                        </TabsContent>
+                    </div>
+                </Tabs>
+            </div>
         </div>
-    )
+    );
 }

@@ -2,7 +2,6 @@
 // Connected to backend APIs for execution, validation, and AI tutoring
 
 import { useState, useCallback } from 'react'
-import { Loader2 } from 'lucide-react'
 import type { CategoryWorkspaceProps } from '@/categories/shared/interfaces'
 import { InteractiveAiTutor } from '@/categories/shared/components/InteractiveAiTutor'
 import {
@@ -14,6 +13,11 @@ import {
     type TutoringStyle,
     type ValidationResult,
 } from '@/lib/api'
+
+// Local components
+import { ProgrammingWorkspaceHeader } from './ProgrammingWorkspaceHeader'
+import { ExecutionOutputPanel } from './ExecutionOutputPanel'
+import { ValidationSummary } from './ValidationSummary'
 
 interface WorkspaceState {
     isExecuting: boolean
@@ -37,13 +41,18 @@ export default function ProgrammingWorkspace({ projectId, project, category }: C
     })
 
     // Execute code
-    const handleExecute = useCallback(async (files: { path: string; content: string }[], entryPoint: string, language: string) => {
+    const handleExecute = useCallback(async () => {
+        // TODO: Get actual files from editor state
+        const files: { path: string; content: string }[] = []
+        const entryPoint = 'main.py'
+        const language = 'python'
+
         setState(prev => ({ ...prev, isExecuting: true, executionOutput: [] }))
 
         try {
             await executeCode(
                 projectId,
-                files.map(f => ({ path: f.path, content: f.content })),
+                files, // In a real app we'd pass actual file content here
                 entryPoint,
                 language,
                 (log) => {
@@ -62,7 +71,12 @@ export default function ProgrammingWorkspace({ projectId, project, category }: C
     }, [projectId])
 
     // Validate project - routes to ProgrammingValidator
-    const handleValidate = useCallback(async (files: { path: string; content: string }[], entryPoint: string, language: string) => {
+    const handleValidate = useCallback(async () => {
+        // TODO: Get actual files from editor state
+        const files: { path: string; content: string }[] = []
+        const entryPoint = 'main.py'
+        const language = 'python'
+
         setState(prev => ({ ...prev, isValidating: true }))
 
         try {
@@ -82,8 +96,11 @@ export default function ProgrammingWorkspace({ projectId, project, category }: C
     }, [projectId, category])
 
     // Start AI tutoring - routes to ProgrammingAiTutor
-    const handleStartTutoring = useCallback(async (files: { path: string; content: string }[]) => {
+    const handleStartTutoring = useCallback(async () => {
         if (!state.validationResult) return
+
+        // TODO: Get actual files from editor state
+        const files: { path: string; content: string }[] = []
 
         setState(prev => ({ ...prev, isTutoring: true }))
 
@@ -129,38 +146,15 @@ export default function ProgrammingWorkspace({ projectId, project, category }: C
 
     return (
         <div className="flex flex-col h-screen bg-background">
-            <header className="flex items-center justify-between px-6 py-4 border-b border-border">
-                <div>
-                    <h1 className="text-xl font-bold">{project.name}</h1>
-                    <p className="text-sm text-muted-foreground">
-                        {category?.name || 'Programming & Software'}
-                    </p>
-                </div>
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => handleExecute([], 'main.py', 'python')}
-                        disabled={state.isExecuting}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg disabled:opacity-50"
-                    >
-                        {state.isExecuting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Run'}
-                    </button>
-                    <button
-                        onClick={() => handleValidate([], 'main.py', 'python')}
-                        disabled={state.isValidating}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
-                    >
-                        {state.isValidating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Validate'}
-                    </button>
-                    {state.validationResult && (
-                        <button
-                            onClick={() => handleStartTutoring([])}
-                            className="px-4 py-2 bg-purple-600 text-white rounded-lg"
-                        >
-                            👨‍💻 AI Assistance
-                        </button>
-                    )}
-                </div>
-            </header>
+            <ProgrammingWorkspaceHeader
+                project={project}
+                category={category}
+                state={state}
+                onExecute={handleExecute}
+                onValidate={handleValidate}
+                onStartTutoring={handleStartTutoring}
+                hasValidationResult={!!state.validationResult}
+            />
 
             <div className="flex-1 flex">
                 <div className="flex-1 p-6">
@@ -169,20 +163,10 @@ export default function ProgrammingWorkspace({ projectId, project, category }: C
                             Programming workspace - Full IDE with Monaco editor, file tree, terminal, and build tools
                         </p>
 
-                        {state.executionOutput.length > 0 && (
-                            <div className="mt-4 p-3 bg-muted rounded font-mono text-sm">
-                                {state.executionOutput.map((line, i) => (
-                                    <div key={i}>{line}</div>
-                                ))}
-                            </div>
-                        )}
+                        <ExecutionOutputPanel output={state.executionOutput} />
 
                         {state.validationResult && (
-                            <div className="mt-4 p-3 bg-muted rounded">
-                                <h4 className="font-semibold">Validation Result</h4>
-                                <p>Score: {state.validationResult.totalScore}%</p>
-                                <p>Status: {state.validationResult.overallStatus}</p>
-                            </div>
+                            <ValidationSummary result={state.validationResult} />
                         )}
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 // LoopLab Desktop App - Tauri Entry Point
 // Embeds the Rust backend and Python AI pipeline
 
-use tauri::Manager;
+use std::process::Command;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,20 +21,16 @@ pub fn run() {
       tauri::async_runtime::spawn(async move {
         // Start Python Sidecar
         // Note: The binary name in config is "looplab-ai-pipeline", Tauri adds suffix automatically
-        let (mut rx, child) = tauri::api::process::Command::new("looplab-ai-pipeline")
+        let mut child = Command::new("looplab-ai-pipeline")
             .spawn()
             .expect("Failed to spawn python sidecar");
 
-        tracing::info!("Python sidecar spawned with PID: {}", child.pid());
+        tracing::info!("Python sidecar spawned with PID: {}", child.id());
 
         // Log output from sidecar
         tauri::async_runtime::spawn(async move {
-            while let Some(event) = rx.recv().await {
-                if let tauri::api::process::CommandEvent::Stdout(line) = event {
-                     tracing::info!("[PYTHON] {}", line);
-                } else if let tauri::api::process::CommandEvent::Stderr(line) = event {
-                     tracing::warn!("[PYTHON] {}", line);
-                }
+            if let Err(e) = child.wait() {
+                tracing::error!("Python sidecar error: {}", e);
             }
         });
 

@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Select,
   SelectContent,
@@ -15,6 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
+  ArrowLeft,
   CheckCircle2,
   Code2,
   FileCode,
@@ -24,6 +26,8 @@ import {
   Clock,
   Loader2,
 } from 'lucide-react'
+import { useSmartNavigation } from '@/hooks/useSmartNavigation'
+import Navbar from '@/components/Navbar'
 
 // Types
 type Category = 'Programming' | 'Algorithms' | 'DataScience' | 'Math' | 'Finance'
@@ -121,6 +125,9 @@ const difficultyColors: Record<Difficulty, string> = {
 }
 
 export default function CreateCustomScenarioPage() {
+  const navigate = useNavigate()
+  const { getBackUrl, getBackLabel, buildNavUrl } = useSmartNavigation()
+
   const [formData, setFormData] = React.useState<FormData>({
     category: '',
     scenario: '',
@@ -288,7 +295,9 @@ export default function CreateCustomScenarioPage() {
 
   const handleStartWorking = () => {
     console.log('[Create Scenario] Starting project with data:', { formData, previewData })
-    // Navigate to project workspace
+    // TODO: In the future, this would create a project via API and navigate to workspace
+    // For now, navigate to projects page with context preserved
+    navigate(buildNavUrl('/projects'))
   }
 
   const getStageLabel = (stage: GenerationStage): string => {
@@ -306,8 +315,23 @@ export default function CreateCustomScenarioPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
+
+      <div className="container mx-auto px-6 pt-24 pb-8">
+        {/* Back button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mb-6"
+          onClick={() => navigate(getBackUrl('/dashboard'))}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          {getBackLabel('Back to Dashboard')}
+        </Button>
+      </div>
+
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-16 z-10">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary">
@@ -461,11 +485,10 @@ export default function CreateCustomScenarioPage() {
                     Problem Description <span className="text-destructive">*</span>
                   </Label>
                   <span
-                    className={`text-xs ${
-                      charCount.description < 50 || charCount.description > 5000
+                    className={`text-xs ${charCount.description < 50 || charCount.description > 5000
                         ? 'text-destructive'
                         : 'text-muted-foreground'
-                    }`}
+                      }`}
                   >
                     {charCount.description}/5000 (min: 50)
                   </span>
@@ -718,35 +741,32 @@ export default function CreateCustomScenarioPage() {
                   <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
                       <div
-                        className={`size-2 rounded-full ${
-                          generationStage === 'analyzing'
+                        className={`size-2 rounded-full ${generationStage === 'analyzing'
                             ? 'bg-primary animate-pulse'
                             : 'bg-muted-foreground'
-                        }`}
+                          }`}
                       />
                       <span>Analyzing requirements</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className={`size-2 rounded-full ${
-                          generationStage === 'generating'
+                        className={`size-2 rounded-full ${generationStage === 'generating'
                             ? 'bg-primary animate-pulse'
                             : generationProgress > 25
                               ? 'bg-primary'
                               : 'bg-muted-foreground'
-                        }`}
+                          }`}
                       />
                       <span>Generating project structure</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className={`size-2 rounded-full ${
-                          generationStage === 'validating'
+                        className={`size-2 rounded-full ${generationStage === 'validating'
                             ? 'bg-primary animate-pulse'
                             : generationProgress > 75
                               ? 'bg-primary'
                               : 'bg-muted-foreground'
-                        }`}
+                          }`}
                       />
                       <span>Validating scenario</span>
                     </div>

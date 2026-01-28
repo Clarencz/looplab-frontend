@@ -5,11 +5,12 @@ import path from "path"
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: "::",
+    host: "0.0.0.0",
     port: 8080,
+    strictPort: false,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
       },
     },

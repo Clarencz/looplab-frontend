@@ -3,9 +3,80 @@ import { motion } from 'framer-motion';
 import { WifiOff, Cpu, ArrowRight, Link } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
+import { useEffect } from 'react';
 
 export function DesktopOnboarding() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const setupListener = async () => {
+            // Listen for auth completion signal (from store_auth_tokens or other sources)
+            const unlistenAuth = await listen('auth-state-changed', (event) => {
+                if (event.payload === 'authenticated') {
+                    navigate('/dashboard');
+                }
+            });
+
+            // Listen for deep link with tokens (from Rust backend)
+            const unlistenDeepLink = await listen('auth-deep-link-received', async (event) => {
+                const url = event.payload as string;
+                console.log('Deep link received in frontend:', url);
+
+                try {
+                    // Manual parsing of query params since URL object might not handle custom protocol well in some envs
+                    // But standard URL object usually works if the string is a valid URL
+                    // looplab://auth/callback?access_token=...
+                    const dummyUrl = url.replace('looplab://', 'http://localhost/');
+                    const parsedUrl = new URL(dummyUrl);
+                    const params = new URLSearchParams(parsedUrl.search);
+
+                    const accessToken = params.get('access_token');
+                    const refreshToken = params.get('refresh_token');
+                    const expiresAtStr = params.get('expires_at');
+
+                    if (accessToken && refreshToken && expiresAtStr) {
+                        const expiresAt = parseInt(expiresAtStr, 10);
+
+                        // Store in localStorage for web compatibility (AuthContext)
+                        localStorage.setItem('access_token', accessToken);
+                        localStorage.setItem('refresh_token', refreshToken);
+                        localStorage.setItem('expires_at', expiresAt.toString());
+
+                        // Also persist via IPC for desktop security (future proofing)
+                        await invoke('store_auth_tokens', {
+                            accessToken,
+                            refreshToken,
+                            expiresAt
+                        });
+                    }
+                } catch (e) {
+                    console.error('Failed to parse deep link:', e);
+                }
+            });
+
+            return () => {
+                unlistenAuth();
+                unlistenDeepLink();
+            };
+        };
+
+        let unlistenFn: (() => void) | undefined;
+        setupListener().then(fn => { unlistenFn = fn; });
+
+        return () => {
+            if (unlistenFn) unlistenFn();
+        };
+    }, [navigate]);
+
+    const handleAuth = async () => {
+        try {
+            await invoke('open_auth_in_browser');
+        } catch (error) {
+            console.error('Failed to open auth in browser:', error);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white flex overflow-hidden relative selection:bg-cyan-500/30">
@@ -59,7 +130,7 @@ export function DesktopOnboarding() {
                         <div className="space-y-4">
                             <Button
                                 className="w-full h-12 text-lg bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 border-0 shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300"
-                                onClick={() => navigate('/auth')}
+                                onClick={handleAuth}
                             >
                                 <Cpu className="w-5 h-5 mr-2" />
                                 Initialize Workspace
@@ -68,7 +139,7 @@ export function DesktopOnboarding() {
                             <Button
                                 variant="outline"
                                 className="w-full h-12 text-lg border-white/10 hover:bg-white/5 text-zinc-300 hover:text-white transition-all"
-                                onClick={() => navigate('/auth')}
+                                onClick={handleAuth}
                             >
                                 <Link className="w-5 h-5 mr-2" />
                                 Connect Account

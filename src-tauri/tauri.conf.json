@@ -9,6 +9,15 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build"
   },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "looplab"
+        ]
+      }
+    }
+  },
   "app": {
     "windows": [
       {

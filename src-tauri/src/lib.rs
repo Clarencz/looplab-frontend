@@ -2,11 +2,82 @@
 // Embeds the Rust backend and Python AI pipeline
 
 use std::process::Command;
+use tauri::{Manager, Emitter, Listener};
+use tauri_plugin_shell::ShellExt;
+
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
+struct AuthTokens {
+    access_token: String,
+    refresh_token: String,
+    expires_at: i64,
+}
+
+#[tauri::command]
+async fn store_auth_tokens(
+    app: tauri::AppHandle,
+    access_token: String,
+    refresh_token: String,
+    expires_at: i64,
+) -> Result<(), String> {
+    // Store in secure storage (Phase 4)
+    // For now just logging
+    tracing::info!("Storing auth tokens: access_token=..., refresh_token=..., expires_at={}", expires_at);
+    
+    // Emit event to frontend
+    app.emit("auth-state-changed", "authenticated")
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+async fn get_auth_tokens(app: tauri::AppHandle) -> Result<Option<AuthTokens>, String> {
+    // Retrieve from secure storage (Phase 4)
+    Ok(None)
+}
+
+#[tauri::command]
+async fn clear_auth_tokens(app: tauri::AppHandle) -> Result<(), String> {
+    // Clear from secure storage (Phase 4)
+    app.emit("auth-state-changed", "unauthenticated")
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+async fn open_auth_in_browser(app: tauri::AppHandle) -> Result<(), String> {
+    let url = "http://localhost:8080/auth?flow=desktop";
+    app.shell().open(url, None).map_err(|e| e.to_string())?;
+    Ok(())
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   tauri::Builder::default()
+    .invoke_handler(tauri::generate_handler![
+        store_auth_tokens,
+        get_auth_tokens,
+        clear_auth_tokens,
+        open_auth_in_browser,
+    ])
     .setup(|app| {
+      #[cfg(desktop)]
+      app.handle().plugin(tauri_plugin_deep_link::init())?;
+      app.handle().plugin(tauri_plugin_shell::init())?;
+
+      // Handle deep links checks
+      #[cfg(desktop)]
+      // Handle deep links checks
+      #[cfg(desktop)]
+      {
+          let handle = app.handle().clone();
+          app.listen("deep-link://new-url", move |event| {
+              tracing::info!("Deep link received: {:?}", event.payload());
+              let payload = event.payload();
+              if payload.contains("access_token=") {
+                  let _ = handle.emit("auth-deep-link-received", payload);
+              }
+          });
+      }
       // Setup logging plugin
       if cfg!(debug_assertions) {
         app.handle().plugin(

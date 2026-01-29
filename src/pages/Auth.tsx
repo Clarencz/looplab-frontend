@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Github, Chrome, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
-  const { user, loading, signInWithGitHub, signInWithGoogle } = useAuth();
+  const { user, loading, signInWithGitHub: baseSignInWithGitHub, signInWithGoogle: baseSignInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [isSigningIn, setIsSigningIn] = useState<"github" | "google" | null>(null);
+
+  const isDesktopFlow = searchParams.get("flow") === "desktop";
 
   useEffect(() => {
     if (user && !loading) {
@@ -21,7 +24,11 @@ const Auth = () => {
   const handleGitHubSignIn = async () => {
     try {
       setIsSigningIn("github");
-      await signInWithGitHub();
+      if (isDesktopFlow) {
+        window.location.href = `/api/v1/auth/desktop?provider=github`;
+      } else {
+        await baseSignInWithGitHub();
+      }
     } catch (error: any) {
       toast({
         title: "Sign in failed",
@@ -35,7 +42,11 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsSigningIn("google");
-      await signInWithGoogle();
+      if (isDesktopFlow) {
+        window.location.href = `/api/v1/auth/desktop?provider=google`;
+      } else {
+        await baseSignInWithGoogle();
+      }
     } catch (error: any) {
       toast({
         title: "Sign in failed",

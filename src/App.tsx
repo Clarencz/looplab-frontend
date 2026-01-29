@@ -11,13 +11,15 @@ import { ScrollToTop } from "@/components/ScrollToTop"
 import { KeyboardShortcutsModal } from "@/components/KeyboardShortcutsModal"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { AdminProtectedRoute } from "@/components/AdminProtectedRoute"
+import { ActionTooltip } from "@/components/ActionTooltip"
 import { isTauri } from "@/utils/platform";
-import { DesktopOnboarding } from "@/pages/desktop/Onboarding";
+import { DesktopEntry } from "@/pages/desktop/Entry";
+import Index from "./pages/Index";
 
 // ... existing imports ...
 
 // Inside Routes
-<Route path="/" element={isTauri() ? <DesktopOnboarding /> : <Index />} />
+<Route path="/" element={isTauri() ? <DesktopEntry /> : <Index />} />
 import Auth from "./pages/Auth"
 import AuthCallback from "./pages/AuthCallback"
 import Projects from "./pages/Projects"

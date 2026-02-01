@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable"
 import { toast } from "sonner"
 import { apiClient } from "@/lib/api/client"
+import { isTauri } from "@/utils/platform"
+import { UnifiedProjectService, type UnifiedProject } from "@/lib/storage/projects-unified"
+import { LocalProjectStorage } from "@/lib/storage/local-projects"
 import WorkspaceHeader from "@/components/workspace/WorkspaceHeader"
 import FilePanel, { type WorkspaceFile } from "@/components/workspace/FilePanel"
 import CodeEditor from "@/components/workspace/CodeEditor"
@@ -57,11 +60,12 @@ const Workspace = () => {
   const { getBackUrl } = useSmartNavigation()
 
   // Project and user-project state
-  const [project, setProject] = useState<{ id: string; name: string; hasPreview: boolean; categoryId?: string } | null>(null)
+  const [project, setProject] = useState<{ id: string; name: string; hasPreview: boolean; categoryId?: string; isLocal?: boolean; isPublished?: boolean } | null>(null)
   const [userProject, setUserProject] = useState<any>(null)
   const [category, setCategory] = useState<Category | null>(null)
 
   const [isLoading, setIsLoading] = useState(true)
+  const [isPublishing, setIsPublishing] = useState(false)
   const [filePanelCollapsed, setFilePanelCollapsed] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [openTabs, setOpenTabs] = useState<EditorTab[]>([])
@@ -91,48 +95,80 @@ const Workspace = () => {
       }
 
       try {
-        // First, fetch the project details
-        const projectResponse = await fetch(`/api/v1/projects/${id}`)
-        if (!projectResponse.ok) {
+        // Use UnifiedProjectService to get project (handles both local and cloud)
+        const unifiedProject = await UnifiedProjectService.getProject(id)
+
+        if (!unifiedProject) {
           throw new Error('Project not found')
         }
-        const projectData = (await projectResponse.json()).data
 
+        // Initial project setup from unified source
         setProject({
-          id: projectData.id,
-          name: projectData.name,
-          hasPreview: projectData.includesBackend || false,
-          categoryId: projectData.categoryId,
+          id: unifiedProject.id,
+          name: unifiedProject.name,
+          hasPreview: false, // Default, updated later if cloud
+          categoryId: unifiedProject.category,
+          isLocal: unifiedProject.isLocal,
+          isPublished: unifiedProject.isPublished,
         })
 
-        // Fetch category data to determine learning mode
-        if (projectData.categoryId) {
+        // Fetch category data if available
+        if (unifiedProject.category) {
           try {
-            const categoryResponse = await fetch(`/api/v1/categories/${projectData.categoryId}`)
+            const categoryResponse = await fetch(`/api/v1/categories/${unifiedProject.category}`)
             if (categoryResponse.ok) {
               const categoryData = (await categoryResponse.json()).data
               setCategory(categoryData)
             }
           } catch (error) {
             console.error('Failed to fetch category:', error)
-            // Continue without category - will default to IDE mode
           }
         }
 
-        // Convert project fileStructure to WorkspaceFile format
-        // Handles flat paths like 'src/loader.py' and builds proper nested tree
+        // --- Local Project Logic ---
+        if (unifiedProject.isLocal) {
+          const localProject = await LocalProjectStorage.loadProject(id)
+          if (localProject && localProject.workspace) {
+            setWorkspaceFiles(localProject.workspace.files || [])
+            setOpenTabs(localProject.workspace.openTabs?.map((p: string) => ({
+              path: p,
+              name: p.split('/').pop() || p,
+              content: '', // Content will be loaded when clicked
+              isDirty: false
+            })) || [])
+            setActiveTab(localProject.workspace.activeTabPath || null)
+            toast.success("Local workspace loaded")
+            setIsLoading(false)
+            return // Done for local project
+          }
+        }
+
+        // --- Cloud Project Logic ---
+        // If we are here, it's either a cloud project or a local project without workspace data yet (unlikely)
+
+        // Fetch full project details from API (needed for fileStructure)
+        const projectResponse = await fetch(`/api/v1/projects/${id}`)
+        if (!projectResponse.ok) {
+          throw new Error('Project not found')
+        }
+        const data = (await projectResponse.json()).data
+        const cloudProjectData = data;
+
+        // Update project state with potentially more info from cloud (like hasPreview)
+        setProject(prev => prev ? {
+          ...prev,
+          hasPreview: cloudProjectData.includesBackend || false
+        } : null)
+
+        // Helper to convert file structure
         const convertFileStructure = (files: any[]): WorkspaceFile[] => {
           const root: WorkspaceFile[] = [];
           const folderMap = new Map<string, WorkspaceFile>();
-
-          // Sort files so folders are processed consistently
           const sortedFiles = [...files].sort((a, b) => a.name.localeCompare(b.name));
 
           sortedFiles.forEach((file: any) => {
             const parts = file.name.split('/');
-
             if (parts.length === 1) {
-              // Root level file
               root.push({
                 name: file.name,
                 type: 'file',
@@ -140,14 +176,11 @@ const Workspace = () => {
                 content: file.content || '',
               });
             } else {
-              // Nested file - create folder structure
               let currentPath = '';
               let parent: WorkspaceFile[] = root;
-
               for (let i = 0; i < parts.length - 1; i++) {
                 const folderName = parts[i];
                 currentPath = currentPath ? `${currentPath}/${folderName}` : folderName;
-
                 if (!folderMap.has(currentPath)) {
                   const folder: WorkspaceFile = {
                     name: folderName,
@@ -160,8 +193,6 @@ const Workspace = () => {
                 }
                 parent = folderMap.get(currentPath)!.children!;
               }
-
-              // Add the file to its parent folder
               parent.push({
                 name: parts[parts.length - 1],
                 type: 'file',
@@ -170,26 +201,22 @@ const Workspace = () => {
               });
             }
           });
-
           return root;
         };
 
-        // Use project's file structure if available
-        if (projectData.fileStructure && projectData.fileStructure.length > 0) {
-          setWorkspaceFiles(convertFileStructure(projectData.fileStructure))
+        if (cloudProjectData.fileStructure && cloudProjectData.fileStructure.length > 0) {
+          setWorkspaceFiles(convertFileStructure(cloudProjectData.fileStructure))
         }
 
-        // Now try to load/create user-project workspace
+        // Load/Create user-project for cloud projects
         try {
-          // Try to get existing user-project using API client
           const response = await apiClient.post('/user-projects', {
-            projectSlug: projectData.slug
+            projectSlug: cloudProjectData.slug
           })
 
           if (response.data) {
             setUserProject(response.data)
 
-            // If user has saved workspace state, load it
             if (response.data.workspace && response.data.workspace.files && response.data.workspace.files.length > 0) {
               setWorkspaceFiles(response.data.workspace.files)
               setOpenTabs(response.data.workspace.openTabs || [])
@@ -201,21 +228,8 @@ const Workspace = () => {
           }
         } catch (error) {
           console.error('Failed to create/load user project:', error)
-          // Continue with default workspace from project
         }
 
-        // Fallback to localStorage
-        const storageKey = `workspace-${id}`
-        const savedWorkspace = localStorage.getItem(storageKey)
-        if (savedWorkspace && workspaceFiles.length === 0) {
-          const parsed = JSON.parse(savedWorkspace)
-          if (parsed.files && parsed.files.length > 0) {
-            setWorkspaceFiles(parsed.files)
-            setOpenTabs(parsed.openTabs || [])
-            setActiveTab(parsed.activeTab || null)
-            toast.info("Workspace loaded from local cache")
-          }
-        }
       } catch (error) {
         console.error("Failed to load workspace:", error)
         toast.error("Failed to load project")
@@ -228,21 +242,32 @@ const Workspace = () => {
     loadWorkspace()
   }, [id, navigate])
 
-  // Save workspace to backend API whenever files or tabs change
+  // Save workspace to backend API or local storage whenever files or tabs change
   useEffect(() => {
     if (!isLoading) {
       const saveWorkspace = async () => {
         try {
           const workspaceState = {
             files: workspaceFiles,
-            openTabs,
+            openTabs: openTabs.map(t => t.path), // Map to strings for storage
             activeTabPath: activeTab,
             terminalLogs: logs,
             lastSavedAt: new Date().toISOString(),
           }
 
-          // Save to backend API using API client
-          await apiClient.put(`/user-projects/${id}/workspace`, workspaceState)
+          if (isTauri()) {
+            // Save to local storage on desktop
+            await LocalProjectStorage.updateWorkspace(id!, {
+              files: workspaceFiles,
+              openTabs: openTabs.map(t => t.path),
+              activeTabPath: activeTab || undefined
+            })
+
+            // If published and online, also sync to cloud (optional for now, can be manual)
+          } else {
+            // Save to backend API using API client (Web)
+            await apiClient.put(`/user-projects/${id}/workspace`, workspaceState)
+          }
           setStatus("saved")
 
           // Also save to localStorage as backup
@@ -363,7 +388,8 @@ const Workspace = () => {
       name,
       content: newFile.content || "",
       isDirty: false,
-    }
+      isNew: true // Assuming EditorTab might support this, or ignorable
+    } as EditorTab
     setOpenTabs((prev) => [...prev, newTab])
     setActiveTab(newPath)
     setSelectedFile(newPath)
@@ -578,6 +604,24 @@ def test_another():
     }
   }
 
+  const handlePublish = async () => {
+    if (!id || !project?.isLocal) return
+
+    setIsPublishing(true)
+    try {
+      await UnifiedProjectService.publishProject(id)
+      setProject(prev => prev ? { ...prev, isPublished: true } : null)
+      toast.success("Project published to cloud!", {
+        description: "Your project is now synced and available on the web."
+      })
+    } catch (error) {
+      console.error("Failed to publish project:", error)
+      toast.error("Failed to publish project")
+    } finally {
+      setIsPublishing(false)
+    }
+  }
+
   const handleSubmit = () => {
     setShowSubmitModal(true)
   }
@@ -660,10 +704,13 @@ def test_another():
             onRun={handleRun}
             onStop={handleStop}
             onSubmit={handleSubmit}
+            onPublish={handlePublish}
             isRunning={isRunning}
             hasRun={hasRun}
             isSubmitting={isSubmitting}
             isSubmitDisabled={isSubmitting || (hasSubmittedOnce && openTabs.filter(t => t.isDirty).length === 0)}
+            isLocal={project.isLocal}
+            isPublished={project.isPublished}
           />
 
           <div className="flex-1 flex min-h-0 overflow-hidden h-full">

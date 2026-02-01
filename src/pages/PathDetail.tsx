@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Clock, CheckCircle2, Lock, Play, Trophy, LogOut, ArrowRight } from 'lucide-react';
 import { getPathDetail, startPath, type PathDetailResponse, type PathProjectDetail } from '@/lib/api';
+import { isTauri } from '@/utils/platform';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -45,6 +46,12 @@ export default function PathDetail() {
 
     const handleStartPath = async () => {
         if (!pathId) return;
+
+        // Check if running on desktop
+        if (!isTauri()) {
+            navigate('/download-app');
+            return;
+        }
 
         try {
             setStarting(true);

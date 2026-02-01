@@ -14,6 +14,8 @@ import { AdminProtectedRoute } from "@/components/AdminProtectedRoute"
 import { ActionTooltip } from "@/components/ActionTooltip"
 import { isTauri } from "@/utils/platform";
 import { DesktopEntry } from "@/pages/desktop/Entry";
+import { DesktopOnlyRoute } from "@/components/DesktopOnlyRoute";
+import DownloadApp from "@/pages/DownloadApp";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth"
 import AuthCallback from "./pages/AuthCallback"
@@ -83,17 +85,17 @@ const App = () => (
                   <Route path="/projects/:id" element={<ProtectedRoute><ErrorBoundary><ProjectDetail /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/learning-paths" element={<ProtectedRoute><ErrorBoundary><LearningPaths /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/learning-paths/:pathId" element={<ProtectedRoute><ErrorBoundary><PathDetail /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/workspace/:id" element={<ProtectedRoute><ErrorBoundary><Workspace /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/validation/:id" element={<ProtectedRoute><ErrorBoundary><Validation /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/workspace/:id" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><Workspace /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
+                  <Route path="/validation/:id" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><Validation /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
                   <Route path="/stats" element={<ProtectedRoute><ErrorBoundary><Stats /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><ErrorBoundary><Profile /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><ErrorBoundary><Settings /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/create-scenario" element={<ProtectedRoute><ErrorBoundary><CreateCustomScenario /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/create-scenario" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><CreateCustomScenario /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
 
 
 
-                  <Route path="/algorithms" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblems /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/algorithms/:slug" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblemDetail /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/algorithms" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><AlgorithmProblems /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
+                  <Route path="/algorithms/:slug" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><AlgorithmProblemDetail /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
                   <Route path="/u/:username" element={<ErrorBoundary><PublicProfile /></ErrorBoundary>} />
                   <Route path="/u/:username/project/:slug" element={<ErrorBoundary><PublicProjectDetail /></ErrorBoundary>} />
                   {/* Admin Routes */}
@@ -121,6 +123,10 @@ const App = () => (
                   {/* Candidate Assessment Routes (Public - token-based) */}
                   <Route path="/candidate/assessment/:token" element={<AssessmentWorkspace />} />
                   <Route path="/candidate/assessment/complete" element={<AssessmentComplete />} />
+
+                  {/* Test Routes for Phase 1 */}
+                  <Route path="/download-app" element={<DownloadApp />} />
+                  <Route path="/test-desktop-only" element={<DesktopOnlyRoute><div className="p-8 text-center"><h1 className="text-4xl font-bold">Desktop Only Content</h1><p className="text-muted-foreground mt-4">You are viewing this on the desktop app!</p></div></DesktopOnlyRoute>} />
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>

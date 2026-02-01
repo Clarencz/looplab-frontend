@@ -5,6 +5,7 @@ import { BookOpen, Clock, TrendingUp, CheckCircle2, Play, Search, Loader2, Alert
 import { listLearningPaths, startPath, getUserSubscription, type LearningPathWithProgress, type DifficultyLevel, type TierLevel } from '@/lib/api';
 import { listCategories, type Category } from '@/lib/api/categories';
 import { useAuth } from '@/contexts/AuthContext';
+import { isTauri } from '@/utils/platform';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -96,6 +97,12 @@ export default function LearningPaths() {
     };
 
     const handleStartPath = async (pathId: string) => {
+        // Check if running on desktop
+        if (!isTauri()) {
+            navigate('/download-app');
+            return;
+        }
+
         if (!user) {
             toast({
                 title: 'Authentication Required',

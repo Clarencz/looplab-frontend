@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Play, Send, Circle, Square } from "lucide-react"
+import { ArrowLeft, Play, Send, Circle, Square, CloudUpload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
@@ -11,13 +11,30 @@ interface WorkspaceHeaderProps {
   onRun: () => void
   onStop?: () => void
   onSubmit: () => void
+  onPublish?: () => void
   isRunning?: boolean
   hasRun?: boolean
   isSubmitting?: boolean
   isSubmitDisabled?: boolean
+  isLocal?: boolean
+  isPublished?: boolean
 }
 
-const WorkspaceHeader = ({ projectName, status, onRun, onStop, onSubmit, isRunning, hasRun = false, isSubmitting = false, isSubmitDisabled = false }: WorkspaceHeaderProps) => {
+
+const WorkspaceHeader = ({
+  projectName,
+  status,
+  onRun,
+  onStop,
+  onSubmit,
+  onPublish,
+  isRunning,
+  hasRun = false,
+  isSubmitting = false,
+  isSubmitDisabled = false,
+  isLocal = false,
+  isPublished = false
+}: WorkspaceHeaderProps) => {
   const navigate = useNavigate()
 
   const statusConfig = {
@@ -53,6 +70,13 @@ const WorkspaceHeader = ({ projectName, status, onRun, onStop, onSubmit, isRunni
         </div>
 
         <div className="flex items-center gap-2">
+          {isLocal && !isPublished && onPublish && (
+            <Button size="sm" variant="outline" className="h-8 px-3 text-blue-500 hover:text-blue-600 hover:bg-blue-50" onClick={onPublish}>
+              <CloudUpload className="w-3.5 h-3.5 mr-1.5" />
+              Publish
+            </Button>
+          )}
+
           {isRunning ? (
             <Button size="sm" variant="destructive" className="h-8 px-3" onClick={onStop}>
               <Square className="w-3.5 h-3.5 mr-1.5" />

@@ -15,7 +15,7 @@ export function DesktopOnboarding() {
             // Listen for auth completion signal (from store_auth_tokens or other sources)
             const unlistenAuth = await listen('auth-state-changed', (event) => {
                 if (event.payload === 'authenticated') {
-                    navigate('/dashboard');
+                    navigate('/create-scenario');
                 }
             });
 
@@ -50,6 +50,9 @@ export function DesktopOnboarding() {
                             refreshToken,
                             expiresAt
                         });
+
+                        // Navigate to Create Scenario as requested
+                        navigate('/create-scenario');
                     }
                 } catch (e) {
                     console.error('Failed to parse deep link:', e);

@@ -25,9 +25,8 @@ export function DesktopOnboarding() {
                 console.log('Deep link received in frontend:', url);
 
                 try {
-                    // Manual parsing of query params since URL object might not handle custom protocol well in some envs
-                    // But standard URL object usually works if the string is a valid URL
-                    // looplab://auth/callback?access_token=...
+                    // Manual parsing of query params; normalize protocol so URL can parse
+                    // looplab://auth/callback?access_token=... OR looplab://auth/callback?code=...
                     const dummyUrl = url.replace('looplab://', 'http://localhost/');
                     const parsedUrl = new URL(dummyUrl);
                     const params = new URLSearchParams(parsedUrl.search);
@@ -35,6 +34,38 @@ export function DesktopOnboarding() {
                     const accessToken = params.get('access_token');
                     const refreshToken = params.get('refresh_token');
                     const expiresAtStr = params.get('expires_at');
+                    const code = params.get('code');
+
+                    if (code) {
+                        // Exchange one-time code with backend for tokens
+                        const backend = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
+                        try {
+                            const resp = await fetch(`${backend}/api/v1/auth/desktop/claim?code=${encodeURIComponent(code)}`);
+                            if (resp.ok) {
+                                const json = await resp.json();
+                                const at = json.access_token as string;
+                                const rt = json.refresh_token as string;
+                                const exp = json.expires_at as number;
+
+                                localStorage.setItem('access_token', at);
+                                localStorage.setItem('refresh_token', rt);
+                                localStorage.setItem('expires_at', exp.toString());
+
+                                await invoke('store_auth_tokens', {
+                                    accessToken: at,
+                                    refreshToken: rt,
+                                    expiresAt: exp,
+                                });
+
+                                navigate('/create-scenario');
+                                return;
+                            } else {
+                                console.error('Failed to claim desktop code');
+                            }
+                        } catch (err) {
+                            console.error('Error claiming desktop code', err);
+                        }
+                    }
 
                     if (accessToken && refreshToken && expiresAtStr) {
                         const expiresAt = parseInt(expiresAtStr, 10);
@@ -75,7 +106,7 @@ export function DesktopOnboarding() {
 
     const handleAuth = async () => {
         try {
-            await invoke('open_auth_in_browser');
+            await invoke('open_auth_in_browser', { provider: 'github' });
         } catch (error) {
             console.error('Failed to open auth in browser:', error);
         }

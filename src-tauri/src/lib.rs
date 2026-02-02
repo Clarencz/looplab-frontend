@@ -44,9 +44,13 @@ async fn clear_auth_tokens(app: tauri::AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
-async fn open_auth_in_browser(app: tauri::AppHandle) -> Result<(), String> {
-    let url = "http://localhost:8080/auth?flow=desktop";
-    app.shell().open(url, None).map_err(|e| e.to_string())?;
+async fn open_auth_in_browser(app: tauri::AppHandle, provider: String) -> Result<(), String> {
+    // Open the system browser to the backend's desktop OAuth entrypoint.
+    // Include a callback deep-link so the provider can return into the app.
+    let backend = std::env::var("BACKEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let callback = "looplab://auth/callback";
+    let url = format!("{}/api/v1/auth/desktop?provider={}&callback={}", backend, provider, callback);
+    app.shell().open(&url, None).map_err(|e| e.to_string())?;
     Ok(())
 }
 

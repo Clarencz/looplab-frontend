@@ -5,19 +5,18 @@ import { useNavigate } from "react-router-dom"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { ProfileColumn } from "@/components/dashboard/ProfileColumn"
-import { ProjectModal } from "@/components/dashboard/ProjectModal"
 import { WeeklyActivityGrid } from "@/components/dashboard/WeeklyActivityGrid"
-import { SkillRadarChart } from "@/components/dashboard/SkillRadarChart"
 import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist"
 import { DashboardTour } from "@/components/onboarding/DashboardTour"
 import { getUserPaths, type LearningPathWithProgress } from "@/lib/api"
-import { UnifiedProjectService, type UnifiedProject } from "@/lib/storage/projects-unified"
-import { isTauri } from "@/utils/platform"
+// Use Web only
+import { UnifiedProjectService } from "@/lib/storage/projects-unified"
+// No isTauri check needed
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, TrendingUp, Play, Loader2, AlertCircle, HardDrive, Cloud, Sparkles, Users } from "lucide-react"
+import { BookOpen, Loader2, AlertCircle, Play } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
@@ -122,34 +121,19 @@ export default function Dashboard() {
 
   const loadUserProjects = async () => {
     try {
-      if (isTauri()) {
-        // Desktop: Use unified service (local + cloud)
-        const unifiedProjects = await UnifiedProjectService.listProjects()
-        // Take first 6 projects
-        const recentProjects = unifiedProjects.slice(0, 6).map(p => ({
-          id: p.id,
-          title: p.name,
-          summary: p.description,
-          techStack: [],
-          isLocal: p.isLocal,
-          isPublished: p.isPublished,
-        }))
-        setProjects(recentProjects)
-      } else {
-        // Web: Use existing cloud API
-        const response = await fetch('/api/v1/projects?status=in_progress&limit=6', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-          },
-          credentials: 'include',
-        })
+      // Web: Use existing cloud API or Unified (Cloud only)
+      const response = await fetch('/api/v1/projects?status=in_progress&limit=6', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        credentials: 'include',
+      })
 
-        if (response.ok) {
-          const data = await response.json()
-          setProjects(data.data || data.projects || [])
-        } else {
-          setProjects([])
-        }
+      if (response.ok) {
+        const data = await response.json()
+        setProjects(data.data || data.projects || [])
+      } else {
+        setProjects([])
       }
     } catch (error) {
       console.error('Failed to load projects:', error)
@@ -220,39 +204,7 @@ export default function Dashboard() {
             <div className="flex-1 min-w-0">
               <OnboardingChecklist />
 
-              {/* Desktop-Only Classroom Tools */}
-              {isTauri() && (
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold tracking-tight mb-4">Classroom Tools</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card className="hover:border-primary/50 transition-colors cursor-pointer" onClick={() => navigate('/create-scenario')}>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Create Custom Scenario</CardTitle>
-                        <Sparkles className="h-4 w-4 text-purple-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">New Challenge</div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Design AI-powered learning challenges for your students.
-                        </p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="hover:border-primary/50 transition-colors cursor-pointer" onClick={() => navigate('/admin')}>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Student Analytics</CardTitle>
-                        <Users className="h-4 w-4 text-blue-500" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">Manage Class</div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Track progress and review class performance.
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              )}
+              {/* NO Desktop Tools */}
 
               {/* Learning Paths Section */}
               {!loadingPaths && activePaths.length > 0 && (
@@ -325,22 +277,6 @@ export default function Dashboard() {
                         <CardHeader>
                           <div className="flex items-center justify-between mb-1">
                             <CardTitle className="text-lg">{project.title}</CardTitle>
-                            {isTauri() && (
-                              <div className="flex gap-1">
-                                {project.isLocal && !project.isPublished && (
-                                  <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20 text-xs">
-                                    <HardDrive className="h-3 w-3 mr-1" />
-                                    Local
-                                  </Badge>
-                                )}
-                                {project.isPublished && (
-                                  <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20 text-xs">
-                                    <Cloud className="h-3 w-3 mr-1" />
-                                    Published
-                                  </Badge>
-                                )}
-                              </div>
-                            )}
                           </div>
                           <CardDescription className="line-clamp-2">{project.summary}</CardDescription>
                         </CardHeader>

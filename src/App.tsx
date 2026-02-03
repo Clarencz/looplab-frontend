@@ -50,7 +50,7 @@ import AdminRoles from "./pages/admin/Roles"
 import AdminAuditLogs from "./pages/admin/AuditLogs"
 import ProjectImport from "./pages/admin/ProjectImport"
 import PipelineMonitor from "./pages/admin/PipelineMonitor"
-import CreateCustomScenario from "./pages/CreateCustomScenario"
+import React from 'react'
 import EnterpriseDashboard from "./pages/enterprise/Dashboard"
 import CandidateResults from "./pages/enterprise/CandidateResults"
 import RequestDemo from "./pages/enterprise/RequestDemo"
@@ -90,7 +90,7 @@ const App = () => (
                   <Route path="/stats" element={<ProtectedRoute><ErrorBoundary><Stats /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><ErrorBoundary><Profile /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><ErrorBoundary><Settings /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/create-scenario" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><CreateCustomScenario /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
+                  {/* create-scenario is implemented in the desktop app; frontend has no route here */}
 
 
 

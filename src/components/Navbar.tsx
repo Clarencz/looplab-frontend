@@ -52,9 +52,7 @@ const Navbar = () => {
                 <a href="/learning-paths" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Learning Paths
                 </a>
-                <a href="/create-scenario" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                  Custom Scenario
-                </a>
+                {/* Custom Scenario is desktop-only; link removed from frontend */}
                 <a href="/pricing" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Pricing
                 </a>
@@ -168,9 +166,7 @@ const Navbar = () => {
                   <a href="/learning-paths" className="block text-sm text-muted-foreground">
                     Learning Paths
                   </a>
-                  <a href="/create-scenario" className="block text-sm text-muted-foreground">
-                    Custom Scenario
-                  </a>
+                  {/* Custom Scenario is desktop-only; link removed from frontend */}
                   <a href="/pricing" className="block text-sm text-muted-foreground">
                     Pricing
                   </a>

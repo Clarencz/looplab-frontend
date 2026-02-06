@@ -25,7 +25,9 @@ const Auth = () => {
     try {
       setIsSigningIn("github");
       if (isDesktopFlow) {
-        window.location.href = `/api/v1/auth/desktop?provider=github`;
+        const callback = searchParams.get("callback");
+        const callbackQuery = callback ? `&callback=${encodeURIComponent(callback)}` : "";
+        window.location.href = `/api/v1/auth/desktop?provider=github${callbackQuery}`;
       } else {
         await baseSignInWithGitHub();
       }
@@ -43,7 +45,9 @@ const Auth = () => {
     try {
       setIsSigningIn("google");
       if (isDesktopFlow) {
-        window.location.href = `/api/v1/auth/desktop?provider=google`;
+        const callback = searchParams.get("callback");
+        const callbackQuery = callback ? `&callback=${encodeURIComponent(callback)}` : "";
+        window.location.href = `/api/v1/auth/desktop?provider=google${callbackQuery}`;
       } else {
         await baseSignInWithGoogle();
       }

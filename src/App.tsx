@@ -12,9 +12,6 @@ import { KeyboardShortcutsModal } from "@/components/KeyboardShortcutsModal"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { AdminProtectedRoute } from "@/components/AdminProtectedRoute"
 import { ActionTooltip } from "@/components/ActionTooltip"
-import { isTauri } from "@/utils/platform";
-import { DesktopEntry } from "@/pages/desktop/Entry";
-import { DesktopOnlyRoute } from "@/components/DesktopOnlyRoute";
 import DownloadApp from "@/pages/DownloadApp";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth"
@@ -73,7 +70,7 @@ const App = () => (
                 <ScrollToTop />
                 <KeyboardShortcutsModal />
                 <Routes>
-                  <Route path="/" element={isTauri() ? <DesktopEntry /> : <Index />} />
+                  <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
                   <Route path="/welcome" element={<Welcome />} />
@@ -85,17 +82,21 @@ const App = () => (
                   <Route path="/projects/:id" element={<ProtectedRoute><ErrorBoundary><ProjectDetail /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/learning-paths" element={<ProtectedRoute><ErrorBoundary><LearningPaths /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/learning-paths/:pathId" element={<ProtectedRoute><ErrorBoundary><PathDetail /></ErrorBoundary></ProtectedRoute>} />
-                  <Route path="/workspace/:id" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><Workspace /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
-                  <Route path="/validation/:id" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><Validation /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
+                  <Route path="/workspace/:id" element={<ProtectedRoute><ErrorBoundary><Workspace /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/validation/:id" element={<ProtectedRoute><ErrorBoundary><Validation /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/stats" element={<ProtectedRoute><ErrorBoundary><Stats /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><ErrorBoundary><Profile /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><ErrorBoundary><Settings /></ErrorBoundary></ProtectedRoute>} />
-                  {/* create-scenario is implemented in the desktop app; frontend has no route here */}
+
+                  {/* Desktop-Only Features (Not available in web frontend) */}
+                  {/* - /category/:categoryId - Category-specific learning paths view */}
+                  {/* - /custom-project - Custom project creation */}
+                  {/* - /path/:pathId - Learning path details with master-detail view */}
 
 
 
-                  <Route path="/algorithms" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><AlgorithmProblems /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
-                  <Route path="/algorithms/:slug" element={<DesktopOnlyRoute><ProtectedRoute><ErrorBoundary><AlgorithmProblemDetail /></ErrorBoundary></ProtectedRoute></DesktopOnlyRoute>} />
+                  <Route path="/algorithms" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblems /></ErrorBoundary></ProtectedRoute>} />
+                  <Route path="/algorithms/:slug" element={<ProtectedRoute><ErrorBoundary><AlgorithmProblemDetail /></ErrorBoundary></ProtectedRoute>} />
                   <Route path="/u/:username" element={<ErrorBoundary><PublicProfile /></ErrorBoundary>} />
                   <Route path="/u/:username/project/:slug" element={<ErrorBoundary><PublicProjectDetail /></ErrorBoundary>} />
                   {/* Admin Routes */}
@@ -126,7 +127,7 @@ const App = () => (
 
                   {/* Test Routes for Phase 1 */}
                   <Route path="/download-app" element={<DownloadApp />} />
-                  <Route path="/test-desktop-only" element={<DesktopOnlyRoute><div className="p-8 text-center"><h1 className="text-4xl font-bold">Desktop Only Content</h1><p className="text-muted-foreground mt-4">You are viewing this on the desktop app!</p></div></DesktopOnlyRoute>} />
+
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>

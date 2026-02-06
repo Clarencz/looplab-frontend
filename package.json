@@ -17,7 +17,7 @@
     "@handsontable/react": "^16.2.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.2.2",
-    "@looplab/shared-types": "workspace:*",
+    "@looplab/shared": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Github, Chrome, ArrowLeft, Loader2 } from "lucide-react";
+import { Github, Chrome, ArrowLeft, Loader2, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -71,8 +71,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
+      <div className="absolute inset-0 bg-dot-pattern opacity-30" />
+      
+      {/* Gradient orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
 
@@ -101,17 +104,17 @@ const Auth = () => {
           className="w-full max-w-md"
         >
           {/* Logo */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <span className="font-mono text-xl font-bold text-primary-foreground">L</span>
+          <div className="flex items-center justify-center gap-2.5 mb-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
+              <Code2 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-mono text-2xl font-bold text-foreground">LoopLab</span>
+            <span className="text-xl font-semibold tracking-tight">LoopLab</span>
           </div>
 
           {/* Auth card */}
           <div className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-6 sm:p-8">
             <div className="text-center mb-8">
-              <h1 className="font-mono text-xl sm:text-2xl font-bold text-foreground mb-2">
+              <h1 className="text-2xl font-bold mb-2">
                 Welcome back
               </h1>
               <p className="text-muted-foreground">
@@ -120,33 +123,33 @@ const Auth = () => {
             </div>
 
             {/* Terminal decoration */}
-            <div className="bg-background/80 rounded-lg border border-border p-4 mb-8 font-mono text-sm">
+            <div className="bg-background/80 rounded-xl border border-border p-4 mb-8 text-sm">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                <div className="w-3 h-3 rounded-full bg-terminal-green/60" />
+                <div className="w-2.5 h-2.5 rounded-full bg-destructive/60" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
               </div>
-              <div className="text-muted-foreground">
-                <span className="text-terminal-green">$</span> looplab auth --login
+              <div className="text-muted-foreground font-mono text-xs">
+                <span className="text-primary">$</span> looplab auth --login
               </div>
-              <div className="text-foreground mt-1">
+              <div className="text-foreground mt-1 font-mono text-xs">
                 <span className="terminal-cursor">Awaiting authentication...</span>
               </div>
             </div>
 
             {/* OAuth buttons */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full justify-center gap-3 h-12 font-mono"
+                className="w-full justify-center gap-3 h-11"
                 onClick={handleGitHubSignIn}
                 disabled={isSigningIn !== null}
               >
                 {isSigningIn === "github" ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Github className="h-5 w-5" />
+                  <Github className="h-4 w-4" />
                 )}
                 Continue with GitHub
               </Button>
@@ -154,14 +157,14 @@ const Auth = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full justify-center gap-3 h-12 font-mono"
+                className="w-full justify-center gap-3 h-11"
                 onClick={handleGoogleSignIn}
                 disabled={isSigningIn !== null}
               >
                 {isSigningIn === "google" ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Chrome className="h-5 w-5" />
+                  <Chrome className="h-4 w-4" />
                 )}
                 Continue with Google
               </Button>

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminApi, type Category } from '@/lib/api/admin';
+import { adminApi, type AdminCategory } from '@/lib/api/admin';
 import { Plus, Edit2, Trash2, GripVertical, X, Check } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
 export default function AdminCategories() {
     const [isCreating, setIsCreating] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [editForm, setEditForm] = useState<Partial<Category>>({});
+    const [editForm, setEditForm] = useState<Partial<AdminCategory>>({});
     const queryClient = useQueryClient();
 
     const { data: categories, isLoading } = useQuery({

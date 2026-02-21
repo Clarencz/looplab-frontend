@@ -14,12 +14,12 @@ const features = [
   {
     icon: FileCode2,
     title: "Full Project Delivery",
-    description: "Receive complete, realistic projects with intentional bugs, missing files, and incomplete features. No toy examples.",
+    description: "Receive complete, realistic projects with intentional bugs, missing files, and incomplete features.",
   },
   {
     icon: GitBranch,
     title: "GitHub Integration",
-    description: "Clone projects, work in your IDE, and push back for validation. Seamless Git workflow you already know.",
+    description: "Clone projects, work in your IDE, and push back for validation. Seamless Git workflow.",
   },
   {
     icon: Shield,
@@ -55,20 +55,23 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="features" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <section id="features" className="relative py-24 lg:py-32 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-secondary/30" />
+      <div className="absolute inset-0 bg-secondary/20" />
+      
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-10 sm:mb-16">
+        <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mb-6"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 mb-6"
           >
-            <span className="font-mono text-xs sm:text-sm text-primary">// features</span>
+            <span className="text-xs font-medium text-muted-foreground">Features</span>
           </motion.div>
 
           <motion.h2
@@ -76,7 +79,7 @@ const Features = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4"
+            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4 text-balance"
           >
             Built for <span className="text-gradient">real developers</span>
           </motion.h2>
@@ -86,14 +89,14 @@ const Features = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
             No fluff. No hand-holding. Just the features you need to build real skills.
           </motion.p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -101,19 +104,14 @@ const Features = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
-              className="group relative rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:bg-card/80"
+              className="group relative rounded-xl border border-border bg-card/50 p-6 transition-all duration-300 hover:border-primary/20 hover:bg-card/80 card-hover"
             >
-              {/* Glow effect on hover */}
-              <div className="absolute inset-0 rounded-xl bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-              <div className="relative">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/30">
-                  <feature.icon className="h-6 w-6 text-primary" />
-                </div>
-
-                <h3 className="mb-2 font-mono text-lg font-semibold">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/15">
+                <feature.icon className="h-5 w-5 text-primary" />
               </div>
+
+              <h3 className="mb-2 text-base font-semibold">{feature.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>

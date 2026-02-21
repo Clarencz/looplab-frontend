@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import Interactive3DEditor from "./landing/Interactive3DEditor";
@@ -9,30 +9,30 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-dark" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-glow opacity-50" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-background" />
+      
+      {/* Mesh gradient background */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
+      
+      {/* Subtle dot pattern */}
+      <div className="absolute inset-0 bg-dot-pattern opacity-30" />
 
-      {/* Grid Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }}
-      />
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2"
+            className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-sm"
           >
-            <Zap className="h-4 w-4 text-primary flex-shrink-0" />
-            <span className="text-xs sm:text-sm font-mono text-primary">AI can code. Learn to be a problem solver.</span>
+            <Sparkles className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+            <span className="text-xs font-medium text-primary">AI can code. Learn to be a problem solver.</span>
           </motion.div>
 
           {/* Main Heading */}
@@ -40,19 +40,19 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-4 sm:mb-6 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+            className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-balance"
           >
             <span className="text-foreground">Build skills by</span>
             <br />
             <span className="text-gradient">solving real projects</span>
           </motion.h1>
 
-          {/* Description moved above the editor */}
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-6 sm:mb-10 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
+            className="mb-8 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
           >
             LoopLab delivers broken projects. You fix them in your own IDE.
             Submit for validation and earn project completion streaks.
@@ -63,12 +63,12 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mb-6 sm:mb-10 px-0 sm:px-4"
+            className="mb-10"
           >
             <Interactive3DEditor />
           </motion.div>
 
-          {/* CTAs - Different for authenticated vs non-authenticated users */}
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -76,12 +76,11 @@ const Hero = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             {user ? (
-              // Authenticated user CTAs
               <>
-                <Button variant="hero" size="xl" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <a href="/dashboard">
                     Go to Dashboard
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
@@ -89,12 +88,11 @@ const Hero = () => {
                 </Button>
               </>
             ) : (
-              // Non-authenticated user CTAs
               <>
-                <Button variant="hero" size="xl" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <a href="/auth">
                     Start Your First Project
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
                 <Button variant="outline" size="lg" asChild>
@@ -109,7 +107,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-8 sm:mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto"
+            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
               { value: "10K+", label: "Projects Fixed" },
@@ -117,8 +115,8 @@ const Hero = () => {
               { value: "∞", label: "Your Own IDE" },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="font-mono text-xl sm:text-2xl font-bold text-primary">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-2xl font-bold text-foreground mb-1">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </motion.div>

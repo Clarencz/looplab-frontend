@@ -451,39 +451,6 @@ export const api = {
   },
 
   // ---------------------------------------------------------------------------
-  // ONBOARDING
-  // ---------------------------------------------------------------------------
-  onboarding: {
-    /**
-     * Get onboarding state
-     */
-    get: () =>
-      get<ApiResponse<OnboardingState>>("/onboarding").then((r) => r.data),
-
-    /**
-     * Update onboarding step
-     */
-    update: (data: UpdateOnboardingRequest) =>
-      put<ApiResponse<OnboardingState>>("/onboarding", data).then((r) => r.data),
-
-    /**
-     * Complete onboarding
-     */
-    complete: () =>
-      post<ApiResponse<OnboardingState>>("/onboarding/complete").then(
-        (r) => r.data
-      ),
-
-    /**
-     * Reset onboarding (for testing/settings)
-     */
-    reset: () =>
-      post<ApiResponse<OnboardingState>>("/onboarding/reset").then(
-        (r) => r.data
-      ),
-  },
-
-  // ---------------------------------------------------------------------------
   // PROJECTS (Catalog)
   // ---------------------------------------------------------------------------
   projects: {
@@ -506,89 +473,6 @@ export const api = {
       get<ApiResponse<Project["fileStructure"]>>(
         `/projects/${projectId}/files`
       ).then((r) => r.data),
-  },
-
-  // ---------------------------------------------------------------------------
-  // USER PROJECTS (User's instances)
-  // ---------------------------------------------------------------------------
-  userProjects: {
-    /**
-     * List user's projects
-     */
-    list: (filters?: ProjectFilters) =>
-      get<PaginatedResponse<UserProject>>("/user-projects", filters as Record<string, string | number | boolean | undefined>),
-
-    /**
-     * Get user project by ID
-     */
-    get: (id: EntityId) =>
-      get<ApiResponse<UserProject>>(`/user-projects/${id}`).then((r) => r.data),
-
-    /**
-     * Start a new project
-     */
-    start: (data: StartProjectRequest) =>
-      post<ApiResponse<UserProject>>("/user-projects", data).then((r) => r.data),
-
-    /**
-     * Save workspace state
-     */
-    saveWorkspace: (data: SaveWorkspaceRequest) =>
-      put<ApiResponse<UserProject>>(
-        `/user-projects/${data.userProjectId}/workspace`,
-        data
-      ).then((r) => r.data),
-
-    /**
-     * Submit for validation
-     */
-    submit: (data: SubmitProjectRequest) =>
-      post<ApiResponse<Submission>>(
-        `/user-projects/${data.userProjectId}/submit`,
-        data
-      ).then((r) => r.data),
-
-    /**
-     * Abandon project
-     */
-    abandon: (id: EntityId) =>
-      del<ApiResponse<void>>(`/user-projects/${id}/abandon`),
-
-    /**
-     * Link GitHub repo
-     */
-    linkGitHub: (data: GitHubLinkRequest) =>
-      post<ApiResponse<UserProject>>(
-        `/user-projects/${data.projectId}/github`,
-        data
-      ).then((r) => r.data),
-  },
-
-  // ---------------------------------------------------------------------------
-  // SUBMISSIONS & VALIDATION
-  // ---------------------------------------------------------------------------
-  submissions: {
-    /**
-     * Get submission by ID
-     */
-    get: (id: EntityId) =>
-      get<ApiResponse<Submission>>(`/submissions/${id}`).then((r) => r.data),
-
-    /**
-     * List submissions for a user project
-     */
-    listForProject: (userProjectId: EntityId) =>
-      get<PaginatedResponse<Submission>>(
-        `/user-projects/${userProjectId}/submissions`
-      ),
-
-    /**
-     * Retry failed submission
-     */
-    retry: (id: EntityId) =>
-      post<ApiResponse<Submission>>(`/submissions/${id}/retry`).then(
-        (r) => r.data
-      ),
   },
 
   // ---------------------------------------------------------------------------

@@ -22,7 +22,7 @@ export interface UserWithDetails {
     subscription_tier?: string;
 }
 
-export interface Category {
+export interface AdminCategory {
     id: string;
     name: string;
     slug: string;
@@ -132,8 +132,8 @@ export const adminApi = {
     },
 
     // Categories
-    listCategories: async (): Promise<Category[]> => {
-        return apiClient.get<Category[]>('/admin/categories');
+    listCategories: async (): Promise<AdminCategory[]> => {
+        return apiClient.get<AdminCategory[]>('/admin/categories');
     },
 
     createCategory: async (data: {
@@ -142,12 +142,12 @@ export const adminApi = {
         description?: string;
         icon?: string;
         color?: string;
-    }): Promise<Category> => {
-        return apiClient.post<Category>('/admin/categories', data);
+    }): Promise<AdminCategory> => {
+        return apiClient.post<AdminCategory>('/admin/categories', data);
     },
 
-    updateCategory: async (id: string, data: Partial<Category>): Promise<Category> => {
-        return apiClient.patch<Category>(`/admin/categories/${id}`, data);
+    updateCategory: async (id: string, data: Partial<AdminCategory>): Promise<AdminCategory> => {
+        return apiClient.patch<AdminCategory>(`/admin/categories/${id}`, data);
     },
 
     deleteCategory: async (id: string) => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminApi, type LearningPath, type Category } from '@/lib/api/admin';
+import { adminApi, type LearningPath, type AdminCategory } from '@/lib/api/admin';
 import { Plus, Edit, Trash2, Search, BookOpen, Globe, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

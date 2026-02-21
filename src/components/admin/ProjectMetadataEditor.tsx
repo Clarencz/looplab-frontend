@@ -72,11 +72,12 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
     const handleGenerateDescription = async () => {
         setIsGenerating(true);
         try {
-            const response = await apiClient.post(`/admin/projects/${projectId}/ai/generate-description`, {});
+            const response = await apiClient.post<any>(`/admin/projects/${projectId}/ai/generate-description`, {});
+            const data = response.data || response;
             setAiModal({
                 isOpen: true,
                 title: 'AI-Generated Description',
-                suggestion: response.description,
+                suggestion: data.description,
                 field: 'description',
             });
         } catch (error) {
@@ -90,11 +91,12 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
     const handleGenerateNarrative = async () => {
         setIsGenerating(true);
         try {
-            const response = await apiClient.post(`/admin/projects/${projectId}/ai/generate-narrative`, {});
+            const response = await apiClient.post<any>(`/admin/projects/${projectId}/ai/generate-narrative`, {});
+            const data = response.data || response;
             setAiModal({
                 isOpen: true,
                 title: 'AI-Generated Narrative',
-                suggestion: response.narrative,
+                suggestion: data.narrative,
                 field: 'narrative',
             });
         } catch (error) {
@@ -108,14 +110,15 @@ export default function ProjectMetadataEditor({ projectId, project, onUpdate }: 
     const handleSuggestMetadata = async () => {
         setIsGenerating(true);
         try {
-            const response = await apiClient.post(`/admin/projects/${projectId}/ai/suggest-metadata`, {});
+            const response = await apiClient.post<any>(`/admin/projects/${projectId}/ai/suggest-metadata`, {});
+            const data = response.data || response;
             // Apply all metadata suggestions
             setFormData({
                 ...formData,
-                difficulty: response.difficulty,
-                estimatedTimeMinutes: response.estimatedTimeMinutes,
-                targetSkill: response.targetSkill,
-                learningOutcome: response.learningOutcome,
+                difficulty: data.difficulty,
+                estimatedTimeMinutes: data.estimatedTimeMinutes,
+                targetSkill: data.targetSkill,
+                learningOutcome: data.learningOutcome,
             });
             toast.success('AI metadata suggestions applied!');
         } catch (error) {

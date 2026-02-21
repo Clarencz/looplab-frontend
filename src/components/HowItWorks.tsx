@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, Code2, Upload, Trophy, ArrowRight } from "lucide-react";
+import { Download, Code2, Upload, Trophy } from "lucide-react";
 
 const steps = [
   {
@@ -49,20 +49,24 @@ $ code .  # Your editor, your rules`,
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
+    <section id="how-it-works" className="relative py-24 lg:py-32 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-dark" />
+      <div className="absolute inset-0 bg-background" />
+      
+      {/* Subtle gradient orbs */}
+      <div className="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-20">
+        <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mb-6"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 mb-6"
           >
-            <span className="font-mono text-xs sm:text-sm text-primary">// workflow</span>
+            <span className="text-xs font-medium text-muted-foreground">Workflow</span>
           </motion.div>
 
           <motion.h2
@@ -70,7 +74,7 @@ const HowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl mb-3 sm:mb-4"
+            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4 text-balance"
           >
             How <span className="text-gradient">LoopLab</span> Works
           </motion.h2>
@@ -80,41 +84,33 @@ const HowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
             Four steps. No fluff. Real learning through real work.
           </motion.p>
         </div>
 
         {/* Steps */}
-        <div className="grid gap-6 sm:gap-8 lg:gap-12">
+        <div className="grid gap-16 lg:gap-24">
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className={`grid lg:grid-cols-2 gap-8 items-center ${index % 2 === 1 ? "lg:direction-rtl" : ""
-                }`}
+              transition={{ delay: index * 0.1 }}
+              className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center ${index % 2 === 1 ? "lg:direction-rtl" : ""}`}
             >
               {/* Content */}
               <div className={`space-y-4 ${index % 2 === 1 ? "lg:order-2" : ""}`}>
                 <div className="flex items-center gap-4">
-                  <span className="font-mono text-4xl font-bold text-primary/30">{step.number}</span>
+                  <span className="text-5xl font-bold text-primary/20">{step.number}</span>
                   <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <step.icon className="h-6 w-6 text-primary" />
+                    <step.icon className="h-5 w-5 text-primary" />
                   </div>
                 </div>
                 <h3 className="text-2xl font-bold">{step.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:flex items-center gap-2 pt-4 text-primary/50">
-                    <ArrowRight className="h-4 w-4" />
-                    <span className="font-mono text-sm">Next step</span>
-                  </div>
-                )}
               </div>
 
               {/* Code Block */}
@@ -124,9 +120,9 @@ const HowItWorks = () => {
                     <div className="h-3 w-3 rounded-full bg-destructive/60" />
                     <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
                     <div className="h-3 w-3 rounded-full bg-primary/60" />
-                    <span className="ml-2 font-mono text-xs text-muted-foreground">step-{step.number}.sh</span>
+                    <span className="ml-2 text-xs text-muted-foreground">step-{step.number}.sh</span>
                   </div>
-                  <pre className="font-mono text-sm text-muted-foreground whitespace-pre-wrap">
+                  <pre className="text-sm text-muted-foreground whitespace-pre-wrap">
                     <code>{step.code}</code>
                   </pre>
                 </div>

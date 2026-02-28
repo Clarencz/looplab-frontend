@@ -445,7 +445,7 @@ export default function AdminProjects() {
                                     type="text"
                                     value={exportForm.orgOrUser}
                                     onChange={(e) => setExportForm(f => ({ ...f, orgOrUser: e.target.value }))}
-                                    placeholder="e.g., looplabs or your-username"
+                                    placeholder="e.g., mathemalab or your-username"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>

@@ -24,52 +24,51 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-premium">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
-              <Code2 className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-semibold tracking-tight">LoopLab</span>
-          </a>
+          {/* LEFT: Logo + Nav Links grouped together */}
+          <div className="flex items-center gap-6">
+            {/* Logo */}
+            <a href="/" className="flex items-center gap-2.5 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-110 overflow-hidden">
+                <img src="/logo.png" alt="MathemaLab Logo" className="h-full w-full object-cover" />
+              </div>
+              <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+                MathemaLab
+              </span>
+            </a>
 
-          {/* Desktop Nav */}
-          <div className="hidden items-center gap-1 md:flex">
-            {user ? (
-              // Authenticated navigation
-              <>
-                <a href="/download-app" className="px-4 py-2 text-sm font-medium text-primary transition-colors hover:text-primary/80 rounded-lg hover:bg-primary/5">
-                  Download App
-                </a>
-                <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
-                  Pricing
-                </a>
-              </>
-            ) : (
-              // Non-authenticated navigation
-              <>
-                <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
-                  Pricing
-                </a>
-                <a href="/#how-it-works" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
-                  How it Works
-                </a>
-                <a href="/#features" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
-                  Features
-                </a>
-                <a href="/enterprise/request-demo" className="px-4 py-2 text-sm font-medium text-primary transition-colors hover:text-primary/80 rounded-lg hover:bg-primary/5">
-                  For Organizations
-                </a>
-              </>
-            )}
+            {/* Desktop Nav Links */}
+            <div className="hidden items-center gap-1 md:flex">
+              {user ? (
+                <>
+                  <a href="/download-app" className="px-4 py-2 text-sm font-medium text-primary transition-colors hover:text-primary/80 rounded-lg hover:bg-primary/5">
+                    Open Editor
+                  </a>
+                  <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                    Pricing
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                    Pricing
+                  </a>
+                  <a href="/#how-it-works" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                    How it Works
+                  </a>
+                  <a href="/#features" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                    Features
+                  </a>
+                </>
+              )}
+            </div>
           </div>
 
-          {/* Desktop Actions */}
+          {/* RIGHT: CTAs */}
           <div className="hidden items-center gap-3 md:flex">
             {user ? (
-              // Authenticated actions
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
@@ -100,13 +99,22 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              // Non-authenticated actions
               <>
+                <div className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 backdrop-blur-sm">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">This Easter</span>
+                  <motion.span
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                    className="text-sm"
+                  >
+                    🥚→
+                  </motion.span>
+                </div>
+                <Button size="sm" asChild>
+                  <a href="/auth">Join Waitlist</a>
+                </Button>
                 <Button variant="ghost" size="sm" asChild>
                   <a href="/auth">Sign In</a>
-                </Button>
-                <Button size="sm" asChild>
-                  <a href="/auth">Get Started</a>
                 </Button>
               </>
             )}
@@ -129,12 +137,12 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
           >
-            <div className="container mx-auto px-4 sm:px-6 py-4 space-y-1 max-w-7xl">
+            <div className="container mx-auto px-4 sm:px-6 py-4 space-y-1 max-w-6xl">
               {user ? (
                 // Authenticated mobile menu
                 <>
                   <a href="/download-app" className="block px-4 py-3 text-sm font-medium text-primary rounded-lg hover:bg-primary/5">
-                    Download App
+                    Open Editor
                   </a>
                   <a href="/pricing" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
                     Pricing
@@ -158,15 +166,15 @@ const Navbar = () => {
                   <a href="/#features" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
                     Features
                   </a>
-                  <a href="/enterprise/request-demo" className="block px-4 py-3 text-sm font-medium text-primary rounded-lg hover:bg-primary/5">
-                    For Organizations
-                  </a>
                   <div className="pt-4 mt-2 border-t border-border space-y-2">
+                    <div className="flex flex-col items-center">
+                      <span className="mb-1 text-[10px] font-bold uppercase tracking-widest text-primary animate-pulse">This Easter 🐣</span>
+                      <Button size="sm" className="w-full" asChild>
+                        <a href="/auth">Join Waitlist</a>
+                      </Button>
+                    </div>
                     <Button variant="ghost" size="sm" className="w-full" asChild>
                       <a href="/auth">Sign In</a>
-                    </Button>
-                    <Button size="sm" className="w-full" asChild>
-                      <a href="/auth">Get Started</a>
                     </Button>
                   </div>
                 </>

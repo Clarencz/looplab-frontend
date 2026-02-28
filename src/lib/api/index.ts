@@ -12,9 +12,8 @@ export { api, ApiClientError, apiClient, authInterceptor as TokenManager } from 
 export * from './types';
 
 // --- Domain API Exports ---
-// Auth & Users
+// Auth
 export { authApi, authInterceptor } from './auth';
-export { usersApi } from './users';
 
 // Payments
 export * from './subscriptions';

@@ -1,48 +1,52 @@
 import { motion } from "framer-motion";
-import { Download, Code2, Upload, Trophy } from "lucide-react";
+import { BookOpen, Cpu, MessageSquare, Trophy } from "lucide-react";
 
 const steps = [
   {
     number: "01",
-    icon: Download,
-    title: "Get a Broken Project",
-    description: "Select your tech stack and difficulty. LoopLab generates a real project with missing files, bugs, and incomplete features.",
-    code: `// project.config
+    icon: BookOpen,
+    title: "Choose Your Topic",
+    description: "Pick from 6 learning categories — finance, data analytics, math, algorithms, web dev, or programming — and set your level from beginner to advanced.",
+    code: `// topic.config
 {
-  "stack": "react",
-  "difficulty": "intermediate",
-  "status": "broken"
+  "category": "algorithms",
+  "level": "beginner",
+  "focus": "sorting"
 }`,
   },
   {
     number: "02",
-    icon: Code2,
-    title: "Fix in Your IDE",
-    description: "Clone to your machine or connect via GitHub. Use VS Code, WebStorm, or any editor. No restrictions, no handholding.",
-    code: `$ git clone looplab/project-xyz
-$ cd project-xyz
-$ code .  # Your editor, your rules`,
+    icon: Cpu,
+    title: "AI Generates Your Project",
+    description: "MathemaLab generates a broken or incomplete project tailored exactly to your topic and skill level. No generic tutorials — real, targeted problems.",
+    code: `// project.generated
+{
+  "type": "broken",
+  "topic": "bubble sort",
+  "gaps": ["loop logic", "swap fn"]
+}`,
   },
   {
     number: "03",
-    icon: Upload,
-    title: "Submit for Validation",
-    description: "Push your completed code back. LoopLab runs automated tests, checks functionality, and validates your solution.",
-    code: `$ git push origin main
-> Running validation...
-> ✓ Build passed
-> ✓ Tests passed`,
+    icon: MessageSquare,
+    title: "Work With AI Guidance",
+    description: "A built-in AI tutor watches your progress. It offers hints, explains the underlying concept, and asks guiding questions — it never just hands you the answer.",
+    code: `// ai.tutor
+> Hint: Check your loop
+  boundary condition.
+> Why does i stop at
+  n-1 instead of n?`,
   },
   {
     number: "04",
     icon: Trophy,
-    title: "Earn Your Streak",
-    description: "Validated projects count toward your weekly streak. Build a portfolio of real, working projects you actually fixed.",
-    code: `// profile.stats
+    title: "Complete & Level Up",
+    description: "Finish the project, see what you learned, and unlock the next challenge in your learning path. Every completion builds real understanding.",
+    code: `// progress.stats
 {
-  "streak": 5,
-  "projects": 12,
-  "rank": "Code Surgeon"
+  "completed": 1,
+  "concept": "bubble sort",
+  "next": "merge sort"
 }`,
   },
 ];
@@ -50,14 +54,14 @@ $ code .  # Your editor, your rules`,
 const HowItWorks = () => {
   return (
     <section id="how-it-works" className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-background" />
-      
+      {/* Semi-transparent overlay so ballpit shows through */}
+      <div className="absolute inset-0 bg-background/70" />
+
       {/* Subtle gradient orbs */}
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-6 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
           <motion.div
@@ -74,9 +78,9 @@ const HowItWorks = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4 text-balance"
+            className="text-3xl font-bold sm:text-4xl md:text-5xl mb-4 text-balance text-white"
           >
-            How <span className="text-gradient">LoopLab</span> Works
+            How <span className="text-gradient">MathemaLab</span> Works
           </motion.h2>
 
           <motion.p
@@ -86,7 +90,7 @@ const HowItWorks = () => {
             transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            Four steps. No fluff. Real learning through real work.
+            Four steps. AI-guided. Learn by fixing real problems.
           </motion.p>
         </div>
 
@@ -115,7 +119,7 @@ const HowItWorks = () => {
 
               {/* Code Block */}
               <div className={`${index % 2 === 1 ? "lg:order-1" : ""}`}>
-                <div className="code-block p-6 overflow-hidden">
+                <div className="glass-premium p-6 overflow-hidden rounded-2xl">
                   <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
                     <div className="h-3 w-3 rounded-full bg-destructive/60" />
                     <div className="h-3 w-3 rounded-full bg-yellow-500/60" />

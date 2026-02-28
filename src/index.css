@@ -26,9 +26,9 @@
     --popover: 240 10% 6%;
     --popover-foreground: 0 0% 98%;
 
-    /* Primary - Refined green */
-    --primary: 152 69% 45%;
-    --primary-foreground: 240 10% 3.9%;
+    /* Primary - Premium Blue */
+    --primary: 210 100% 60%;
+    --primary-foreground: 240 10% 4%;
 
     --secondary: 240 5% 10%;
     --secondary-foreground: 0 0% 98%;
@@ -36,41 +36,41 @@
     --muted: 240 5% 15%;
     --muted-foreground: 240 5% 64.9%;
 
-    /* Accent - Subtle teal */
-    --accent: 172 66% 50%;
-    --accent-foreground: 240 10% 3.9%;
+    /* Accent - Vibrant Cyan */
+    --accent: 185 100% 50%;
+    --accent-foreground: 240 10% 4%;
 
     --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5% 14%;
     --input: 240 5% 14%;
-    --ring: 152 69% 45%;
+    --ring: 210 100% 60%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --glow-primary: 152 69% 45%;
-    --glow-accent: 172 66% 50%;
+    --glow-primary: 210 100% 60%;
+    --glow-accent: 185 100% 50%;
     --terminal-green: 152 69% 45%;
     --code-bg: 240 10% 8%;
     --code-border: 240 5% 16%;
 
-    /* Gradients - More subtle and refined */
-    --gradient-primary: linear-gradient(135deg, hsl(152 69% 45%) 0%, hsl(172 66% 50%) 100%);
+    /* Gradients - Premium Blue Edition */
+    --gradient-primary: linear-gradient(135deg, hsl(210 100% 60%) 0%, hsl(185 100% 50%) 100%);
     --gradient-dark: linear-gradient(180deg, hsl(240 10% 5%) 0%, hsl(240 10% 3.9%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(240 10% 7%) 0%, hsl(240 10% 5%) 100%);
-    --gradient-glow: radial-gradient(ellipse at center, hsl(152 69% 45% / 0.08) 0%, transparent 70%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsla(152, 69%, 45%, 0.08) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsla(172, 66%, 50%, 0.06) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsla(152, 69%, 45%, 0.05) 0px, transparent 50%),
-                     radial-gradient(at 80% 50%, hsla(172, 66%, 50%, 0.04) 0px, transparent 50%),
-                     radial-gradient(at 0% 100%, hsla(152, 69%, 45%, 0.06) 0px, transparent 50%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(210 100% 60% / 0.12) 0%, transparent 70%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(210, 100%, 60%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsla(185, 100%, 50%, 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(210, 100%, 60%, 0.06) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsla(185, 100%, 50%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(210, 100%, 60%, 0.08) 0px, transparent 50%);
 
-    /* Shadows - More refined */
-    --shadow-glow: 0 0 80px hsl(152 69% 45% / 0.15);
+    /* Shadows - Refined */
+    --shadow-glow: 0 0 80px hsl(210 100% 60% / 0.15);
     --shadow-card: 0 4px 32px hsl(240 10% 0% / 0.3);
-    --shadow-button: 0 0 24px hsl(152 69% 45% / 0.25);
+    --shadow-button: 0 0 24px hsl(210 100% 60% / 0.25);
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -81,12 +81,12 @@
 
     --sidebar-background: 240 10% 5%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 152 69% 45%;
-    --sidebar-primary-foreground: 240 10% 3.9%;
+    --sidebar-primary: 210 100% 60%;
+    --sidebar-primary-foreground: 240 10% 4%;
     --sidebar-accent: 240 5% 10%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 240 5% 14%;
-    --sidebar-ring: 152 69% 45%;
+    --sidebar-ring: 210 100% 60%;
   }
 
   .dark {
@@ -131,7 +131,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: var(--font-sans);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   /* Smooth text rendering */
@@ -180,7 +180,9 @@
     line-height: 1.2;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-sans);
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -470,25 +472,33 @@
   .gradient-border {
     position: relative;
     background: linear-gradient(var(--background), var(--background)) padding-box,
-                linear-gradient(135deg, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.5)) border-box;
+      linear-gradient(135deg, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.5)) border-box;
     border: 1px solid transparent;
   }
 
   /* Animated gradient background */
   .animated-gradient {
-    background: linear-gradient(-45deg, 
-      hsl(152 69% 45% / 0.1), 
-      hsl(172 66% 50% / 0.1), 
-      hsl(152 69% 45% / 0.05), 
-      hsl(172 66% 50% / 0.05));
+    background: linear-gradient(-45deg,
+        hsl(152 69% 45% / 0.1),
+        hsl(172 66% 50% / 0.1),
+        hsl(152 69% 45% / 0.05),
+        hsl(172 66% 50% / 0.05));
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;
   }
 
   @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   /* Smooth fade in animation */
@@ -501,6 +511,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -508,11 +519,25 @@
   }
 
   /* Stagger animation delay utilities */
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
+  }
 
   /* Modern button glow */
   .btn-glow {
@@ -544,5 +569,69 @@
   /* Text balance for headings */
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* NEW Premium Utilities */
+  .noise-underlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .noise-underlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.04;
+    z-index: 0;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  }
+
+  .glass-premium {
+    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-2xl transition-all duration-300;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-premium:hover {
+    @apply bg-white/[0.05] border-white/20;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  }
+
+  .aurora-glow-premium {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aurora-glow-premium::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.15) 0%, transparent 50%);
+    animation: aurora-rotate 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes aurora-rotate {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+      transform: rotate(180deg) scale(1.2);
+    }
+
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
   }
 }

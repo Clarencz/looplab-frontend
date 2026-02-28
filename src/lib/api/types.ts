@@ -1,5 +1,5 @@
 // =============================================================================
-// LOOPLAB API TYPE SYSTEM
+// MATHEMALAB API TYPE SYSTEM
 // =============================================================================
 // This type system serves as the shared vocabulary between the frontend and
 // Rust (Axum) backend. All types are designed as contracts that describe intent,
@@ -178,11 +178,6 @@ export interface UserStats {
   totalHours: number
   joinedAt: Timestamp
 }
-
-// -----------------------------------------------------------------------------
-// SKILLS DOMAIN
-// -----------------------------------------------------------------------------
-
 // -----------------------------------------------------------------------------
 // SKILLS DOMAIN
 // -----------------------------------------------------------------------------
@@ -261,7 +256,7 @@ export interface ProfileData {
   personalInfo: PersonalInfo
   summary: string
   skills: string[]
-  loopLabSkills: string[]
+  mathemaLabSkills: string[]
   experiences: Experience[]
   education: Education[]
   projects: CompletedProject[]

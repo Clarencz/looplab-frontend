@@ -136,7 +136,7 @@ const AdminLogin = () => {
                             <Shield className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                            <span className="font-mono text-2xl font-bold text-white">LoopLab</span>
+                            <span className="font-mono text-2xl font-bold text-white">MathemaLab</span>
                             <span className="block text-sm text-blue-400 font-medium">Admin Portal</span>
                         </div>
                     </div>

@@ -74,7 +74,7 @@ const Auth = () => {
       {/* Background */}
       <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
       <div className="absolute inset-0 bg-dot-pattern opacity-30" />
-      
+
       {/* Gradient orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
@@ -108,7 +108,7 @@ const Auth = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
               <Code2 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold tracking-tight">LoopLab</span>
+            <span className="text-xl font-bold tracking-tight">MathemaLab</span>
           </div>
 
           {/* Auth card */}
@@ -130,7 +130,7 @@ const Auth = () => {
                 <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
               </div>
               <div className="text-muted-foreground font-mono text-xs">
-                <span className="text-primary">$</span> looplab auth --login
+                <span className="text-primary">$</span> mml auth --login
               </div>
               <div className="text-foreground mt-1 font-mono text-xs">
                 <span className="terminal-cursor">Awaiting authentication...</span>
@@ -178,7 +178,7 @@ const Auth = () => {
 
           {/* Bottom text */}
           <p className="text-center text-sm text-muted-foreground mt-6">
-            New to LoopLab? Signing in will create your account automatically.
+            New to MathemaLab? Signing in will create your account automatically.
           </p>
         </motion.div>
       </div>

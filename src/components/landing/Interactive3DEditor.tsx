@@ -49,7 +49,7 @@ export async function authenticate(token) {
         icon: PlayCircle,
         iconColor: 'text-blue-400',
         bgGlow: 'from-blue-500/20 via-cyan-500/10 to-transparent',
-        code: `$ looplab validate
+        code: `$ mml validate
 
 Running test suite...
 
@@ -189,7 +189,7 @@ export default function Interactive3DEditor() {
                             </motion.div>
 
                             <div className="hidden sm:flex items-center gap-2">
-                                <span className="text-xs text-white/40 font-mono">looplab</span>
+                                <span className="text-xs text-white/40 font-mono">mathemalab</span>
                             </div>
                         </div>
 

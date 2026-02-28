@@ -31,12 +31,6 @@ import AdminAuditLogs from "./pages/admin/AuditLogs"
 import ProjectImport from "./pages/admin/ProjectImport"
 import PipelineMonitor from "./pages/admin/PipelineMonitor"
 import React from 'react'
-import EnterpriseDashboard from "./pages/enterprise/Dashboard"
-import CandidateResults from "./pages/enterprise/CandidateResults"
-import RequestDemo from "./pages/enterprise/RequestDemo"
-import AssessmentWorkspace from "./pages/candidate/AssessmentWorkspace"
-import { EnterpriseErrorBoundary } from "./components/enterprise/EnterpriseErrorBoundary"
-import AssessmentComplete from "./pages/candidate/AssessmentComplete"
 
 const queryClient = new QueryClient()
 
@@ -90,15 +84,6 @@ const App = () => (
                   <Route path="roles" element={<AdminRoles />} />
                   <Route path="audit" element={<AdminAuditLogs />} />
                 </Route>
-
-                {/* Enterprise Routes */}
-                <Route path="/enterprise/request-demo" element={<RequestDemo />} />
-                <Route path="/enterprise" element={<ProtectedRoute><EnterpriseErrorBoundary><EnterpriseDashboard /></EnterpriseErrorBoundary></ProtectedRoute>} />
-                <Route path="/enterprise/assessments/:assessmentId/results" element={<ProtectedRoute><EnterpriseErrorBoundary><CandidateResults /></EnterpriseErrorBoundary></ProtectedRoute>} />
-
-                {/* Candidate Assessment Routes (Public - token-based) */}
-                <Route path="/candidate/assessment/:token" element={<AssessmentWorkspace />} />
-                <Route path="/candidate/assessment/complete" element={<AssessmentComplete />} />
 
                 {/* Download App page */}
                 <Route path="/download-app" element={<DownloadApp />} />

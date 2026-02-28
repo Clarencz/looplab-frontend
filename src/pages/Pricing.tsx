@@ -17,7 +17,7 @@ const ENTERPRISE_TIER = {
     id: 'enterprise',
     name: 'enterprise',
     displayName: 'Enterprise',
-    description: 'For large teams & organizations',
+    description: 'For schools and bootcamps',
     priceMonthly: null,
     priceYearly: null,
     features: {
@@ -36,16 +36,14 @@ const ENTERPRISE_TIER = {
 
 // Feature comparison data
 const COMPARISON_FEATURES = [
-    { name: 'Projects', free: '3', pro: '10', premium: 'Unlimited', enterprise: 'Unlimited' },
-    { name: 'Learning Paths', free: '1', pro: '5', premium: 'Unlimited', enterprise: 'Unlimited' },
-    { name: 'Code Execution', free: '50/day', pro: '200/day', premium: 'Unlimited', enterprise: 'Unlimited' },
-    { name: 'AI Code Review', free: false, pro: true, premium: true, enterprise: true },
-    { name: 'Certificate Generation', free: false, pro: true, premium: true, enterprise: true },
+    { name: 'Categories Accessible', free: '2', pro: '4', premium: 'All 6', enterprise: 'All 6' },
+    { name: 'AI Hint Credits/month', free: '20', pro: '200', premium: 'Unlimited', enterprise: 'Unlimited' },
+    { name: 'Learning Paths', free: '1', pro: '3', premium: 'Unlimited', enterprise: 'Unlimited' },
+    { name: 'Project History', free: '10', pro: '100', premium: 'Unlimited', enterprise: 'Unlimited' },
+    { name: 'Mistake Explanations', free: true, pro: true, premium: true, enterprise: true },
+    { name: 'Progress Tracking', free: false, pro: true, premium: true, enterprise: true },
     { name: 'Priority Support', free: false, pro: false, premium: true, enterprise: true },
-    { name: 'Team Collaboration', free: false, pro: false, premium: true, enterprise: true },
-    { name: 'Custom Branding', free: false, pro: false, premium: false, enterprise: true },
-    { name: 'API Access', free: false, pro: false, premium: true, enterprise: true },
-    { name: 'Dedicated Manager', free: false, pro: false, premium: false, enterprise: true },
+    { name: 'Instructor Dashboard', free: false, pro: false, premium: false, enterprise: true },
 ]
 
 // FAQ data
@@ -72,7 +70,7 @@ const FAQS = [
     },
     {
         question: 'How does Enterprise pricing work?',
-        answer: 'Enterprise pricing is customized based on your organization\'s size, needs, and usage requirements. Contact our sales team for a personalized quote.'
+        answer: 'Enterprise pricing is customized for schools, bootcamps, and educational organizations. We offer volume discounts and instructor dashboards. Contact us for a personalized quote.'
     }
 ]
 
@@ -111,7 +109,7 @@ export default function Pricing() {
     }
 
     const handleContactSales = () => {
-        window.location.href = 'mailto:sales@looplab.io?subject=Enterprise%20Inquiry'
+        window.location.href = 'mailto:sales@mathemalab.io?subject=Enterprise%20Inquiry'
     }
 
     const getTierIcon = (tierName: string) => {
@@ -153,11 +151,11 @@ export default function Pricing() {
                                 <Sparkles className="w-3 h-3 text-primary" />
                                 <span className="text-xs font-medium text-muted-foreground">Simple, transparent pricing</span>
                             </div>
-                            
+
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance">
                                 Pricing that <span className="text-gradient">makes sense</span>
                             </h1>
-                            
+
                             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
                                 Start for free, upgrade as you grow. No hidden fees, no surprises.
                                 Choose the plan that fits your learning journey.
@@ -241,7 +239,7 @@ export default function Pricing() {
                                                         {tier.name === 'free' && 'Perfect for getting started'}
                                                         {tier.name === 'pro' && 'For serious learners'}
                                                         {tier.name === 'premium' && 'For career advancement'}
-                                                        {tier.name === 'enterprise' && 'For teams & organizations'}
+                                                        {tier.name === 'enterprise' && 'For schools and bootcamps'}
                                                     </CardDescription>
                                                 </CardHeader>
 
@@ -380,7 +378,7 @@ export default function Pricing() {
                         <div className="text-center mb-12">
                             <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
                             <p className="text-muted-foreground">
-                                Have more questions? <a href="mailto:support@looplab.io" className="text-primary hover:underline">Contact us</a>
+                                Have more questions? <a href="mailto:support@mathemalab.io" className="text-primary hover:underline">Contact us</a>
                             </p>
                         </div>
 

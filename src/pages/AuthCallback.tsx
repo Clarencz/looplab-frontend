@@ -22,7 +22,7 @@ const AuthCallback = () => {
 
             // Auto-trigger deep link after 1.5s
             const triggerTimer = setTimeout(() => {
-                const deepLink = `looplab://auth/callback?code=${code}`;
+                const deepLink = `mathemalab://auth/callback?code=${code}`;
                 console.log('[AuthCallback] Auto-triggering deep link:', deepLink);
                 window.location.href = deepLink;
                 setAutoTriggerInitiated(true);
@@ -56,7 +56,7 @@ const AuthCallback = () => {
     const handleManualOpen = () => {
         const code = searchParams.get('code');
         if (code) {
-            window.location.href = `looplab://auth/callback?code=${code}`;
+            window.location.href = `mathemalab://auth/callback?code=${code}`;
             setAutoTriggerInitiated(true);
         }
     };
@@ -83,7 +83,7 @@ const AuthCallback = () => {
                     <div className="space-y-2">
                         <h1 className="text-3xl font-bold tracking-tight">Login Successful</h1>
                         <p className="text-muted-foreground text-lg">
-                            We're redirecting you back to the LoopLab desktop app.
+                            We're redirecting you back to the MathemaLab desktop app.
                         </p>
                     </div>
 
@@ -110,7 +110,7 @@ const AuthCallback = () => {
 
                     <div className="pt-12">
                         <p className="text-xs text-muted-foreground opacity-50 uppercase tracking-widest font-semibold">
-                            LoopLab Security • Secure OAuth Handshake
+                            MathemaLab Security • Secure OAuth Handshake
                         </p>
                     </div>
                 </div>

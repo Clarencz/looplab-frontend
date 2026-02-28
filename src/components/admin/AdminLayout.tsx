@@ -47,7 +47,7 @@ export default function AdminLayout() {
                     >
                         <Menu className="w-6 h-6 text-gray-600" />
                     </button>
-                    <h1 className="text-lg font-bold text-primary-600">LoopLab Admin</h1>
+                    <h1 className="text-lg font-bold text-primary-600">MathemaLab Admin</h1>
                     <div className="w-10" /> {/* Spacer for centering */}
                 </div>
             </div>
@@ -66,11 +66,13 @@ export default function AdminLayout() {
                     }`}
             >
                 {/* Logo */}
-                <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-                    <h1 className="text-xl font-bold text-primary-600">LoopLab Admin</h1>
+                <div className="h-16 flex items-center px-6 border-b border-border bg-card/50">
+                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+                        MathemaLab
+                    </span>
                     <button
                         onClick={closeSidebar}
-                        className="lg:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100"
+                        className="lg:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100 ml-auto"
                         aria-label="Close menu"
                     >
                         <X className="w-5 h-5 text-gray-500" />

@@ -1,5 +1,5 @@
 // =============================================================================
-// LOOPLAB API CLIENT
+// MATHEMALAB API CLIENT
 // =============================================================================
 // Unified communication boundary between the frontend and Rust (Axum) backend.
 // Enforces consistent request behavior, standardizes responses, ensures safe
@@ -11,15 +11,6 @@ import type {
   AuthSession,
   AuthTokens,
   User,
-  OnboardingState,
-  Project,
-  UserProject,
-  Submission,
-  Skill,
-  Activity,
-  WeeklyActivityData,
-  DailyActivityData,
-  PerformanceMetrics,
   ProfileData,
   PublicProfile,
   Notification,
@@ -27,7 +18,6 @@ import type {
   GitHubRepo,
   UserSettings,
   ErrorCode,
-  TechStack,
 } from "./types"
 
 import { getConfig } from "../config/env"
@@ -448,82 +438,6 @@ export const api = {
       )
       return response.data.url
     },
-  },
-
-  // ---------------------------------------------------------------------------
-  // PROJECTS (Catalog)
-  // ---------------------------------------------------------------------------
-  projects: {
-    /**
-     * List all available projects
-     */
-    list: (filters?: ProjectFilters) =>
-      get<PaginatedResponse<Project>>("/projects", filters as Record<string, string | number | boolean | undefined>),
-
-    /**
-     * Get project by ID or slug
-     */
-    get: (idOrSlug: string) =>
-      get<ApiResponse<Project>>(`/projects/${idOrSlug}`).then((r) => r.data),
-
-    /**
-     * Get project file structure
-     */
-    getFiles: (projectId: EntityId) =>
-      get<ApiResponse<Project["fileStructure"]>>(
-        `/projects/${projectId}/files`
-      ).then((r) => r.data),
-  },
-
-  // ---------------------------------------------------------------------------
-  // SKILLS
-  // ---------------------------------------------------------------------------
-  skills: {
-    /**
-     * Get user's skills
-     */
-    list: () => get<ApiResponse<Skill[]>>("/skills").then((r) => r.data),
-
-    /**
-     * Get all available tech stacks
-     */
-    getTechStacks: () =>
-      get<ApiResponse<TechStack[]>>("/skills/tech-stacks").then((r) => r.data),
-  },
-
-  // ---------------------------------------------------------------------------
-  // ACTIVITY & ANALYTICS
-  // ---------------------------------------------------------------------------
-  activity: {
-    /**
-     * Get activity feed
-     */
-    list: (filters?: ActivityFilters) =>
-      get<PaginatedResponse<Activity>>("/activity", filters as Record<string, string | number | boolean | undefined>),
-
-    /**
-     * Get weekly activity data
-     */
-    weekly: (year?: number) =>
-      get<ApiResponse<WeeklyActivityData[]>>("/activity/weekly", { year }).then(
-        (r) => r.data
-      ),
-
-    /**
-     * Get daily activity heatmap data
-     */
-    heatmap: (year?: number) =>
-      get<ApiResponse<DailyActivityData[]>>("/activity/heatmap", { year }).then(
-        (r) => r.data
-      ),
-
-    /**
-     * Get performance metrics
-     */
-    performance: () =>
-      get<ApiResponse<PerformanceMetrics>>("/activity/performance").then(
-        (r) => r.data
-      ),
   },
 
   // ---------------------------------------------------------------------------

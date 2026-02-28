@@ -1,125 +1,116 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import Interactive3DEditor from "./landing/Interactive3DEditor";
 
 const Hero = () => {
   const { user } = useAuth();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background */}
-      <div className="absolute inset-0 bg-background" />
-      
-      {/* Mesh gradient background */}
-      <div className="absolute inset-0 bg-mesh-gradient opacity-60" />
-      
-      {/* Subtle dot pattern */}
-      <div className="absolute inset-0 bg-dot-pattern opacity-30" />
+    <section className="relative min-h-[70vh] overflow-hidden pt-32 pb-16">
+      {/* Glassmorphism overlay — strong frosted-glass effect */}
+      <div className="absolute inset-0 bg-background/70 " />
 
-      {/* Gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+      {/* Mesh gradient & Noise background */}
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40" />
+      <div className="absolute inset-0 noise-underlay opacity-20" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-sm"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-primary flex-shrink-0" />
-            <span className="text-xs font-medium text-primary">AI can code. Learn to be a problem solver.</span>
-          </motion.div>
+      {/* Aurora Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] aurora-glow-premium opacity-30 pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
 
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-balance"
-          >
-            <span className="text-foreground">Build skills by</span>
-            <br />
-            <span className="text-gradient">solving real projects</span>
-          </motion.h1>
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex flex-col items-center text-center">
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-8 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-          >
-            LoopLab delivers broken projects. You fix them in your own IDE.
-            Submit for validation and earn project completion streaks.
-          </motion.p>
+            {/* Main Heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="mb-4 font-black leading-[1.1] tracking-tight"
+            >
+              <span className="block text-2xl sm:text-3xl md:text-4xl text-white">
+                where ambition and learning meet the interactive tools to grow your skillset
+              </span>
+            </motion.h1>
 
-          {/* Interactive 3D Editor Demo */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mb-10"
-          >
-            <Interactive3DEditor />
-          </motion.div>
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-8 text-lg md:text-xl text-zinc-400 max-w-lg leading-relaxed font-medium italic"
+            >
+              Guidance of your favourite teacher with AI smarterness.
+            </motion.p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            {user ? (
-              <>
-                <Button variant="hero" size="lg" asChild>
-                  <a href="/dashboard">
-                    Go to Dashboard
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <a href="/projects">Browse Projects</a>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="hero" size="lg" asChild>
-                  <a href="/auth">
-                    Start Your First Project
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <a href="/#how-it-works">See How It Works</a>
-                </Button>
-              </>
-            )}
-          </motion.div>
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-start gap-4"
+            >
+              {user ? (
+                <>
+                  <Button variant="hero" size="lg" className="rounded-full px-8 h-12 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-sm font-semibold" asChild>
+                    <a href="/dashboard">
+                      Launch Hub
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="lg" className="glass-premium rounded-full px-8 h-12 border-white/10 hover:bg-white/5 transition-all text-sm font-semibold" asChild>
+                    <a href="/projects">Explore Paths</a>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-3">
+                    {/* Verdant-style Easter badge */}
+                    <div className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 backdrop-blur-sm">
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary">This Easter</span>
+                      <motion.span
+                        animate={{ x: [0, 6, 0] }}
+                        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-base"
+                      >
+                        🥚→
+                      </motion.span>
+                    </div>
+                    <Button variant="hero" size="lg" className="rounded-full px-8 h-12 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-sm font-semibold" asChild>
+                      <a href="/auth">
+                        Join Waitlist
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
+                  <Button variant="outline" size="lg" className="glass-premium rounded-full px-8 h-12 border-white/10 hover:bg-white/5 transition-all text-sm font-semibold" asChild>
+                    <a href="/#how-it-works">Watch Demo</a>
+                  </Button>
+                </>
+              )}
+            </motion.div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
-          >
-            {[
-              { value: "10K+", label: "Projects Fixed" },
-              { value: "50+", label: "Technologies" },
-              { value: "∞", label: "Your Own IDE" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl font-bold text-foreground mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.45 }}
+              className="mt-10 flex items-center gap-8"
+            >
+              {[
+                { value: "6", label: "Categories" },
+                { value: "AI", label: "Guided Projects" },
+                { value: "∞", label: "Practice" },
+              ].map((stat, index) => (
+                <div key={index} className="text-left">
+                  <div className="text-xl font-bold text-foreground mb-0.5">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </div>
 

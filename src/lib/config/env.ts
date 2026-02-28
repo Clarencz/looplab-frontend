@@ -1,5 +1,5 @@
 // =============================================================================
-// LOOPLAB ENVIRONMENT CONFIGURATION
+// MATHEMALAB ENVIRONMENT CONFIGURATION
 // =============================================================================
 // Single authoritative runtime configuration system. Provides type-safe access
 // to environment-specific settings, feature flags, and service endpoints.
@@ -138,7 +138,7 @@ const STAGING_OVERRIDES: Partial<EnvironmentConfig> = {
   env: "staging",
 
   api: {
-    baseUrl: "https://staging-api.looplab.dev/api/v1",
+    baseUrl: "https://staging-api.mathemalab.io/api/v1",
     version: "v1",
     timeout: 30000,
     retryAttempts: 3,
@@ -157,10 +157,10 @@ const STAGING_OVERRIDES: Partial<EnvironmentConfig> = {
   },
 
   services: {
-    validation: "https://staging-api.looplab.dev/api/validation",
-    websocket: "wss://staging-api.looplab.dev/ws",
-    analytics: "https://staging-api.looplab.dev/api/analytics",
-    cdn: "https://staging-cdn.looplab.dev",
+    validation: "https://staging-api.mathemalab.io/api/validation",
+    websocket: "wss://staging-api.mathemalab.io/ws",
+    analytics: "https://staging-api.mathemalab.io/api/analytics",
+    cdn: "https://staging-cdn.mathemalab.io",
   },
 
   debug: {
@@ -173,7 +173,7 @@ const STAGING_OVERRIDES: Partial<EnvironmentConfig> = {
 
   telemetry: {
     enabled: true,
-    endpoint: "https://staging-telemetry.looplab.dev",
+    endpoint: "https://staging-telemetry.mathemalab.io",
     sampleRate: 1.0,
     includeErrors: true,
     includeTiming: true,
@@ -184,7 +184,7 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   env: "production",
 
   api: {
-    baseUrl: "https://api.looplab.dev/api/v1",
+    baseUrl: "https://api.mathemalab.io/api/v1",
     version: "v1",
     timeout: 30000,
     retryAttempts: 3,
@@ -203,10 +203,10 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   },
 
   services: {
-    validation: "https://api.looplab.dev/api/validation",
-    websocket: "wss://api.looplab.dev/ws",
-    analytics: "https://api.looplab.dev/api/analytics",
-    cdn: "https://cdn.looplab.dev",
+    validation: "https://api.mathemalab.io/api/validation",
+    websocket: "wss://api.mathemalab.io/ws",
+    analytics: "https://api.mathemalab.io/api/analytics",
+    cdn: "https://cdn.mathemalab.io",
   },
 
   debug: {
@@ -219,7 +219,7 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
 
   telemetry: {
     enabled: true,
-    endpoint: "https://telemetry.looplab.dev",
+    endpoint: "https://telemetry.mathemalab.io",
     sampleRate: 0.1, // Sample 10% in production
     includeErrors: true,
     includeTiming: true,
@@ -362,7 +362,7 @@ interface DevOverrides {
   debug?: Partial<DebugConfig>
 }
 
-const DEV_OVERRIDES_KEY = "__looplab_dev_overrides__"
+const DEV_OVERRIDES_KEY = "__mathemalab_dev_overrides__"
 
 export function setDevOverrides(overrides: DevOverrides): void {
   if (getConfig().env === "production") {

@@ -23,14 +23,14 @@ const DownloadApp = () => {
 
     const getPlatformDownloadUrl = () => {
         // TODO: Replace with actual download URLs
-        const baseUrl = 'https://github.com/looplab/releases/latest/download';
+        const baseUrl = 'https://github.com/mathemalab/releases/latest/download';
         switch (platform) {
             case 'mac':
-                return `${baseUrl}/LoopLab-macOS.dmg`;
+                return `${baseUrl}/MathemaLab-macOS.dmg`;
             case 'windows':
-                return `${baseUrl}/LoopLab-Windows.exe`;
+                return `${baseUrl}/MathemaLab-Windows.exe`;
             case 'linux':
-                return `${baseUrl}/LoopLab-Linux.AppImage`;
+                return `${baseUrl}/MathemaLab-Linux.AppImage`;
             default:
                 return baseUrl;
         }
@@ -62,11 +62,11 @@ const DownloadApp = () => {
                     </div>
 
                     <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                        Unlock the Full LoopLab Experience
+                        Unlock the Full MathemaLab Experience
                     </h1>
 
                     <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                        Access powerful workspaces, run code locally, and leverage your system's full potential with the LoopLab Desktop App.
+                        Access powerful workspaces, run code locally, and leverage your system's full potential with the MathemaLab Desktop App.
                     </p>
 
                     {/* Primary Download Button */}
@@ -84,7 +84,7 @@ const DownloadApp = () => {
                             size="lg"
                             variant="outline"
                             className="text-lg px-8 py-6"
-                            onClick={() => window.open('https://github.com/looplab/releases', '_blank')}
+                            onClick={() => window.open('https://github.com/mathemalab/releases', '_blank')}
                         >
                             View All Platforms
                         </Button>

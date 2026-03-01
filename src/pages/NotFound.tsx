@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
-import { Home, Search, ArrowLeft, Code2, FolderOpen, BarChart3 } from "lucide-react"
+import { Home, Search, ArrowLeft, FolderOpen, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
@@ -28,7 +28,9 @@ const NotFound = () => {
         {/* 404 Illustration */}
         <div className="mb-8 relative">
           <div className="text-9xl font-bold text-primary/20 select-none">404</div>
-          <Code2 className="w-24 h-24 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          <div className="w-24 h-24 bg-primary/20 rounded-2xl flex items-center justify-center p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
+            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover opacity-50" />
+          </div>
         </div>
 
         {/* Heading */}

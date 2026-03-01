@@ -47,7 +47,12 @@ export default function AdminLayout() {
                     >
                         <Menu className="w-6 h-6 text-gray-600" />
                     </button>
-                    <h1 className="text-lg font-bold text-primary-600">MathemaLab Admin</h1>
+                    <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center overflow-hidden">
+                            <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                        </div>
+                        <h1 className="text-lg font-bold text-primary-600">MathemaLab Admin</h1>
+                    </div>
                     <div className="w-10" /> {/* Spacer for centering */}
                 </div>
             </div>
@@ -66,7 +71,10 @@ export default function AdminLayout() {
                     }`}
             >
                 {/* Logo */}
-                <div className="h-16 flex items-center px-6 border-b border-border bg-card/50">
+                <div className="h-16 flex items-center px-6 border-b border-border bg-card/50 gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center overflow-hidden">
+                        <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
+                    </div>
                     <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
                         MathemaLab
                     </span>

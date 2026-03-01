@@ -8,8 +8,8 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4 group transition-transform hover:scale-105 origin-left">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20">
-                <Code2 className="h-5 w-5 text-primary-foreground" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20 overflow-hidden">
+                <img src="/logo.png" alt="MathemaLab Logo" className="h-full w-full object-cover" />
               </div>
               <span className="text-xl font-bold tracking-tight">MathemaLab</span>
             </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Monitor, Zap, Shield, HardDrive, Code2 } from 'lucide-react';
+import { Download, Monitor, Zap, Shield, HardDrive } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -124,8 +124,8 @@ const DownloadApp = () => {
 
                         {/* Feature 3 */}
                         <div className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors">
-                            <div className="bg-pink-500/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                                <Code2 className="h-6 w-6 text-pink-500" />
+                            <div className="bg-pink-500/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4 overflow-hidden">
+                                <img src="/logo.png" alt="Logo" className="h-6 w-6 object-cover" />
                             </div>
                             <h3 className="text-xl font-semibold mb-2">Full IDE Experience</h3>
                             <p className="text-muted-foreground">
@@ -226,10 +226,10 @@ const DownloadApp = () => {
                         Get Started with Desktop
                     </Button>
                 </div>
-            </main>
+            </main >
 
             <Footer />
-        </div>
+        </div >
     );
 };
 

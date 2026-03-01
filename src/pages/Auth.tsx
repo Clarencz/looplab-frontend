@@ -105,8 +105,8 @@ const Auth = () => {
         >
           {/* Logo */}
           <div className="flex items-center justify-center gap-2.5 mb-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
-              <Code2 className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 overflow-hidden">
+              <img src="/logo.png" alt="MathemaLab Logo" className="h-full w-full object-cover" />
             </div>
             <span className="text-xl font-bold tracking-tight">MathemaLab</span>
           </div>

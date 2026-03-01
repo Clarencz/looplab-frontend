@@ -31,8 +31,8 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             {/* Logo */}
             <a href="/" className="flex items-center gap-2.5 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-110 overflow-hidden">
-                <img src="/logo.png" alt="MathemaLab Logo" className="h-full w-full object-cover" />
+              <div className="flex h-10 w-10 items-center justify-center transition-transform group-hover:scale-110 overflow-hidden">
+                <img src="/logo.png" alt="MathemaLab Logo" className="h-full w-full object-contain" />
               </div>
               <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
                 MathemaLab

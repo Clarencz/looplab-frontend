@@ -132,8 +132,8 @@ const AdminLogin = () => {
                 >
                     {/* Admin Logo */}
                     <div className="flex items-center justify-center gap-3 mb-8">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg">
-                            <Shield className="h-7 w-7 text-white" />
+                        <div className="flex h-16 w-16 items-center justify-center overflow-hidden">
+                            <img src="/logo.png" alt="Logo" className="h-full w-full object-contain" />
                         </div>
                         <div>
                             <span className="font-mono text-2xl font-bold text-white">MathemaLab</span>

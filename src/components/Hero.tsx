@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { WaitlistModal } from "./WaitlistModal";
 
 const Hero = () => {
   const { user } = useAuth();
@@ -31,7 +32,7 @@ const Hero = () => {
               className="mb-4 font-black leading-[1.1] tracking-tight"
             >
               <span className="block text-2xl sm:text-3xl md:text-4xl text-white">
-                where ambition and learning meet the interactive tools to grow your skillset
+                Where Ambition and Learning Meet the Right Tool to Grow Your Skillset
               </span>
             </motion.h1>
 
@@ -78,16 +79,16 @@ const Hero = () => {
                         🥚→
                       </motion.span>
                     </div>
-                    <Button variant="hero" size="lg" className="rounded-full px-8 h-12 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-sm font-semibold" asChild>
-                      <a href="/auth">
+                    <WaitlistModal>
+                      <Button variant="hero" size="lg" className="rounded-full px-8 h-12 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-sm font-semibold">
                         Join Waitlist
                         <ArrowRight className="ml-2 h-4 w-4" />
-                      </a>
-                    </Button>
+                      </Button>
+                    </WaitlistModal>
                   </div>
-                  <Button variant="outline" size="lg" className="glass-premium rounded-full px-8 h-12 border-white/10 hover:bg-white/5 transition-all text-sm font-semibold" asChild>
+                  {/* <Button variant="outline" size="lg" className="glass-premium rounded-full px-8 h-12 border-white/10 hover:bg-white/5 transition-all text-sm font-semibold" asChild>
                     <a href="/#how-it-works">Watch Demo</a>
-                  </Button>
+                  </Button> */}
                 </>
               )}
             </motion.div>
@@ -100,7 +101,7 @@ const Hero = () => {
               className="mt-10 flex items-center gap-8"
             >
               {[
-                { value: "6", label: "Categories" },
+                { value: "6+", label: "Categories" },
                 { value: "AI", label: "Guided Projects" },
                 { value: "∞", label: "Practice" },
               ].map((stat, index) => (

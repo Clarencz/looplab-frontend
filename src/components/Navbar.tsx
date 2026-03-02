@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { WaitlistModal } from "./WaitlistModal"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -46,15 +47,15 @@ const Navbar = () => {
                   <a href="/download-app" className="px-4 py-2 text-sm font-medium text-primary transition-colors hover:text-primary/80 rounded-lg hover:bg-primary/5">
                     Open Editor
                   </a>
-                  <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                  {/* <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
                     Pricing
-                  </a>
+                  </a> */}
                 </>
               ) : (
                 <>
-                  <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
+                  {/* <a href="/pricing" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
                     Pricing
-                  </a>
+                  </a> */}
                   <a href="/#how-it-works" className="px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50">
                     How it Works
                   </a>
@@ -110,12 +111,12 @@ const Navbar = () => {
                     🥚→
                   </motion.span>
                 </div>
-                <Button size="sm" asChild>
-                  <a href="/auth">Join Waitlist</a>
-                </Button>
-                <Button variant="ghost" size="sm" asChild>
+                <WaitlistModal>
+                  <Button size="sm">Join Waitlist</Button>
+                </WaitlistModal>
+                {/* <Button variant="ghost" size="sm" asChild>
                   <a href="/auth">Sign In</a>
-                </Button>
+                </Button> */}
               </>
             )}
           </div>
@@ -144,9 +145,9 @@ const Navbar = () => {
                   <a href="/download-app" className="block px-4 py-3 text-sm font-medium text-primary rounded-lg hover:bg-primary/5">
                     Open Editor
                   </a>
-                  <a href="/pricing" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
+                  {/* <a href="/pricing" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
                     Pricing
-                  </a>
+                  </a> */}
                   <div className="pt-4 mt-2 border-t border-border space-y-2">
                     <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />
@@ -157,9 +158,9 @@ const Navbar = () => {
               ) : (
                 // Non-authenticated mobile menu
                 <>
-                  <a href="/pricing" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
+                  {/* <a href="/pricing" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
                     Pricing
-                  </a>
+                  </a> */}
                   <a href="/#how-it-works" className="block px-4 py-3 text-sm text-muted-foreground rounded-lg hover:bg-secondary/50">
                     How it Works
                   </a>
@@ -169,13 +170,13 @@ const Navbar = () => {
                   <div className="pt-4 mt-2 border-t border-border space-y-2">
                     <div className="flex flex-col items-center">
                       <span className="mb-1 text-[10px] font-bold uppercase tracking-widest text-primary animate-pulse">This Easter 🐣</span>
-                      <Button size="sm" className="w-full" asChild>
-                        <a href="/auth">Join Waitlist</a>
-                      </Button>
+                      <WaitlistModal>
+                        <Button size="sm" className="w-full">Join Waitlist</Button>
+                      </WaitlistModal>
                     </div>
-                    <Button variant="ghost" size="sm" className="w-full" asChild>
+                    {/* <Button variant="ghost" size="sm" className="w-full" asChild>
                       <a href="/auth">Sign In</a>
-                    </Button>
+                    </Button> */}
                   </div>
                 </>
               )}

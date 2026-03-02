@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, GraduationCap } from "lucide-react";
+import { WaitlistModal } from "./WaitlistModal";
 
 const CTA = () => {
   return (
@@ -42,12 +43,12 @@ const CTA = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="lg" className="rounded-full px-8 h-14 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-base font-semibold" asChild>
-              <a href="/auth">
+            <WaitlistModal>
+              <Button variant="hero" size="lg" className="rounded-full px-8 h-14 bg-primary text-primary-foreground shadow-2xl shadow-primary/40 hover:scale-105 transition-all text-base font-semibold">
                 Get Started Free
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-            </Button>
+              </Button>
+            </WaitlistModal>
             <Button variant="outline" size="lg" className="glass-premium rounded-full px-8 h-14 border-white/10 hover:bg-white/5 transition-all text-base font-semibold" asChild>
               <a href="/#how-it-works">Pick Your First Topic</a>
             </Button>

@@ -676,3 +676,23 @@ export interface StartTutorRequest {
 export interface TutorSessionResponse {
   session: TutorSession
 }
+
+// -----------------------------------------------------------------------------
+// WAITLIST DOMAIN
+// -----------------------------------------------------------------------------
+
+export interface WaitlistEntry {
+  id: EntityId;
+  name: string;
+  email: string;
+  role: string;
+  expectations?: string;
+  createdAt: Timestamp;
+}
+
+export interface NewWaitlistEntry {
+  name: string;
+  email: string;
+  role: "Student" | "Educator" | "Researcher" | "Professional" | "Other";
+  expectations?: string;
+}

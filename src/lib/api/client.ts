@@ -18,6 +18,14 @@ import type {
   GitHubRepo,
   UserSettings,
   ErrorCode,
+  ApiResponse,
+  PaginatedResponse,
+  WaitlistEntry,
+  NewWaitlistEntry,
+  AuthCredentials,
+  UpdateUserRequest,
+  UpdateProfileRequest,
+  CVGenerationRequest,
 } from "./types"
 
 import { getConfig } from "../config/env"
@@ -555,6 +563,17 @@ export const api = {
      */
     listRepos: () =>
       get<ApiResponse<GitHubRepo[]>>("/github/repos").then((r) => r.data),
+  },
+
+  // ---------------------------------------------------------------------------
+  // WAITLIST
+  // ---------------------------------------------------------------------------
+  waitlist: {
+    /**
+     * Join the waitlist
+     */
+    join: (data: NewWaitlistEntry) =>
+      post<ApiResponse<WaitlistEntry>>("/waitlist/join", data, { skipAuth: true }).then((r) => r.data),
   },
 }
 

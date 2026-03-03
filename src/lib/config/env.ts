@@ -224,11 +224,11 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   },
 
   telemetry: {
-    enabled: true,
-    endpoint: "https://telemetry.mathemalab.io",
-    sampleRate: 0.1,
-    includeErrors: true,
-    includeTiming: true,
+    enabled: false,
+    endpoint: "",
+    sampleRate: 0,
+    includeErrors: false,
+    includeTiming: false,
   },
 }
 

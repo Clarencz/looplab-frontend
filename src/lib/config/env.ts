@@ -134,11 +134,13 @@ const DEFAULT_CONFIG: EnvironmentConfig = {
 // ENVIRONMENT-SPECIFIC OVERRIDES
 // -----------------------------------------------------------------------------
 
+const _VITE_API_URL = import.meta.env.VITE_API_URL
+
 const STAGING_OVERRIDES: Partial<EnvironmentConfig> = {
   env: "staging",
 
   api: {
-    baseUrl: "https://staging-api.mathemalab.io/api/v1",
+    baseUrl: _VITE_API_URL || "https://staging-api.mathemalab.io/api/v1",
     version: "v1",
     timeout: 30000,
     retryAttempts: 3,
@@ -157,9 +159,11 @@ const STAGING_OVERRIDES: Partial<EnvironmentConfig> = {
   },
 
   services: {
-    validation: "https://staging-api.mathemalab.io/api/validation",
-    websocket: "wss://staging-api.mathemalab.io/ws",
-    analytics: "https://staging-api.mathemalab.io/api/analytics",
+    validation: `${_VITE_API_URL || "https://staging-api.mathemalab.io/api"}/validation`,
+    websocket: _VITE_API_URL
+      ? _VITE_API_URL.replace(/^https/, "wss").replace(/\/api\/v1$/, "/ws")
+      : "wss://staging-api.mathemalab.io/ws",
+    analytics: `${_VITE_API_URL || "https://staging-api.mathemalab.io/api"}/analytics`,
     cdn: "https://staging-cdn.mathemalab.io",
   },
 
@@ -184,7 +188,7 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   env: "production",
 
   api: {
-    baseUrl: "https://api.mathemalab.io/api/v1",
+    baseUrl: _VITE_API_URL || "https://api.mathemalab.io/api/v1",
     version: "v1",
     timeout: 30000,
     retryAttempts: 3,
@@ -203,9 +207,11 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   },
 
   services: {
-    validation: "https://api.mathemalab.io/api/validation",
-    websocket: "wss://api.mathemalab.io/ws",
-    analytics: "https://api.mathemalab.io/api/analytics",
+    validation: `${_VITE_API_URL || "https://api.mathemalab.io/api"}/validation`,
+    websocket: _VITE_API_URL
+      ? _VITE_API_URL.replace(/^https/, "wss").replace(/\/api\/v1$/, "/ws")
+      : "wss://api.mathemalab.io/ws",
+    analytics: `${_VITE_API_URL || "https://api.mathemalab.io/api"}/analytics`,
     cdn: "https://cdn.mathemalab.io",
   },
 
@@ -220,7 +226,7 @@ const PRODUCTION_OVERRIDES: Partial<EnvironmentConfig> = {
   telemetry: {
     enabled: true,
     endpoint: "https://telemetry.mathemalab.io",
-    sampleRate: 0.1, // Sample 10% in production
+    sampleRate: 0.1,
     includeErrors: true,
     includeTiming: true,
   },

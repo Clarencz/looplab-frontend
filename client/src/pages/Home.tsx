@@ -74,11 +74,7 @@ export default function Home() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#121510]/92 text-[#f4f1e8] backdrop-blur-xl">
         <div className="mx-auto flex h-[72px] max-w-[1600px] items-center justify-between px-5 lg:px-8">
           <a href="#top" className="group flex items-center gap-3" aria-label="MathematLab home">
-            <img
-              className="h-9 w-9 object-contain transition-transform duration-200 group-hover:rotate-[-6deg]"
-              src="/manus-storage/mathematlab-relay-mark_7394100c.png"
-              alt=""
-            />
+            <RelayGlyph className="brand-glyph transition-transform duration-200 group-hover:rotate-[-6deg]" />
             <span className="font-display text-[1.08rem] font-semibold tracking-[-0.05em]">MathematLab</span>
           </a>
 
@@ -126,11 +122,14 @@ export default function Home() {
             <div className="hero-grid" />
           </div>
           <div className="absolute bottom-0 right-0 top-[72px] w-full overflow-hidden lg:w-[59%]">
-            <img
-              className="h-full w-full object-cover object-[68%_center] opacity-80 mix-blend-screen"
-              src="/manus-storage/mathematlab-hero-operations_c03fe680.png"
-              alt="Abstract charcoal modules connected by a relay-green route."
-            />
+            <div className="hero-architecture" aria-hidden="true">
+              <span className="arch-block arch-block--one" />
+              <span className="arch-block arch-block--two" />
+              <span className="arch-block arch-block--three" />
+              <span className="arch-block arch-block--four" />
+              <span className="arch-route arch-route--one" />
+              <span className="arch-route arch-route--two" />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-r from-[#121510] via-[#121510]/75 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121510]/50 via-transparent to-[#121510]/20" />
           </div>
@@ -230,7 +229,13 @@ export default function Home() {
                     Strong digital work is more than a good-looking interface. It is a shared plan, the right decisions, and a system people can continue to use.
                   </p>
                   <div className="relative mt-8 h-48 overflow-hidden border border-[#191b17]/15 sm:h-56">
-                    <img className="h-full w-full object-cover" src="/manus-storage/mathematlab-workflow-notes_e251de45.png" alt="Tactile materials arranged as a workflow route." />
+                    <div className="workflow-still" aria-hidden="true">
+                      <span className="workflow-note workflow-note--one" />
+                      <span className="workflow-note workflow-note--two" />
+                      <span className="workflow-note workflow-note--three" />
+                      <span className="workflow-line workflow-line--one" />
+                      <span className="workflow-line workflow-line--two" />
+                    </div>
                     <div className="absolute bottom-0 left-0 bg-[#191b17] px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.13em] text-[#f4f1e8]">Map the real handoff</div>
                   </div>
                 </div>
@@ -279,11 +284,12 @@ export default function Home() {
               </div>
             </div>
             <div className="relative min-h-[420px] overflow-hidden bg-[#d9d6cb] lg:min-h-0">
-              <img
-                className="absolute inset-0 h-full w-full object-cover"
-                src="/manus-storage/mathematlab-build-system_ea04bf67.png"
-                alt="Modular blank interface frames connected by a green route."
-              />
+              <div className="build-frames" aria-hidden="true">
+                <span className="build-frame build-frame--one" />
+                <span className="build-frame build-frame--two" />
+                <span className="build-frame build-frame--three" />
+                <span className="build-route" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#191b17]/80 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 max-w-[330px] p-7 text-[#f4f1e8] lg:p-10">
                 <p className="font-display text-[1.55rem] font-semibold leading-none tracking-[-0.05em]">Built for the work after launch.</p>
@@ -299,11 +305,14 @@ export default function Home() {
               <div className="side-label text-[#b7eb2d]">04 / Partnership</div>
             </aside>
             <div className="relative min-h-[430px] overflow-hidden lg:min-h-[640px]">
-              <img
-                className="absolute inset-0 h-full w-full object-cover object-center opacity-90"
-                src="/manus-storage/mathematlab-partnership-workroom_223dfad4.png"
-                alt="Two professionals collaborating around a studio worktable."
-              />
+              <div className="partnership-collage" aria-hidden="true">
+                <span className="studio-window studio-window--one" />
+                <span className="studio-window studio-window--two" />
+                <span className="studio-table" />
+                <span className="studio-person studio-person--one" />
+                <span className="studio-person studio-person--two" />
+                <span className="studio-notes" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-tr from-[#191b17]/90 via-[#191b17]/15 to-transparent" />
               <div className="absolute bottom-7 left-5 right-5 max-w-[310px] lg:bottom-10 lg:left-12">
                 <div className="section-kicker text-[#b7eb2d]"><RelayGlyph className="relay-glyph--small" /> Embedded when it matters</div>
@@ -362,10 +371,10 @@ export default function Home() {
       </main>
 
       <footer className="bg-[#121510] text-[#d9d9d0]">
-        <div className="mx-auto flex max-w-[1600px] flex-col gap-8 px-5 py-8 sm:flex-row sm:items-end sm:justify-between lg:px-8">
-          <div>
-            <div className="flex items-center gap-3 text-[#f4f1e8]">
-              <img className="h-8 w-8 object-contain" src="/manus-storage/mathematlab-relay-mark_7394100c.png" alt="" />
+          <div className="mx-auto flex max-w-[1600px] flex-col gap-8 px-5 py-8 sm:flex-row sm:items-end sm:justify-between lg:px-8">
+            <div>
+              <div className="flex items-center gap-3 text-[#f4f1e8]">
+              <RelayGlyph className="brand-glyph" />
               <span className="font-display text-lg font-semibold tracking-[-0.05em]">MathematLab</span>
             </div>
             <p className="mt-3 text-sm text-[#aeb0a6]">Digital systems for better work.</p>

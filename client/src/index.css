@@ -273,6 +273,13 @@
 
   .relay-glyph--variant-3 { transform: rotate(180deg); }
 
+  .brand-glyph {
+    margin-right: -6px;
+    color: #b7eb2d;
+    transform: scale(0.82);
+    transform-origin: left center;
+  }
+
   .service-card {
     position: relative;
     min-height: 390px;
@@ -330,6 +337,164 @@
   background-size: 48px 48px;
   mask-image: linear-gradient(to bottom, black, transparent 90%);
 }
+
+.hero-architecture {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 76% 16%, rgb(183 235 45 / 13%), transparent 22%), linear-gradient(142deg, transparent 0 21%, rgb(48 52 43 / 64%) 21.1% 21.8%, transparent 22% 100%), linear-gradient(32deg, #191c16 0 48%, #252920 48.1% 48.7%, #171914 48.8% 100%);
+}
+
+.hero-architecture::before,
+.hero-architecture::after {
+  position: absolute;
+  content: "";
+}
+
+.hero-architecture::before {
+  width: 64%;
+  height: 52%;
+  right: -8%;
+  top: 20%;
+  border: 1px solid rgb(244 241 232 / 14%);
+  box-shadow: -92px 92px 0 -1px rgb(244 241 232 / 8%), -184px 184px 0 -1px rgb(244 241 232 / 6%);
+  transform: skewY(-18deg) rotate(-16deg);
+}
+
+.hero-architecture::after {
+  width: 118%;
+  height: 160px;
+  right: -24%;
+  bottom: -42px;
+  background: linear-gradient(90deg, transparent, rgb(183 235 45 / 22%), transparent);
+  transform: rotate(-18deg);
+}
+
+.arch-block,
+.arch-route,
+.workflow-note,
+.workflow-line,
+.build-frame,
+.build-route,
+.studio-window,
+.studio-table,
+.studio-person,
+.studio-notes {
+  position: absolute;
+  display: block;
+}
+
+.arch-block {
+  border: 1px solid rgb(244 241 232 / 14%);
+  background: linear-gradient(135deg, #40463b, #20241d 54%, #11130f);
+  box-shadow: 16px 18px 0 rgb(0 0 0 / 26%), inset 1px 1px 0 rgb(255 255 255 / 11%);
+}
+
+.arch-block--one { width: 180px; height: 152px; left: 33%; top: 18%; transform: skewY(-18deg) rotate(-16deg); }
+.arch-block--two { width: 230px; height: 110px; left: 54%; top: 40%; transform: skewY(-18deg) rotate(-16deg); }
+.arch-block--three { width: 104px; height: 170px; right: 8%; top: 14%; transform: skewY(-18deg) rotate(-16deg); }
+.arch-block--four { width: 160px; height: 90px; right: 18%; bottom: 19%; transform: skewY(-18deg) rotate(-16deg); }
+
+.arch-route {
+  height: 3px;
+  background: #b7eb2d;
+  box-shadow: 0 0 24px rgb(183 235 45 / 20%);
+  transform-origin: left center;
+}
+
+.arch-route--one { width: 46%; left: 28%; top: 49%; transform: rotate(23deg); }
+.arch-route--two { width: 27%; right: 8%; top: 61%; transform: rotate(-28deg); }
+
+.workflow-still {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d9d5c9, #f0ece1 58%, #c8c3b7);
+}
+
+.workflow-still::before {
+  position: absolute;
+  inset: 12% 13%;
+  border: 1px solid rgb(25 27 23 / 18%);
+  background-image: linear-gradient(rgb(25 27 23 / 9%) 1px, transparent 1px), linear-gradient(90deg, rgb(25 27 23 / 9%) 1px, transparent 1px);
+  background-size: 22px 22px;
+  content: "";
+  transform: rotate(-6deg);
+}
+
+.workflow-note {
+  width: 27%;
+  height: 48%;
+  border: 1px solid rgb(25 27 23 / 20%);
+  background: #f7f3e9;
+  box-shadow: 8px 9px 0 rgb(25 27 23 / 14%);
+}
+
+.workflow-note--one { left: 14%; top: 20%; transform: rotate(-8deg); }
+.workflow-note--two { left: 38%; top: 30%; transform: rotate(6deg); }
+.workflow-note--three { right: 13%; top: 16%; transform: rotate(-4deg); }
+.workflow-line { height: 2px; background: #557609; }
+.workflow-line--one { left: 26%; top: 47%; width: 29%; transform: rotate(14deg); }
+.workflow-line--two { left: 53%; top: 45%; width: 27%; transform: rotate(-15deg); }
+
+.build-frames {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(150deg, #e5e1d5, #cbc6ba);
+}
+
+.build-frames::before {
+  position: absolute;
+  width: 120%;
+  height: 5px;
+  left: -16%;
+  bottom: 27%;
+  background: #293024;
+  content: "";
+  transform: rotate(-10deg);
+}
+
+.build-frame {
+  border: 11px solid #333a2f;
+  border-bottom-width: 18px;
+  background: linear-gradient(135deg, #f9f5e9, #cecabf);
+  box-shadow: 12px 14px 0 rgb(25 27 23 / 18%), inset 0 0 0 1px rgb(255 255 255 / 65%);
+}
+
+.build-frame--one { width: 29%; height: 37%; left: 7%; bottom: 22%; }
+.build-frame--two { width: 39%; height: 51%; left: 33%; bottom: 30%; }
+.build-frame--three { width: 30%; height: 34%; right: 5%; bottom: 46%; }
+.build-route { width: 58%; height: 3px; left: 13%; bottom: 23%; background: #b7eb2d; transform: rotate(-7deg); }
+
+.partnership-collage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #151914, #343a2f 55%, #10120f);
+}
+
+.partnership-collage::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  background-image: linear-gradient(90deg, transparent 49.5%, rgb(244 241 232 / 30%) 50%, transparent 50.5%), linear-gradient(rgb(244 241 232 / 18%) 1px, transparent 1px);
+  background-size: 102px 100%, 100% 84px;
+  content: "";
+}
+
+.studio-window {
+  border: 1px solid rgb(244 241 232 / 26%);
+  background: linear-gradient(135deg, rgb(207 215 196 / 38%), rgb(63 71 59 / 12%));
+}
+
+.studio-window--one { width: 55%; height: 44%; left: -10%; top: 7%; }
+.studio-window--two { width: 40%; height: 33%; right: -4%; top: 12%; }
+.studio-table { width: 115%; height: 20%; left: -10%; bottom: 24%; background: #c7c2b5; transform: skewY(-8deg); box-shadow: 0 14px 0 #777a6e; }
+.studio-person { width: 31%; height: 38%; bottom: 26%; border-radius: 48% 48% 8% 8%; background: linear-gradient(145deg, #a9a596 0 25%, #272c25 25%); }
+.studio-person--one { left: 14%; transform: rotate(7deg); }
+.studio-person--two { right: 14%; height: 43%; background: linear-gradient(145deg, #bbb8a8 0 23%, #161b16 23%); transform: rotate(-6deg); }
+.studio-notes { width: 26%; height: 13%; right: 20%; bottom: 36%; border: 1px solid #b7eb2d; background: rgb(183 235 45 / 14%); transform: rotate(-13deg); }
 
 .reveal-up {
   animation: reveal-up 620ms cubic-bezier(0.23, 1, 0.32, 1) both;

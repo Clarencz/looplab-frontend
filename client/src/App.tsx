@@ -1,3 +1,4 @@
+/** Operational Modernism: a focused, light-mode project ledger wrapped in a calm application shell. */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";

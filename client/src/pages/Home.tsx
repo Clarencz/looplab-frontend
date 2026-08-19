@@ -2,7 +2,7 @@
  * Operational Modernism: the page reads like a clear project ledger.
  * Ink, limestone, and Relay Green make a systems consultancy feel precise and human.
  */
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -11,7 +11,6 @@ import {
   MoveRight,
   X,
 } from "lucide-react";
-import { toast } from "sonner";
 
 const services = [
   {
@@ -47,6 +46,8 @@ const navItems = [
   ["Partnership", "#partnership"],
 ];
 
+const freeBuildMailto = "mailto:kalotimabeya@gmail.com?subject=Free%20website%20or%20application%20build%20request&body=Hello%20MathematLab%2C%0A%0AI%20would%20like%20to%20submit%20a%20request%20for%20the%2019%E2%80%9322%20August%20free%20build%20offer.%0A%0AWhat%20I%20want%20to%20build%3A%0AWho%20it%20is%20for%3A%0AWhat%20success%20looks%20like%3A%0A%0AThank%20you.";
+
 function RelayGlyph({ className = "" }: { className?: string }) {
   return (
     <span className={`relay-glyph ${className}`} aria-hidden="true">
@@ -62,16 +63,14 @@ export default function Home() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    toast("Consultation brief captured", {
-      description: "Connect MathematLab’s preferred inbox or scheduling link before publishing to receive enquiries.",
-    });
-  };
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f4f1e8] text-[#191b17]">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#121510]/92 text-[#f4f1e8] backdrop-blur-xl">
+        <a className="offer-strip" href={freeBuildMailto}>
+          <span className="offer-strip__date">19–22 August only</span>
+          <span className="offer-strip__message">Free website &amp; application builds</span>
+          <span className="offer-strip__action">Drop your request at kalotimabeya@gmail.com <ArrowUpRight className="h-3.5 w-3.5" /></span>
+        </a>
         <div className="mx-auto flex h-[72px] max-w-[1600px] items-center justify-between px-5 lg:px-8">
           <a href="#top" className="group flex items-center gap-3" aria-label="MathematLab home">
             <RelayGlyph className="brand-glyph transition-transform duration-200 group-hover:rotate-[-6deg]" />
@@ -87,7 +86,7 @@ export default function Home() {
           </nav>
 
           <a className="hidden btn-lime lg:inline-flex" href="#conversation">
-            Start a conversation <ArrowUpRight className="h-4 w-4" />
+            Free build offer <ArrowUpRight className="h-4 w-4" />
           </a>
 
           <button
@@ -109,7 +108,7 @@ export default function Home() {
                 </a>
               ))}
               <a className="btn-lime mt-4 inline-flex w-fit" href="#conversation" onClick={closeMenu}>
-                Start a conversation <ArrowUpRight className="h-4 w-4" />
+                Free build offer <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
           </nav>
@@ -117,11 +116,11 @@ export default function Home() {
       </header>
 
       <main id="top">
-        <section className="relative min-h-[760px] overflow-hidden bg-[#121510] pt-[72px] text-[#f4f1e8] lg:min-h-[860px]">
+        <section className="relative min-h-[760px] overflow-hidden bg-[#121510] pt-[112px] text-[#f4f1e8] lg:min-h-[860px]">
           <div className="absolute inset-0 opacity-35">
             <div className="hero-grid" />
           </div>
-          <div className="absolute bottom-0 right-0 top-[72px] w-full overflow-hidden lg:w-[59%]">
+          <div className="absolute bottom-0 right-0 top-[112px] w-full overflow-hidden lg:w-[59%]">
             <div className="hero-architecture" aria-hidden="true">
               <span className="arch-block arch-block--one" />
               <span className="arch-block arch-block--two" />
@@ -153,7 +152,7 @@ export default function Home() {
               </p>
               <div className="reveal-up delay-3 mt-10 flex flex-wrap items-center gap-3">
                 <a className="btn-lime" href="#conversation">
-                  Start a conversation <ArrowUpRight className="h-4 w-4" />
+                  Claim the free build offer <ArrowUpRight className="h-4 w-4" />
                 </a>
                 <a className="btn-ink" href="#approach">
                   See how we work <ArrowDownRight className="h-4 w-4" />
@@ -343,29 +342,35 @@ export default function Home() {
           <div className="absolute left-0 right-0 top-0 h-1 bg-[#b7eb2d]" />
           <div className="mx-auto grid max-w-[1600px] grid-cols-1 lg:grid-cols-[150px_0.9fr_1.1fr] lg:px-8">
             <aside className="hidden border-r border-[#15170f]/20 pr-7 pt-12 lg:block">
-              <div className="side-label">05 / Conversation</div>
+              <div className="side-label">05 / Free build offer</div>
             </aside>
             <div className="px-5 py-16 lg:px-12 lg:py-24">
-              <p className="section-kicker text-[#15170f]"><RelayGlyph className="relay-glyph--small relay-glyph--green" /> Start with the stuck point</p>
+              <p className="section-kicker text-[#15170f]"><RelayGlyph className="relay-glyph--small relay-glyph--green" /> 19–22 August only</p>
               <h2 className="mt-7 max-w-[540px] font-display text-[clamp(2.8rem,5.2vw,5.5rem)] font-semibold leading-[0.9] tracking-[-0.075em]">
-                Let’s make the next useful thing work.
+                A website or application build—on us.
               </h2>
               <p className="mt-7 max-w-[410px] font-serif text-[1.18rem] leading-[1.5] text-[#4d5047]">
-                Tell us what is changing, what is getting in the way, or what your organization is ready to build. We will start from there.
+                From 19–22 August, MathematLab is opening a limited number of free website and application build partnerships. Send the problem or idea you want to make real; we will review requests and select the work we can take forward.
               </p>
             </div>
-            <form className="border-t border-[#15170f]/20 px-5 py-12 lg:border-l lg:border-t-0 lg:px-12 lg:py-24" onSubmit={handleSubmit}>
-              <div className="grid gap-7 sm:grid-cols-2">
-                <label className="form-label">Your name<input className="form-input" required name="name" autoComplete="name" /></label>
-                <label className="form-label">Work email<input className="form-input" required type="email" name="email" autoComplete="email" /></label>
+            <div className="border-t border-[#15170f]/20 px-5 py-12 lg:border-l lg:border-t-0 lg:px-12 lg:py-24">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[#4d5047]">Send your request by email</p>
+              <a className="mt-4 inline-block font-display text-[clamp(1.55rem,3vw,2.4rem)] font-semibold leading-[0.98] tracking-[-0.06em] underline decoration-[#557609] decoration-2 underline-offset-8 transition-colors hover:text-[#557609]" href={freeBuildMailto}>
+                kalotimabeya@gmail.com
+              </a>
+              <div className="mt-12 border-t border-[#15170f]/20 pt-6">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[#4d5047]">Include these three things</p>
+                <ol className="mt-5 space-y-4 font-serif text-[1.08rem] leading-[1.4] text-[#32362d]">
+                  <li className="flex gap-4"><span className="font-display text-sm font-semibold text-[#557609]">01</span> What you want to build.</li>
+                  <li className="flex gap-4"><span className="font-display text-sm font-semibold text-[#557609]">02</span> Who it is for.</li>
+                  <li className="flex gap-4"><span className="font-display text-sm font-semibold text-[#557609]">03</span> What a useful first version needs to do.</li>
+                </ol>
               </div>
-              <label className="form-label mt-7">Organization<input className="form-input" name="organization" autoComplete="organization" /></label>
-              <label className="form-label mt-7">What needs to work better?<textarea className="form-input min-h-[115px] resize-y pt-3" required name="brief" /></label>
-              <button className="mt-8 inline-flex items-center gap-3 border border-[#15170f] bg-[#b7eb2d] px-5 py-4 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-[#15170f] transition-transform duration-150 hover:-translate-y-0.5 hover:bg-[#d2f776] active:scale-[0.98]" type="submit">
-                Prepare the consultation brief <ArrowUpRight className="h-4 w-4" />
-              </button>
-              <p className="mt-5 max-w-[440px] text-xs leading-relaxed text-[#4d5047]">Before publishing, connect this form to MathematLab’s preferred inbox or calendar link so new project enquiries reach the team.</p>
-            </form>
+              <a className="mt-9 inline-flex items-center gap-3 border border-[#15170f] bg-[#b7eb2d] px-5 py-4 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-[#15170f] transition-transform duration-150 hover:-translate-y-0.5 hover:bg-[#d2f776] active:scale-[0.98]" href={freeBuildMailto}>
+                Email your free-build request <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <p className="mt-5 max-w-[440px] text-xs leading-relaxed text-[#4d5047]">The offer runs from 19–22 August. Requests are reviewed for fit, scope, and available build capacity.</p>
+            </div>
           </div>
         </section>
       </main>

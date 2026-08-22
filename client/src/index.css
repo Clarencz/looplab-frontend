@@ -130,56 +130,6 @@
     letter-spacing: -0.05em;
   }
 
-  .offer-strip {
-    display: flex;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    overflow: hidden;
-    border-bottom: 1px solid rgb(244 241 232 / 12%);
-    background: #b7eb2d;
-    padding-inline: 1.25rem;
-    color: #15170f;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .offer-strip:hover { background: #d2f776; }
-
-  .offer-strip__date {
-    border-right: 1px solid rgb(21 23 15 / 28%);
-    padding-right: 1rem;
-  }
-
-  .offer-strip__message { font-family: "Space Grotesk", sans-serif; }
-
-  .offer-strip__action {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: #445c0a;
-  }
-
-  @media (max-width: 700px) {
-    .offer-strip {
-      justify-content: space-between;
-      gap: 0.5rem;
-      font-size: 0.55rem;
-      letter-spacing: 0.075em;
-    }
-
-    .offer-strip__date {
-      border-right: 0;
-      padding-right: 0;
-    }
-
-    .offer-strip__action { display: none; }
-  }
-
   .btn-lime,
   .btn-ink {
     align-items: center;

@@ -1,0 +1,39 @@
+name: Restore pre-offer MathematLab site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the production branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Wait for the offer to close
+        run: sleep 1020
+
+      - name: Restore the pre-offer homepage
+        run: |
+          git restore --source=5e019fd -- client/src/pages/Home.tsx client/src/index.css
+          rm -f todo.md
+          if git diff --quiet; then
+            echo "The pre-offer homepage is already active."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add client/src/pages/Home.tsx client/src/index.css
+          git commit -m "revert: remove expired free build offer"
+          git push origin HEAD:main
+
+      - name: Confirm the production deployment becomes available
+        run: |
+          sleep 25
+          curl --fail --silent --show-error --head https://looplab-frontend.vercel.app/

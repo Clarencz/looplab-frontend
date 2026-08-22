@@ -46,7 +46,7 @@ const navItems = [
   ["Partnership", "#partnership"],
 ];
 
-const freeBuildMailto = "mailto:kalotimabeya@gmail.com?subject=Free%20website%20or%20application%20build%20request&body=Hello%20MathematLab%2C%0A%0AI%20would%20like%20to%20submit%20a%20request%20for%20the%2019%E2%80%9322%20August%20free%20build%20offer.%0A%0AWhat%20I%20want%20to%20build%3A%0AWho%20it%20is%20for%3A%0AWhat%20success%20looks%20like%3A%0A%0AThank%20you.";
+const freeBuildMailto = "mailto:kalotimabeya@gmail.com?subject=Free%20website%20or%20application%20build%20request%20%E2%80%94%20closes%20today&body=Hello%20MathematLab%2C%0A%0AI%20would%20like%20to%20submit%20a%20request%20for%20the%20free%20build%20offer%20before%20it%20closes%20today.%0A%0AWhat%20I%20want%20to%20build%3A%0AWho%20it%20is%20for%3A%0AWhat%20success%20looks%20like%3A%0A%0AThank%20you.";
 
 function RelayGlyph({ className = "" }: { className?: string }) {
   return (
@@ -67,7 +67,7 @@ export default function Home() {
     <div className="min-h-screen overflow-x-hidden bg-[#f4f1e8] text-[#191b17]">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#121510]/92 text-[#f4f1e8] backdrop-blur-xl">
         <a className="offer-strip" href={freeBuildMailto}>
-          <span className="offer-strip__date">19–22 August only</span>
+          <span className="offer-strip__date">Closes today</span>
           <span className="offer-strip__message">Free website &amp; application builds</span>
           <span className="offer-strip__action">Drop your request at kalotimabeya@gmail.com <ArrowUpRight className="h-3.5 w-3.5" /></span>
         </a>
@@ -152,7 +152,7 @@ export default function Home() {
               </p>
               <div className="reveal-up delay-3 mt-10 flex flex-wrap items-center gap-3">
                 <a className="btn-lime" href="#conversation">
-                  Claim the free build offer <ArrowUpRight className="h-4 w-4" />
+                  Claim it before close <ArrowUpRight className="h-4 w-4" />
                 </a>
                 <a className="btn-ink" href="#approach">
                   See how we work <ArrowDownRight className="h-4 w-4" />
@@ -345,12 +345,12 @@ export default function Home() {
               <div className="side-label">05 / Free build offer</div>
             </aside>
             <div className="px-5 py-16 lg:px-12 lg:py-24">
-              <p className="section-kicker text-[#15170f]"><RelayGlyph className="relay-glyph--small relay-glyph--green" /> 19–22 August only</p>
+              <p className="section-kicker text-[#15170f]"><RelayGlyph className="relay-glyph--small relay-glyph--green" /> Offer closes today</p>
               <h2 className="mt-7 max-w-[540px] font-display text-[clamp(2.8rem,5.2vw,5.5rem)] font-semibold leading-[0.9] tracking-[-0.075em]">
                 A website or application build—on us.
               </h2>
               <p className="mt-7 max-w-[410px] font-serif text-[1.18rem] leading-[1.5] text-[#4d5047]">
-                From 19–22 August, MathematLab is opening a limited number of free website and application build partnerships. Send the problem or idea you want to make real; we will review requests and select the work we can take forward.
+                This free website and application build offer closes today. Send the problem or idea you want to make real before the deadline; we will review requests and select the work we can take forward.
               </p>
             </div>
             <div className="border-t border-[#15170f]/20 px-5 py-12 lg:border-l lg:border-t-0 lg:px-12 lg:py-24">
@@ -369,7 +369,7 @@ export default function Home() {
               <a className="mt-9 inline-flex items-center gap-3 border border-[#15170f] bg-[#b7eb2d] px-5 py-4 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-[#15170f] transition-transform duration-150 hover:-translate-y-0.5 hover:bg-[#d2f776] active:scale-[0.98]" href={freeBuildMailto}>
                 Email your free-build request <ArrowUpRight className="h-4 w-4" />
               </a>
-              <p className="mt-5 max-w-[440px] text-xs leading-relaxed text-[#4d5047]">The offer runs from 19–22 August. Requests are reviewed for fit, scope, and available build capacity.</p>
+              <p className="mt-5 max-w-[440px] text-xs leading-relaxed text-[#4d5047]">Requests must be received today and are reviewed for fit, scope, and available build capacity.</p>
             </div>
           </div>
         </section>
